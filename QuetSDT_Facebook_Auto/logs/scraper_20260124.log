@@ -1,0 +1,37 @@
+2026-01-24 08:23:39,638 - FacebookScraper - INFO - Setting up Chrome driver...
+2026-01-24 08:23:39,638 - FacebookScraper - INFO - Installing ChromeDriver...
+2026-01-24 08:23:39,653 - FacebookScraper - INFO - Cleared ChromeDriver cache
+2026-01-24 08:23:42,829 - FacebookScraper - INFO - Starting Chrome browser...
+2026-01-24 08:23:44,272 - FacebookScraper - INFO - Chrome driver initialized successfully
+2026-01-24 08:23:44,272 - FacebookScraper - INFO - Starting Facebook login...
+2026-01-24 08:24:02,041 - FacebookScraper - INFO - Login successful
+2026-01-24 08:24:02,041 - FacebookScraper - INFO - Searching for: Mỹ Phẩm
+2026-01-24 08:24:13,213 - FacebookScraper - INFO - Trying to click Pages tab...
+2026-01-24 08:24:15,303 - FacebookScraper - ERROR - Could not find Pages tab
+2026-01-24 08:24:15,303 - FacebookScraper - ERROR - Screenshot error: Message: invalid session id
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x567d13
+	0x567d54
+	0x38b0ce
+	0x3c8765
+	0x3f7e76
+	0x3f3be1
+	0x3f30e2
+	0x35e00b
+	0x35e5ae
+	0x35ea8d
+	0x7dbb64
+	0x7d7215
+	0x7f3fad
+	0x581ef8
+	0x589b0d
+	0x35db89
+	0x35d1d0
+	0x94534f
+	0x76b67ba9
+	0x77c3c3ab
+	0x77c3c32f
+
+2026-01-24 08:24:15,303 - FacebookScraper - ERROR - Could not click Pages tab
+2026-01-24 08:24:17,343 - FacebookScraper - INFO - Browser closed

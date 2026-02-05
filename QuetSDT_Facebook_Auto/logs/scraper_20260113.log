@@ -1,0 +1,85 @@
+2026-01-13 14:21:07,237 - FacebookScraper - INFO - Chrome driver initialized successfully
+2026-01-13 14:21:07,237 - FacebookScraper - INFO - Starting Facebook login...
+2026-01-13 14:21:29,657 - FacebookScraper - INFO - Chrome driver initialized successfully
+2026-01-13 14:21:29,657 - FacebookScraper - INFO - Starting Facebook login...
+2026-01-13 14:21:38,949 - FacebookScraper - INFO - Login successful
+2026-01-13 14:21:57,635 - FacebookScraper - INFO - Search completed
+2026-01-13 14:21:57,635 - FacebookScraper - INFO - Extracting data from page...
+2026-01-13 14:21:59,639 - FacebookScraper - INFO - Scrolled 1/3 times
+2026-01-13 14:22:01,653 - FacebookScraper - INFO - Scrolled 2/3 times
+2026-01-13 14:22:03,664 - FacebookScraper - INFO - Scrolled 3/3 times
+2026-01-13 14:22:09,363 - FacebookScraper - INFO - Extracted 50 unique items
+2026-01-13 14:22:11,530 - FacebookScraper - INFO - Browser closed
+2026-01-13 14:32:52,667 - FacebookScraper - INFO - Chrome driver initialized successfully
+2026-01-13 14:32:52,667 - FacebookScraper - INFO - Starting Facebook login...
+2026-01-13 14:33:01,872 - FacebookScraper - INFO - Login successful
+2026-01-13 14:33:25,079 - FacebookScraper - INFO - Trying to click Groups tab...
+2026-01-13 14:33:28,231 - FacebookScraper - WARNING - Could not find Groups tab
+2026-01-13 14:33:28,231 - FacebookScraper - WARNING - Could not click Groups tab, continuing anyway...
+2026-01-13 14:33:31,232 - FacebookScraper - INFO - Search completed and navigated to Groups tab
+2026-01-13 14:33:31,232 - FacebookScraper - INFO - Extracting group data from page...
+2026-01-13 14:33:33,235 - FacebookScraper - INFO - Scrolled 1/3 times
+2026-01-13 14:33:35,244 - FacebookScraper - INFO - Scrolled 2/3 times
+2026-01-13 14:33:37,253 - FacebookScraper - INFO - Scrolled 3/3 times
+2026-01-13 14:33:37,261 - FacebookScraper - INFO - Found 5 result containers
+2026-01-13 14:33:37,416 - FacebookScraper - INFO - Extracted 4 unique groups
+2026-01-13 14:33:39,571 - FacebookScraper - INFO - Browser closed
+2026-01-13 14:37:45,730 - FacebookScraper - INFO - Chrome driver initialized successfully
+2026-01-13 14:37:45,730 - FacebookScraper - INFO - Starting Facebook login...
+2026-01-13 14:38:10,278 - FacebookScraper - INFO - Login successful
+2026-01-13 14:38:25,504 - FacebookScraper - INFO - Trying to click Groups tab...
+2026-01-13 14:38:35,715 - FacebookScraper - INFO - Successfully clicked Groups tab using: //a[contains(@href, '/search/groups/')]
+2026-01-13 14:38:40,716 - FacebookScraper - INFO - Search completed and navigated to Groups tab
+2026-01-13 14:38:40,716 - FacebookScraper - INFO - Extracting group data from page...
+2026-01-13 14:39:42,143 - FacebookScraper - INFO - Found 123 result containers
+2026-01-13 14:39:47,377 - FacebookScraper - INFO - Extracted 122 unique groups
+2026-01-13 14:39:49,540 - FacebookScraper - INFO - Browser closed
+2026-01-13 14:44:34,511 - FacebookScraper - INFO - Chrome driver initialized successfully
+2026-01-13 14:44:34,511 - FacebookScraper - INFO - Starting Facebook login...
+2026-01-13 14:44:56,529 - FacebookScraper - INFO - Login successful
+2026-01-13 14:45:11,736 - FacebookScraper - INFO - Trying to click Groups tab...
+2026-01-13 14:45:22,090 - FacebookScraper - INFO - Successfully clicked Groups tab using: //a[contains(@href, '/search/groups/')]
+2026-01-13 14:45:39,210 - FacebookScraper - INFO - Successfully entered the first group
+2026-01-13 14:46:30,723 - FacebookScraper - ERROR - Continuous scroll error: Message: invalid session id: session deleted as the browser has closed the connection
+from disconnected: not connected to DevTools
+  (Session info: chrome=143.0.7499.193)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0xbb1213
+	0xbb1254
+	0x99e6dd
+	0x98d99e
+	0x9ac4e6
+	0xa121d8
+	0xa2d44c
+	0xa0b2e6
+	0x9dd321
+	0x9de1d4
+	0xe05254
+	0xe0080b
+	0xe1d0ea
+	0xbcb118
+	0xbd311d
+	0xbb9518
+	0xbb96d9
+	0xba3a68
+	0x76b67ba9
+	0x77c3c3ab
+	0x77c3c32f
+
+2026-01-13 14:46:32,838 - FacebookScraper - INFO - Browser closed
+2026-01-13 14:46:53,239 - FacebookScraper - INFO - Browser closed
+2026-01-13 14:58:31,072 - FacebookScraper - INFO - Chrome driver initialized successfully
+2026-01-13 14:58:31,072 - FacebookScraper - INFO - Starting Facebook login...
+2026-01-13 14:58:54,334 - FacebookScraper - INFO - Login successful
+2026-01-13 15:00:41,137 - FacebookScraper - INFO -    Category: N/A
+2026-01-13 15:00:41,137 - FacebookScraper - INFO -    Likes: 
+2026-01-13 15:00:41,138 - FacebookScraper - INFO -    Category: N/A
+2026-01-13 15:00:41,138 - FacebookScraper - INFO -    Likes: 
+2026-01-13 15:00:41,141 - FacebookScraper - INFO -    Category: N/A
+2026-01-13 15:00:41,141 - FacebookScraper - INFO -    Likes: 
+2026-01-13 15:00:41,142 - FacebookScraper - INFO -    Category: N/A
+2026-01-13 15:00:41,142 - FacebookScraper - INFO -    Likes: 
+2026-01-13 15:00:41,143 - FacebookScraper - INFO -    Category: N/A
+2026-01-13 15:00:41,144 - FacebookScraper - INFO -    Likes: 
+2026-01-13 15:00:43,314 - FacebookScraper - INFO - Browser closed

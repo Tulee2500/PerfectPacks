@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Scraper v3.0</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .header p {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    .version-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      margin-top: 10px;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    /* Master File Info Section */
+    .master-info {
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      border-left: 5px solid #4caf50;
+      display: none;
+    }
+
+    .master-info.show {
+      display: block;
+    }
+
+    .master-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .master-stats {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .master-stats h3 {
+      margin: 0 0 10px 0;
+      color: #2e7d32;
+      font-size: 1.3em;
+    }
+
+    .master-stats p {
+      margin: 0;
+      color: #555;
+      font-size: 1em;
+    }
+
+    .master-stats .stat-highlight {
+      font-weight: bold;
+      color: #1b5e20;
+      font-size: 1.2em;
+    }
+
+    .master-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Input Section */
+    .input-section {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .input-group input[type="text"],
+    .input-group input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .checkbox-group label {
+      margin: 0;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    /* Buttons */
+    .button-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 14px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-scrape {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-export {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+    }
+
+    .btn-download {
+      background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+      color: white;
+    }
+
+    .btn-export-table {
+      background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+      color: white;
+    }
+
+    .btn-clear {
+      background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+      color: white;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+      color: white;
+    }
+
+    /* Status Message */
+    #status {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-weight: 500;
+      text-align: center;
+      display: none;
+    }
+
+    #status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+
+    #status.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
+
+    #status.loading {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+      display: block;
+    }
+
+    /* Table */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      min-width: 1000px;
+    }
+
+    thead {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    tbody tr {
+      transition: background 0.2s;
+    }
+
+    tbody tr:hover {
+      background: #f8f9fa;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    tbody tr:nth-child(even):hover {
+      background: #f0f0f0;
+    }
+
+    a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    a:hover {
+      color: #764ba2;
+      text-decoration: underline;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      font-size: 1.1em;
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .header h1 {
+        font-size: 1.8em;
+      }
+
+      .master-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .master-actions {
+        width: 100%;
+      }
+
+      .master-actions button {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🔍 Company Scraper</h1>
+      <p>Công cụ thu thập thông tin công ty từ Trang Vàng Việt Nam</p>
+      <span class="version-badge">v3.0 - Smart Duplicate Detection</span>
+    </div>
+
+    <div class="content">
+      <!-- Master File Info -->
+      <div id="masterInfo" class="master-info">
+        <div class="master-header">
+          <div class="master-stats">
+            <h3>📁 File Excel Tổng Hợp</h3>
+            <p id="masterInfoText">Đang tải thông tin...</p>
+          </div>
+          <div class="master-actions">
+            <button class="btn-download" onclick="downloadMaster()">
+              💾 Tải File Tổng
+            </button>
+            <button class="btn-danger" onclick="clearMaster()">
+              🗑️ Xóa File
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Section -->
+      <div class="input-section">
+        <div class="input-group">
+          <label for="url">🌐 URL Trang Vàng:</label>
+          <input
+            type="text"
+            id="url"
+            placeholder="Nhập link từ trangvangvietnam.com..."
+            value="">
+        </div>
+
+        <div class="row">
+          <div class="input-group">
+            <label for="start_page">📄 Trang bắt đầu:</label>
+            <input type="number" id="start_page" value="1" min="1">
+          </div>
+
+          <div class="input-group">
+            <label for="end_page">📄 Trang kết thúc:</label>
+            <input type="number" id="end_page" value="1" min="1">
+          </div>
+
+          <div class="input-group">
+            <label for="max_companies">🔢 Giới hạn (tùy chọn):</label>
+            <input type="number" id="max_companies" placeholder="VD: 200" min="1">
+          </div>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="fetch_detail">
+          <label for="fetch_detail">📋 Lấy thông tin chi tiết (mã số thuế, người đại diện...)</label>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-scrape" onclick="startScrape()" id="btnScrape">
+            🚀 Xem Dữ Liệu
+          </button>
+          <button class="btn-export" onclick="exportExcel()" id="btnExport">
+            📊 Xuất Excel (Full Detail)
+          </button>
+          <button class="btn-export-table" onclick="exportTableToExcel()">
+            💾 Xuất Excel (Từ Bảng)
+          </button>
+          <button class="btn-clear" onclick="clearResults()">
+            🗑️ Xóa Kết Quả
+          </button>
+        </div>
+      </div>
+
+      <!-- Status Message -->
+      <div id="status"></div>
+
+      <!-- Results Table -->
+      <div class="table-wrapper">
+        <table id="resultTable">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Trang</th>
+              <th>Tên Công Ty</th>
+              <th>Ngành Nghề</th>
+              <th>Địa Chỉ</th>
+              <th>Số Điện Thoại</th>
+              <th>Email</th>
+              <th>Website</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="8" class="no-data">
+                Chưa có dữ liệu. Nhập thông tin và nhấn "Xem Dữ Liệu" để bắt đầu.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script>
+    const API_BASE = 'http://localhost:5003';
+
+    // Load master info khi trang load
+    window.addEventListener('DOMContentLoaded', function() {
+      loadMasterInfo();
+    });
+
+    function showStatus(message, type = 'loading') {
+      const statusDiv = document.getElementById('status');
+      statusDiv.className = type;
+      statusDiv.innerHTML = message;
+    }
+
+    function hideStatus() {
+      const statusDiv = document.getElementById('status');
+      statusDiv.style.display = 'none';
+    }
+
+    function setButtonsEnabled(enabled) {
+      document.getElementById('btnScrape').disabled = !enabled;
+      document.getElementById('btnExport').disabled = !enabled;
+    }
+
+    async function loadMasterInfo() {
+      try {
+        const response = await fetch(`${API_BASE}/api/master/info`);
+        const data = await response.json();
+
+        const masterInfoDiv = document.getElementById('masterInfo');
+        const masterInfoText = document.getElementById('masterInfoText');
+
+        if (data.success && data.exists) {
+          masterInfoDiv.classList.add('show');
+          masterInfoText.innerHTML = `
+            <span class="stat-highlight">${data.total_companies}</span> công ty |
+            Kích thước: <strong>${data.file_size}</strong> |
+            Cập nhật: <strong>${data.last_modified}</strong>
+          `;
+        } else {
+          masterInfoDiv.classList.remove('show');
+        }
+      } catch (err) {
+        console.log('Master file chưa tồn tại hoặc lỗi kết nối');
+      }
+    }
+
+    async function downloadMaster() {
+      try {
+        showStatus('⏳ Đang tải file tổng...', 'loading');
+
+        const response = await fetch(`${API_BASE}/api/master/download`);
+
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `companies_master_${new Date().getTime()}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+
+          showStatus('✅ Đã tải file tổng thành công!', 'success');
+        } else {
+          const errorData = await response.json();
+          showStatus(`❌ ${errorData.error}`, 'error');
+        }
+      } catch (err) {
+        showStatus(`⚠️ Lỗi: ${err.message}`, 'error');
+      }
+    }
+
+    async function clearMaster() {
+      if (!confirm('⚠️ Bạn có chắc muốn xóa file Excel tổng?\n\nToàn bộ dữ liệu đã lưu sẽ bị mất!')) {
+        return;
+      }
+
+      try {
+        showStatus('⏳ Đang xóa file tổng...', 'loading');
+
+        const response = await fetch(`${API_BASE}/api/master/clear`, {
+          method: 'POST'
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showStatus('✅ Đã xóa file tổng', 'success');
+          loadMasterInfo();
+        } else {
+          showStatus(`❌ ${data.error}`, 'error');
+        }
+      } catch (err) {
+        showStatus(`⚠️ Lỗi: ${err.message}`, 'error');
+      }
+    }
+
+    async function startScrape() {
+      const url = document.getElementById('url').value.trim();
+      const startPage = document.getElementById('start_page').value;
+      const endPage = document.getElementById('end_page').value;
+      const maxCompanies = document.getElementById('max_companies').value;
+      const fetchDetail = document.getElementById('fetch_detail').checked;
+      const tbody = document.querySelector('#resultTable tbody');
+
+      if (!url) {
+        showStatus('⚠️ Vui lòng nhập URL!', 'error');
+        return;
+      }
+
+      tbody.innerHTML = '';
+      showStatus('<div class="loading-spinner"></div> Đang thu thập dữ liệu...', 'loading');
+      setButtonsEnabled(false);
+
+      try {
+        const payload = {
+          url,
+          start_page: startPage,
+          end_page: endPage,
+          fetch_detail: fetchDetail
+        };
+
+        if (maxCompanies) {
+          payload.max_companies = maxCompanies;
+        }
+
+        const response = await fetch(`${API_BASE}/api/scrape`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          let message = `✅ Thành công! Đã lấy <strong>${data.total}</strong> công ty`;
+
+          if (data.saved_to_master && data.saved_to_master.success) {
+            const saveInfo = data.saved_to_master;
+            message += `<br>💾 File tổng: <strong>${saveInfo.total_saved}</strong> công ty`;
+            if (saveInfo.new_records > 0) {
+              message += ` (<span style="color: #28a745;">+${saveInfo.new_records} mới</span>)`;
+            }
+            if (saveInfo.duplicate_removed > 0) {
+              message += ` | Loại <strong>${saveInfo.duplicate_removed}</strong> trùng`;
+            }
+            loadMasterInfo();
+          }
+
+          showStatus(message, 'success');
+
+          if (data.companies && data.companies.length > 0) {
+            data.companies.forEach(c => {
+              const row = `
+                <tr>
+                  <td>${c.stt || ''}</td>
+                  <td>${c.page || ''}</td>
+                  <td><a href="${c.link}" target="_blank">${c.name || ''}</a></td>
+                  <td>${c.industry || ''}</td>
+                  <td>${c.address || ''}</td>
+                  <td>${c.phone || ''}</td>
+                  <td>${c.email || ''}</td>
+                  <td>${c.website || ''}</td>
+                </tr>
+              `;
+              tbody.insertAdjacentHTML('beforeend', row);
+            });
+          } else {
+            tbody.innerHTML = '<tr><td colspan="8" class="no-data">Không tìm thấy công ty nào</td></tr>';
+          }
+        } else {
+          showStatus(`❌ Lỗi: ${data.error}`, 'error');
+          tbody.innerHTML = '<tr><td colspan="8" class="no-data">Có lỗi xảy ra</td></tr>';
+        }
+      } catch (err) {
+        showStatus(`⚠️ Lỗi kết nối: ${err.message}`, 'error');
+        tbody.innerHTML = '<tr><td colspan="8" class="no-data">Không thể kết nối tới server</td></tr>';
+        console.error('Error:', err);
+      } finally {
+        setButtonsEnabled(true);
+      }
+    }
+
+    async function exportExcel() {
+      const url = document.getElementById('url').value.trim();
+      const startPage = document.getElementById('start_page').value;
+      const endPage = document.getElementById('end_page').value;
+      const maxCompanies = document.getElementById('max_companies').value;
+
+      if (!url) {
+        showStatus('⚠️ Vui lòng nhập URL!', 'error');
+        return;
+      }
+
+      showStatus('<div class="loading-spinner"></div> Đang xuất Excel (bao gồm thông tin chi tiết)...', 'loading');
+      setButtonsEnabled(false);
+
+      try {
+        const payload = {
+          url,
+          start_page: startPage,
+          end_page: endPage
+        };
+
+        if (maxCompanies) {
+          payload.max_companies = maxCompanies;
+        }
+
+        const response = await fetch(`${API_BASE}/api/export`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          const blob = await response.blob();
+          const downloadUrl = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = downloadUrl;
+          a.download = `companies_export_${new Date().getTime()}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(downloadUrl);
+
+          showStatus('✅ Đã xuất file Excel thành công!', 'success');
+          loadMasterInfo();
+        } else {
+          const errorData = await response.json();
+          showStatus(`❌ Lỗi: ${errorData.error}`, 'error');
+        }
+      } catch (err) {
+        showStatus(`⚠️ Lỗi: ${err.message}`, 'error');
+        console.error('Error:', err);
+      } finally {
+        setButtonsEnabled(true);
+      }
+    }
+
+    function clearResults() {
+      const tbody = document.querySelector('#resultTable tbody');
+      tbody.innerHTML = '<tr><td colspan="8" class="no-data">Chưa có dữ liệu. Nhập thông tin và nhấn "Xem Dữ Liệu" để bắt đầu.</td></tr>';
+      hideStatus();
+    }
+
+    function exportTableToExcel() {
+      const table = document.getElementById('resultTable');
+      const tbody = table.querySelector('tbody');
+
+      const firstRow = tbody.querySelector('tr');
+      if (!firstRow || firstRow.querySelector('.no-data')) {
+        showStatus('⚠️ Không có dữ liệu để xuất!', 'error');
+        return;
+      }
+
+      showStatus('⏳ Đang tạo file Excel...', 'loading');
+
+      try {
+        const wb = XLSX.utils.book_new();
+        const rows = tbody.querySelectorAll('tr');
+        const data = [];
+
+        // Header
+        const headers = ['STT', 'Trang', 'Tên Công Ty', 'Ngành Nghề', 'Địa Chỉ', 'Số Điện Thoại', 'Email', 'Website'];
+        data.push(headers);
+
+        // Data rows
+        rows.forEach(row => {
+          const cells = row.querySelectorAll('td');
+          if (cells.length > 0) {
+            const rowData = [];
+            cells.forEach((cell, index) => {
+              let value = cell.textContent.trim();
+              if (index === 5 && value) {
+                value = '\'' + value;
+              }
+              rowData.push(value);
+            });
+            data.push(rowData);
+          }
+        });
+
+        const ws = XLSX.utils.aoa_to_sheet(data);
+
+        // Format phone column
+        const range = XLSX.utils.decode_range(ws['!ref']);
+        for (let row = 1; row <= range.e.r; row++) {
+          const cellAddress = XLSX.utils.encode_cell({ r: row, c: 5 });
+          if (ws[cellAddress]) {
+            ws[cellAddress].t = 's';
+            ws[cellAddress].z = '@';
+          }
+        }
+
+        // Column widths
+        const colWidths = [
+          { wch: 5 },
+          { wch: 8 },
+          { wch: 40 },
+          { wch: 30 },
+          { wch: 50 },
+          { wch: 25 },
+          { wch: 30 },
+          { wch: 30 }
+        ];
+        ws['!cols'] = colWidths;
+
+        XLSX.utils.book_append_sheet(wb, ws, 'Danh sách công ty');
+
+        const fileName = `companies_table_${new Date().getTime()}.xlsx`;
+        XLSX.writeFile(wb, fileName);
+
+        showStatus('✅ Đã xuất file Excel từ bảng thành công!', 'success');
+      } catch (err) {
+        showStatus(`⚠️ Lỗi xuất Excel: ${err.message}`, 'error');
+        console.error('Export error:', err);
+      }
+    }
+
+    // Handle Enter key
+    document.getElementById('url').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        startScrape();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaSoThue.com Scraper</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 MaSoThue.com Web Scraper</h1>
+            <p>Công cụ lấy thông tin công ty từ MaSoThue.com</p>
+        </header>
+
+        <div class="form-container">
+            <form id="scrapeForm">
+                <div class="form-group">
+                    <label for="url">
+                        <i>🔗</i> URL Trang Đầu Tiên:
+                        <span class="tooltip">Ví dụ: https://masothue.com/tra-cuu-ma-so-thue-theo-nganh-nghe/ban-buon-do-dung-khac-cho-gia-dinh-46492?page=1</span>
+                    </label>
+                    <input type="text" id="url" name="url" required placeholder="https://masothue.com/...">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="from_page"><i>📄</i> Từ trang:</label>
+                        <input type="number" id="from_page" name="from_page" min="1" value="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="to_page"><i>📄</i> Đến trang:</label>
+                        <input type="number" id="to_page" name="to_page" min="1" value="3" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="filter_year">
+                        <i>📅</i> Lọc theo Năm:
+                        <span class="tooltip">Để trống nếu không muốn lọc</span>
+                    </label>
+                    <input type="text" id="filter_year" name="filter_year" placeholder="VD: 2025">
+                </div>
+
+                <div class="form-group">
+                    <label for="filter_industry">
+                        <i>🏭</i> Lọc theo Ngành nghề (Chi tiết):
+                        <span class="tooltip">Có thể nhập nhiều từ khóa cách nhau bởi dấu phẩy. VD: nước hoa, mỹ phẩm</span>
+                    </label>
+                    <input type="text" id="filter_industry" name="filter_industry" placeholder="VD: nước hoa, mỹ phẩm, vệ sinh">
+                </div>
+
+                <button type="submit" id="btnStart" class="btn btn-primary">
+                    🚀 Bắt Đầu Lấy Dữ Liệu
+                </button>
+            </form>
+        </div>
+
+        <div id="progressContainer" class="progress-container" style="display: none;">
+            <h3>📊 Tiến Trình</h3>
+            <div class="progress-bar">
+                <div id="progressBar" class="progress-fill"></div>
+            </div>
+            <div id="progressText" class="progress-text">Đang chuẩn bị...</div>
+            <div id="progressStats" class="progress-stats"></div>
+        </div>
+
+        <div id="resultContainer" class="result-container" style="display: none;">
+            <h3>✅ Hoàn Thành!</h3>
+            <p id="resultMessage"></p>
+            <button id="btnDownload" class="btn btn-success">📥 Tải File Excel</button>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('scrapeForm');
+        const progressContainer = document.getElementById('progressContainer');
+        const resultContainer = document.getElementById('resultContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressStats = document.getElementById('progressStats');
+        const resultMessage = document.getElementById('resultMessage');
+        const btnStart = document.getElementById('btnStart');
+        const btnDownload = document.getElementById('btnDownload');
+
+        let progressInterval;
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                url: document.getElementById('url').value,
+                from_page: document.getElementById('from_page').value,
+                to_page: document.getElementById('to_page').value,
+                filter_year: document.getElementById('filter_year').value,
+                filter_industry: document.getElementById('filter_industry').value
+            };
+
+            // Disable form
+            btnStart.disabled = true;
+            btnStart.textContent = '⏳ Đang xử lý...';
+
+            // Show progress
+            progressContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+
+            try {
+                const response = await fetch('/scrape', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    startProgressTracking();
+                } else {
+                    const error = await response.json();
+                    alert('Lỗi: ' + error.error);
+                    resetForm();
+                }
+            } catch (error) {
+                alert('Lỗi kết nối: ' + error.message);
+                resetForm();
+            }
+        });
+
+        function startProgressTracking() {
+            progressInterval = setInterval(async () => {
+                try {
+                    const response = await fetch('/progress');
+                    const data = await response.json();
+
+                    updateProgress(data);
+
+                    if (data.status === 'completed') {
+                        clearInterval(progressInterval);
+                        showResult(data.message);
+                    }
+                } catch (error) {
+                    console.error('Error tracking progress:', error);
+                }
+            }, 1000);
+        }
+
+        function updateProgress(data) {
+            const pageProgress = (data.current_page / data.total_pages) * 100;
+            progressBar.style.width = pageProgress + '%';
+            progressText.textContent = data.message;
+            progressStats.textContent = `Trang ${data.current_page}/${data.total_pages} | Công ty ${data.current_company}/${data.total_companies}`;
+        }
+
+        function showResult(message) {
+            progressContainer.style.display = 'none';
+            resultContainer.style.display = 'block';
+            resultMessage.textContent = message;
+            resetForm();
+        }
+
+        function resetForm() {
+            btnStart.disabled = false;
+            btnStart.textContent = '🚀 Bắt Đầu Lấy Dữ Liệu';
+        }
+
+        btnDownload.addEventListener('click', async () => {
+            window.location.href = '/download';
+        });
+    </script>
+</body>
+</html>

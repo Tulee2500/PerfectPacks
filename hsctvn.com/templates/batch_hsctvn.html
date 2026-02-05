@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tìm kiếm hàng loạt - HSCTVN</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 40px 0;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 15px;
+        }
+        .upload-box {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9ff;
+        }
+        .upload-box:hover {
+            background: #f0f1ff;
+            border-color: #764ba2;
+        }
+        .upload-box.dragover {
+            background: #e8eaff;
+            border-color: #764ba2;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+        h2 {
+            color: white;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+        .file-info {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        #fileName {
+            font-weight: 700;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <h2 class="text-center mb-4">📊 Tìm kiếm Hàng Loạt Mã Số Thuế</h2>
+
+            {% if error %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Lỗi!</strong> {{ error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endif %}
+
+            <div class="card p-5">
+                <form id="batchForm" enctype="multipart/form-data">
+                    <div class="upload-box" id="uploadBox">
+                        <div style="font-size: 2.5rem; margin-bottom: 15px;">📁</div>
+                        <p class="mb-2" style="font-size: 1.1rem; font-weight: 600;">
+                            Kéo thả file hoặc bấm chọn
+                        </p>
+                        <p class="text-muted mb-0">Hỗ trợ: Excel (.xlsx), CSV (.csv)</p>
+                        <p class="file-info">
+                            Cột đầu tiên phải chứa danh sách mã số thuế
+                        </p>
+                        <input type="file" id="fileInput" accept=".xlsx,.csv" style="display: none;">
+                    </div>
+
+                    <div id="selectedFile" class="mt-3" style="display: none;">
+                        <p class="mb-0">✅ Đã chọn: <span id="fileName"></span></p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 fw-bold mt-4" id="submitBtn">
+                        🔍 Bắt đầu tìm kiếm
+                    </button>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="text-center">
+                    <a href="/" class="btn btn-outline-secondary">← Quay lại</a>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-4" role="alert">
+                <strong>💡 Hướng dẫn:</strong>
+                <ul class="mb-0">
+                    <li>Tạo file Excel hoặc CSV với danh sách mã số thuế</li>
+                    <li>Mã số thuế phải ở cột đầu tiên</li>
+                    <li>Hệ thống sẽ tìm kiếm trên hsctvn.com</li>
+                    <li>Kết quả có thể export thành file Excel</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const uploadBox = document.getElementById('uploadBox');
+const fileInput = document.getElementById('fileInput');
+const selectedFileDiv = document.getElementById('selectedFile');
+const fileNameSpan = document.getElementById('fileName');
+const batchForm = document.getElementById('batchForm');
+const submitBtn = document.getElementById('submitBtn');
+
+uploadBox.addEventListener('click', () => fileInput.click());
+
+uploadBox.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadBox.classList.add('dragover');
+});
+
+uploadBox.addEventListener('dragleave', () => {
+    uploadBox.classList.remove('dragover');
+});
+
+uploadBox.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadBox.classList.remove('dragover');
+    fileInput.files = e.dataTransfer.files;
+    updateFileName();
+});
+
+fileInput.addEventListener('change', updateFileName);
+
+function updateFileName() {
+    if (fileInput.files.length > 0) {
+        fileNameSpan.textContent = fileInput.files[0].name;
+        selectedFileDiv.style.display = 'block';
+        uploadBox.style.display = 'none';
+    }
+}
+
+batchForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!fileInput.files.length) {
+        alert('Vui lòng chọn file');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '⏳ Đang tìm kiếm...';
+
+    try {
+        const response = await fetch('/batch', {
+            method: 'POST',
+            body: formData
+        });
+
+        const html = await response.text();
+        document.open();
+        document.write(html);
+        document.close();
+    } catch (error) {
+        alert('Lỗi: ' + error.message);
+        submitBtn.disabled = false;
+        submitBtn.textContent = '🔍 Bắt đầu tìm kiếm';
+    }
+});
+</script>
+</body>
+</html>

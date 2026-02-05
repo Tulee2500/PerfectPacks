@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GS1 VN Search</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 24px;
+      color: #0f172a;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    h1 {
+      font-size: 28px;
+      margin: 0 0 8px;
+      color: #1e293b;
+      font-weight: 700;
+    }
+    .subtitle {
+      color: #64748b;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 8px;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      background: #f8fafc;
+      font-size: 15px;
+      transition: all 0.2s;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    button {
+      padding: 14px 28px;
+      border: none;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .result-section {
+      margin-top: 32px;
+    }
+    .result-section h3 {
+      font-size: 18px;
+      margin: 0 0 16px;
+      color: #1e293b;
+      font-weight: 600;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 12px;
+      overflow: auto;
+      font-size: 13px;
+      line-height: 1.6;
+      max-height: 500px;
+      font-family: 'Consolas', 'Monaco', monospace;
+    }
+    .footer {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 2px solid #e2e8f0;
+      font-size: 13px;
+      color: #64748b;
+      text-align: center;
+    }
+    .footer a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 12px;
+    }
+    .status.loading {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .status.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .status.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>🔍 Tra cứu Verified by GS1 (Vietnam)</h1>
+      <p class="subtitle">Tìm kiếm thông tin công ty đã đăng ký mã vạch GS1 tại Việt Nam</p>
+
+      <div class="grid">
+        <div class="field">
+          <label for="company_name">Tên công ty</label>
+          <input id="company_name" placeholder="VD: Công Ty TNHH..." />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Địa chỉ (có thể thêm nhiều)</label>
+        <div id="addresses_container"></div>
+        <div class="actions" style="margin-top:12px">
+          <button type="button" id="add_address_btn" onclick="addAddress()">➕ Thêm địa chỉ</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="scan_btn" onclick="scanAndSave()">
+          🚀 Quét & Lưu Excel
+        </button>
+      </div>
+
+      <div class="footer">
+        📊 Nguồn dữ liệu: <a href="https://www.gs1.org/services/verified-by-gs1" target="_blank">GS1 Verified Database</a>
+      </div>
+
+      <div class="result-section">
+        <h3>Kết quả <span id="status"></span></h3>
+        <pre id="result_area">Chưa có kết quả. Nhập thông tin và nhấn "Quét & Lưu Excel".</pre>
+      </div>
+    </div>
+  </div>
+
+<script>
+const backendUrl = 'http://127.0.0.1:5000/api/search';
+
+function addAddress(values = { street_address: '', city: '' }) {
+  const container = document.getElementById('addresses_container');
+  const wrapper = document.createElement('div');
+  wrapper.className = 'grid address-item';
+  wrapper.innerHTML = `
+    <div class="field">
+      <label>Địa chỉ</label>
+      <input class="addr_street" placeholder="VD: Số 11 Đường..." value="${values.street_address || ''}" />
+    </div>
+    <div class="field">
+      <label>Thành phố</label>
+      <input class="addr_city" placeholder="VD: Hà Nội" value="${values.city || ''}" />
+    </div>
+    <div class="field" style="align-self:end">
+      <button type="button" onclick="this.closest('.address-item').remove()">🗑️ Xóa</button>
+    </div>`;
+  container.appendChild(wrapper);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('addresses_container');
+  if (container && container.children.length === 0) {
+    addAddress();
+  }
+});
+
+async function scanAndSave() {
+  const resultArea = document.getElementById('result_area');
+  const statusSpan = document.getElementById('status');
+  const scanBtn = document.getElementById('scan_btn');
+
+  // Disable button
+  scanBtn.disabled = true;
+  scanBtn.textContent = '⏳ Đang xử lý...';
+
+  statusSpan.className = 'status loading';
+  statusSpan.textContent = '⏳ Đang gửi yêu cầu...';
+  resultArea.textContent = '🔄 Đang kết nối đến server...\n\nVui lòng đợi, có thể mất 30-60 giây nếu có CAPTCHA.';
+
+  const company_name = document.getElementById('company_name').value.trim();
+  const addresses = Array.from(document.querySelectorAll('#addresses_container .address-item')).map(row => {
+    const street_address = row.querySelector('.addr_street')?.value.trim() || '';
+    const city = row.querySelector('.addr_city')?.value.trim() || '';
+    return { street_address, city };
+  }).filter(a => a.street_address || a.city);
+
+  // Validate
+  if (!company_name && addresses.length === 0) {
+    statusSpan.className = 'status error';
+    statusSpan.textContent = '❌ Lỗi';
+    resultArea.textContent = '⚠️ Vui lòng nhập tên công ty hoặc ít nhất một địa chỉ!';
+    scanBtn.disabled = false;
+    scanBtn.textContent = '🚀 Quét & Lưu Excel';
+    return;
+  }
+
+  const firstAddr = addresses[0] || { street_address: '', city: '' };
+  const payload = {
+    company_name,
+    country: 'VN',
+    street_address: firstAddr.street_address,
+    city: firstAddr.city,
+    addresses
+  };
+
+  try {
+    console.log('Sending request to:', backendUrl);
+    console.log('Payload:', payload);
+
+    const res = await fetch(backendUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    console.log('Response status:', res.status);
+    console.log('Response headers:', res.headers);
+
+    const contentType = res.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await res.text();
+      console.error('Response is not JSON:', text);
+      throw new Error(`Server trả về HTML thay vì JSON. Kiểm tra backend có đang chạy không?\n\nResponse: ${text.substring(0, 200)}...`);
+    }
+
+    const data = await res.json();
+    console.log('Response data:', data);
+
+    if (data.ok) {
+      statusSpan.className = 'status success';
+      statusSpan.textContent = '✅ Thành công';
+    } else {
+      statusSpan.className = 'status error';
+      statusSpan.textContent = '❌ Có lỗi';
+    }
+
+    resultArea.textContent = JSON.stringify(data, null, 2);
+  } catch (e) {
+    console.error('Error:', e);
+    statusSpan.className = 'status error';
+    statusSpan.textContent = '❌ Lỗi kết nối';
+    resultArea.textContent = `❌ LỖI KẾT NỐI:\n\n${e.message}\n\n` +
+      `🔧 KIỂM TRA:\n` +
+      `1. Backend có đang chạy không? (python gs1_backend.py)\n` +
+      `2. Có thấy "GS1 Backend API đang chạy" không?\n` +
+      `3. Mở http://127.0.0.1:5000 trên trình duyệt xem có lỗi gì không\n\n` +
+      `📝 Chi tiết lỗi: ${e.toString()}`;
+  } finally {
+    scanBtn.disabled = false;
+    scanBtn.textContent = '🚀 Quét & Lưu Excel';
+  }
+}
+
+// Test kết nối khi load trang
+window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const res = await fetch('http://127.0.0.1:5000/', {
+      method: 'GET',
+    });
+    console.log('Backend connection test:', res.ok ? 'OK' : 'FAILED');
+  } catch (e) {
+    console.error('Backend không chạy:', e);
+    document.getElementById('result_area').textContent =
+      '⚠️ CẢNH BÁO: Không kết nối được backend!\n\n' +
+      'Vui lòng chạy: python gs1_backend.py';
+  }
+});
+</script>
+</body>
+</html>

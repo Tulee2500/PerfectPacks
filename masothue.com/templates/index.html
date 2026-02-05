@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraper - Công ty theo ngành</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 13px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-scrape {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-scrape:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-scrape:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background: #e0e0e0;
+        }
+
+        .info-box {
+            background: #f5f7fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .results-section {
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .results-header h2 {
+            color: #333;
+        }
+
+        .stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table thead {
+            background: #f5f7fa;
+        }
+
+        table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+        }
+
+        table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .btn-download {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .btn-download:hover {
+            background: #45a049;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .helper-text {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            table th, table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Trích xuất Dữ liệu Công ty</h1>
+            <p>Lấy danh sách công ty từ masothue.com theo URL</p>
+        </div>
+
+        <div class="card">
+            <div class="alert" id="alert"></div>
+
+            <form id="scrapForm">
+                <div class="form-group">
+                    <label for="url">URL tra cứu từ masothue.com</label>
+                    <input 
+                        type="url" 
+                        id="url" 
+                        name="url" 
+                        placeholder="https://masothue.com"
+                        required
+                        style="width: 100%;">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="start_page">Trang bắt đầu</label>
+                        <input type="number" id="start_page" name="start_page" min="1" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end_page">Trang kết thúc</label>
+                        <input type="number" id="end_page" name="end_page" min="1" value="1" required>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-scrape" id="submitBtn">⚡ Bắt đầu lấy dữ liệu</button>
+                    <button type="reset" class="btn-reset">🔄 Đặt lại</button>
+                </div>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p id="loadingText">Đang lấy dữ liệu...</p>
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card results-section" id="resultsSection">
+            <div class="results-header">
+                <h2>📊 Kết quả</h2>
+                <div class="stats" id="statsBox"></div>
+            </div>
+            <table id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên công ty</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <a href="#" id="downloadBtn" class="btn-download">📥 Tải file Excel (CSV)</a>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('scrapForm');
+        const loading = document.getElementById('loading');
+        const alert = document.getElementById('alert');
+        const resultsSection = document.getElementById('resultsSection');
+        const statsBox = document.getElementById('statsBox');
+        const tableBody = document.getElementById('tableBody');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const loadingText = document.getElementById('loadingText');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                url: document.getElementById('url').value,
+                start_page: parseInt(document.getElementById('start_page').value),
+                end_page: parseInt(document.getElementById('end_page').value)
+            };
+
+            // Validate
+            if (!formData.url) {
+                showAlert('Vui lòng nhập URL!', 'error');
+                return;
+            }
+
+            if (formData.start_page < 1 || formData.end_page < formData.start_page) {
+                showAlert('Số trang không hợp lệ!', 'error');
+                return;
+            }
+
+            if (formData.end_page - formData.start_page > 50) {
+                showAlert('Tối đa 50 trang mỗi lần!', 'error');
+                return;
+            }
+
+            // Show loading
+            loading.style.display = 'block';
+            progressBar.style.display = 'block';
+            submitBtn.disabled = true;
+            resultsSection.classList.remove('active');
+            alert.style.display = 'none';
+
+            const totalPages = endPage - startPage + 1;
+            loadingText.textContent = `Đang lấy dữ liệu từ ${totalPages} trang...`;
+
+            try {
+                const response = await fetch('/api/scrape', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        industry_name: industryName,
+                        industry_code: industryCode,
+                        start_page: startPage,
+                        end_page: endPage
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Lỗi không xác định');
+                }
+
+                displayResults(data);
+                showAlert(`✓ Thành công! Đã lấy ${data.count} công ty từ ${totalPages} trang`, 'success');
+
+            } catch (error) {
+                showAlert(`❌ ${error.message}`, 'error');
+            } finally {
+                loading.style.display = 'none';
+                progressBar.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        });
+
+        function displayResults(data) {
+            statsBox.innerHTML = `Tổng: <strong>${data.count}</strong> công ty`;
+            tableBody.innerHTML = '';
+
+            data.data.forEach((item, index) => {
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item['Tên công ty']}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+
+            downloadBtn.href = `/api/download/${data.filename}`;
+            resultsSection.classList.add('active');
+        }
+
+        function showAlert(message, type) {
+            alert.textContent = message;
+            alert.className = `alert ${type}`;
+            alert.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

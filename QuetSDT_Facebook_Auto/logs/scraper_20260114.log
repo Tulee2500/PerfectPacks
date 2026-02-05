@@ -1,0 +1,804 @@
+2026-01-14 09:24:08,109 - FacebookScraper - ERROR - Failed to initialize driver: [WinError 193] %1 is not a valid Win32 application
+2026-01-14 09:26:03,371 - FacebookScraper - ERROR -    1. Install Chrome: https://www.google.com/chrome/
+2026-01-14 09:26:03,371 - FacebookScraper - ERROR -    2. Check Chrome version: google-chrome --version
+2026-01-14 09:26:03,371 - FacebookScraper - ERROR -    3. Install dependencies: pip install --upgrade selenium webdriver-manager
+2026-01-14 09:26:03,371 - FacebookScraper - ERROR -    4. Try running with sudo (Linux): sudo python app.py
+2026-01-14 09:26:57,630 - FacebookScraper - ERROR -    1. Install Chrome: https://www.google.com/chrome/
+2026-01-14 09:26:57,630 - FacebookScraper - ERROR -    2. Check Chrome version: google-chrome --version
+2026-01-14 09:26:57,638 - FacebookScraper - ERROR -    3. Install dependencies: pip install --upgrade selenium webdriver-manager
+2026-01-14 09:26:57,638 - FacebookScraper - ERROR -    4. Try running with sudo (Linux): sudo python app.py
+2026-01-14 09:29:20,973 - FacebookScraper - INFO - Setting up Chrome driver...
+2026-01-14 09:29:20,973 - FacebookScraper - INFO - Installing ChromeDriver...
+2026-01-14 09:29:20,988 - FacebookScraper - INFO - Cleared ChromeDriver cache
+2026-01-14 09:29:24,509 - FacebookScraper - INFO - Starting Chrome browser...
+2026-01-14 09:29:26,254 - FacebookScraper - INFO - Chrome driver initialized successfully
+2026-01-14 09:29:26,254 - FacebookScraper - INFO - Starting Facebook login...
+2026-01-14 09:29:43,641 - FacebookScraper - INFO - Login successful
+2026-01-14 09:29:43,641 - FacebookScraper - INFO - Searching for: Mỹ Phẩm
+2026-01-14 09:30:13,001 - FacebookScraper - INFO - Trying to click Pages tab...
+2026-01-14 09:30:15,140 - FacebookScraper - INFO - Successfully clicked Pages tab
+2026-01-14 09:30:20,140 - FacebookScraper - INFO - Successfully navigated to Pages tab
+2026-01-14 09:30:20,141 - FacebookScraper - INFO - Extracting Pages data...
+2026-01-14 09:30:20,141 - FacebookScraper - INFO - Scrolling to load more pages...
+2026-01-14 09:31:20,515 - FacebookScraper - INFO - Completed 20 scrolls
+2026-01-14 09:31:20,515 - FacebookScraper - INFO - Finding page containers...
+2026-01-14 09:31:20,530 - FacebookScraper - INFO - Found 257 page containers
+2026-01-14 09:31:20,649 - FacebookScraper - INFO - Found page 1: Mỹ Phẩm Đông Anh - Trang Công Ty
+2026-01-14 09:31:20,672 - FacebookScraper - INFO - Found page 2: Duy Thường Mỹ Phẩm Chính Hãng
+2026-01-14 09:31:20,700 - FacebookScraper - INFO - Found page 3: Vu Pham Diem My
+2026-01-14 09:31:20,727 - FacebookScraper - INFO - Found page 4: MC Pham My Linh
+2026-01-14 09:31:20,752 - FacebookScraper - INFO - Found page 5: Mỹ Phẩm Authentic
+2026-01-14 09:31:20,772 - FacebookScraper - INFO - Found page 6: My phẩm
+2026-01-14 09:31:20,793 - FacebookScraper - INFO - Found page 7: My phẩm
+2026-01-14 09:31:20,811 - FacebookScraper - INFO - Found page 8: Mỹ phẩm
+2026-01-14 09:31:20,830 - FacebookScraper - INFO - Found page 9: My phẩm
+2026-01-14 09:31:20,850 - FacebookScraper - INFO - Found page 10: Mặt Nạ NMN Meso Kousa - Chăm Sóc Da Cao 
+2026-01-14 09:31:20,868 - FacebookScraper - INFO - Found page 11: My phẩm
+2026-01-14 09:31:20,885 - FacebookScraper - INFO - Found page 12: My phẩm
+2026-01-14 09:31:20,932 - FacebookScraper - INFO - Found page 13: My phẩm
+2026-01-14 09:31:20,979 - FacebookScraper - INFO - Found page 14: Mỹ Phẩm Chính Hãng
+2026-01-14 09:31:21,004 - FacebookScraper - INFO - Found page 15: Mỹ Phẩm Hàn Quốc
+2026-01-14 09:31:21,026 - FacebookScraper - INFO - Found page 16: Mỹ phẩm Phạm Hương - Mỹ Phẩm Chính Hãng 
+2026-01-14 09:31:21,053 - FacebookScraper - INFO - Found page 17: Mỹ Phẩm Xách Tay Hàn Quốc Chính Hãng
+2026-01-14 09:31:21,077 - FacebookScraper - INFO - Found page 18: Mỹ Phẩm Thủy Nguyên
+2026-01-14 09:31:21,099 - FacebookScraper - INFO - Found page 19: Mỹ Phẩm Linh Hương
+2026-01-14 09:31:21,120 - FacebookScraper - INFO - Found page 20: Mỹ phẩm, thực phẩm chức năng xách tay Hà
+2026-01-14 09:31:21,145 - FacebookScraper - INFO - Found page 21: Mỹ Phẩm Thái Nguyên
+2026-01-14 09:31:21,162 - FacebookScraper - INFO - Found page 22: Mỹ phẩm, gia dụng mọi người muốn gì cũng
+2026-01-14 09:31:21,186 - FacebookScraper - INFO - Found page 23: Mỹ Phẩm Pháp BeautyMart
+2026-01-14 09:31:21,206 - FacebookScraper - INFO - Found page 24: Mỹ phẩm 1
+2026-01-14 09:31:21,230 - FacebookScraper - INFO - Found page 25: Mỹ Phẩm Mai Linh
+2026-01-14 09:31:21,252 - FacebookScraper - INFO - Found page 26: AURA STORE - Phân Phối Mỹ Phẩm Cao Cấp T
+2026-01-14 09:31:21,280 - FacebookScraper - INFO - Found page 27: Tú Beauté - Dược Mỹ Phẩm
+2026-01-14 09:31:21,301 - FacebookScraper - INFO - Found page 28: Mỹ Phẩm Min Shop (Min Cosmetics)
+2026-01-14 09:31:21,325 - FacebookScraper - INFO - Found page 29: Mỹ phẩm THE FACE SHOP
+2026-01-14 09:31:21,343 - FacebookScraper - INFO - Found page 30: Mỹ phẩm 35+
+2026-01-14 09:31:21,363 - FacebookScraper - INFO - Found page 31: Mỹ Phẩm ADA
+2026-01-14 09:31:21,385 - FacebookScraper - INFO - Found page 32: Mỹ phẩm Hàn Quốc Queenie
+2026-01-14 09:31:21,406 - FacebookScraper - INFO - Found page 33: MỸ PHẨM HOA DƯƠNG
+2026-01-14 09:31:21,429 - FacebookScraper - INFO - Found page 34: Mỹ phẩm Nga
+2026-01-14 09:31:21,449 - FacebookScraper - INFO - Found page 35: Mỹ Phẩm Thiên Nhiên 2
+2026-01-14 09:31:21,472 - FacebookScraper - INFO - Found page 36: Mỹ phẩm Hàn Quốc
+2026-01-14 09:31:21,488 - FacebookScraper - INFO - Found page 37: Mỹ Phẩm Hà My
+2026-01-14 09:31:21,514 - FacebookScraper - INFO - Found page 38: Mỹ Phẩm Ocadar
+2026-01-14 09:31:21,538 - FacebookScraper - INFO - Found page 39: MỸ PHẨM SỐ 1
+2026-01-14 09:31:21,555 - FacebookScraper - INFO - Found page 40: Mỹ phẩm sân bay
+2026-01-14 09:31:21,580 - FacebookScraper - INFO - Found page 41: Mỹ Phẩm MQ Skin
+2026-01-14 09:31:21,602 - FacebookScraper - INFO - Found page 42: Mỹ Phẩm Diệu Linh
+2026-01-14 09:31:21,621 - FacebookScraper - INFO - Found page 43: MỸ PHẨM SỈ &LẺ
+2026-01-14 09:31:21,638 - FacebookScraper - INFO - Found page 44: Mỹ Phẩm Phạm Thủy
+2026-01-14 09:31:21,658 - FacebookScraper - INFO - Found page 45: Mỹ phẩm Laone
+2026-01-14 09:31:21,678 - FacebookScraper - INFO - Found page 46: Mỹ phẩm My Linh
+2026-01-14 09:31:21,697 - FacebookScraper - INFO - Found page 47: Mỹ Phẩm Hana
+2026-01-14 09:31:21,718 - FacebookScraper - INFO - Found page 48: Mỹ phẩm AA Cosmetics
+2026-01-14 09:31:21,744 - FacebookScraper - INFO - Found page 49: Mỹ Phẩm Min Shop (Cosmetic)
+2026-01-14 09:31:21,770 - FacebookScraper - INFO - Found page 50: Mỹ phẩm Kissme
+2026-01-14 09:31:21,792 - FacebookScraper - INFO - Found page 51: Mỹ phẩm Linh Anh
+2026-01-14 09:31:21,816 - FacebookScraper - INFO - Found page 52: MỸ PHẨM CAO CẤP
+2026-01-14 09:31:21,837 - FacebookScraper - INFO - Found page 53: Mỹ Phẩm MH
+2026-01-14 09:31:21,861 - FacebookScraper - INFO - Found page 54: Mỹ Phẩm Giá Gốc
+2026-01-14 09:31:21,886 - FacebookScraper - INFO - Found page 55: Độc Mộc Charmy
+2026-01-14 09:31:21,905 - FacebookScraper - INFO - Found page 56: Mỹ Phẩm Hà Nội
+2026-01-14 09:31:21,922 - FacebookScraper - INFO - Found page 57: Mỹ phẩm trị Nám - Hi Beauty
+2026-01-14 09:31:21,946 - FacebookScraper - INFO - Found page 58: Mỹ phẩm Linh Nhâm
+2026-01-14 09:31:21,964 - FacebookScraper - INFO - Found page 59: Mỹ phẩm Authentic
+2026-01-14 09:31:21,985 - FacebookScraper - INFO - Found page 60: Mỹ Phẩm 24H
+2026-01-14 09:31:22,010 - FacebookScraper - INFO - Found page 61: Mỹ Phẩm Chính Hãng
+2026-01-14 09:31:22,027 - FacebookScraper - INFO - Found page 62: Mỹ Phẩm Hà Nội
+2026-01-14 09:31:22,045 - FacebookScraper - INFO - Found page 63: Mỹ Phẩm Lâm Hà
+2026-01-14 09:31:22,068 - FacebookScraper - INFO - Found page 64: Mỹ Phẩm Queenie - Trang điểm thời thượng
+2026-01-14 09:31:22,087 - FacebookScraper - INFO - Found page 65: Mỹ phẩm Huyền Oanh
+2026-01-14 09:31:22,104 - FacebookScraper - INFO - Found page 66: Mỹ Phẩm Anh Quốc - Phạm Huế
+2026-01-14 09:31:22,121 - FacebookScraper - INFO - Found page 67: Mỹ Phẩm Chính Hãng Huyền Phi
+2026-01-14 09:31:22,150 - FacebookScraper - INFO - Found page 68: Lagumi - Mỹ phẩm thiên nhiên
+2026-01-14 09:31:22,167 - FacebookScraper - INFO - Found page 69: Mỹ phẩm chính hãng Emilia
+2026-01-14 09:31:22,184 - FacebookScraper - INFO - Found page 70: Mỹ phẩm Hàn Quốc chính hãng
+2026-01-14 09:31:22,209 - FacebookScraper - INFO - Found page 71: Mỹ Phẩm Quỳnh Anh
+2026-01-14 09:31:22,226 - FacebookScraper - INFO - Found page 72: Mỹ phẩm trị Nám - Hibeauty
+2026-01-14 09:31:22,248 - FacebookScraper - INFO - Found page 73: Mỹ Phẩm HÀN QUỐC Chính Hãng Hà Nội, Tphc
+2026-01-14 09:31:22,270 - FacebookScraper - INFO - Found page 74: AOM - Mỹ phẩm Thảo dược Núi rừng
+2026-01-14 09:31:22,293 - FacebookScraper - INFO - Found page 75: OAM Offical _Dược Mỹ Phẩm
+2026-01-14 09:31:22,311 - FacebookScraper - INFO - Found page 76: Mỹ phẩm C. Thuỷ La Khê
+2026-01-14 09:31:22,334 - FacebookScraper - INFO - Found page 77: Mỹ Phẩm Nhập Khẩu Chính Hãng
+2026-01-14 09:31:22,352 - FacebookScraper - INFO - Found page 78: Mỹ phẩm xách tay hàn chính hãng
+2026-01-14 09:31:22,370 - FacebookScraper - INFO - Found page 79: Mỹ phẩm xách tay hàn quốc
+2026-01-14 09:31:22,388 - FacebookScraper - INFO - Found page 80: Hali-Beauty academy-Dưỡng sinh&Mỹ phẩm
+2026-01-14 09:31:22,411 - FacebookScraper - INFO - Found page 81: Mỹ phẩm xách tay hàn chính hãng
+2026-01-14 09:31:22,429 - FacebookScraper - INFO - Found page 82: MỸ PHẨM GIÁ ĐẸP zalo 0868149946
+2026-01-14 09:31:22,446 - FacebookScraper - INFO - Found page 83: Mỹ Phẩm Tóc Chính Hãng
+2026-01-14 09:31:22,465 - FacebookScraper - INFO - Found page 84: Mỹ Phẩm Tóc Tiện Dụng
+2026-01-14 09:31:22,484 - FacebookScraper - INFO - Found page 85: Mỹ Phẩm Chính Hãng Giá Tốt
+2026-01-14 09:31:22,509 - FacebookScraper - INFO - Found page 86: Mỹ phẩm hàn quốc 2021
+2026-01-14 09:31:22,527 - FacebookScraper - INFO - Found page 87: Mỹ Phẩm Navoco Beauty chính hãng
+2026-01-14 09:31:22,547 - FacebookScraper - INFO - Found page 88: Mỹ Phẩm Tóc Tại Nhà
+2026-01-14 09:31:22,564 - FacebookScraper - INFO - Found page 89: Mỹ Phẩm Tùng Linh - Hà Đông
+2026-01-14 09:31:22,581 - FacebookScraper - INFO - Found page 90: Mỹ phẩm nội địa Trung
+2026-01-14 09:31:22,599 - FacebookScraper - INFO - Found page 91: Mỹ phẩm dược liệu MINH ANH
+2026-01-14 09:31:22,621 - FacebookScraper - INFO - Found page 92: Xanh Cosmetics - Mỹ phẩm chính hãng
+2026-01-14 09:31:22,643 - FacebookScraper - INFO - Found page 93: Mỹ Phẩm Sammy Korea Beauty - Hàn Quốc Ch
+2026-01-14 09:31:22,662 - FacebookScraper - INFO - Found page 94: Mỹ Phẩm Huyền Phi Chính Hãng
+2026-01-14 09:31:22,682 - FacebookScraper - INFO - Found page 95: Mỹ phẩm ROSA Beauty & Spa
+2026-01-14 09:31:22,699 - FacebookScraper - INFO - Found page 96: Mỹ phẩm thiên nhiên thu trang
+2026-01-14 09:31:22,717 - FacebookScraper - INFO - Found page 97: Mỹ Phẩm Xách Tay Chính Hãng Am Cosmetics
+2026-01-14 09:31:22,736 - FacebookScraper - INFO - Found page 98: Mỹ phẩm thiên nhiên Huyền Phi
+2026-01-14 09:31:22,753 - FacebookScraper - INFO - Found page 99: Mỹ Phẩm Hàn Quốc - Hoàn Nguyễn
+2026-01-14 09:31:22,772 - FacebookScraper - INFO - Found page 100: Hội Review Mỹ Phẩm Và Kinh Nghiệm Làm Đẹ
+2026-01-14 09:31:22,792 - FacebookScraper - INFO - Found page 101: Mỹ phẩm chính hãng giá gốc
+2026-01-14 09:31:22,812 - FacebookScraper - INFO - Found page 102: Mỹ Phẩm - Nước Hoa Authentic
+2026-01-14 09:31:22,829 - FacebookScraper - INFO - Found page 103: Mỹ Phẩm Cao Cấp - Hi Beauty
+2026-01-14 09:31:22,852 - FacebookScraper - INFO - Found page 104: Cam Cam Cosmetics - Shop mỹ phẩm
+2026-01-14 09:31:22,870 - FacebookScraper - INFO - Found page 105: Mỹ phẩm hera
+2026-01-14 09:31:22,888 - FacebookScraper - INFO - Found page 106: MỸ PHẨM 5
+2026-01-14 09:31:22,911 - FacebookScraper - INFO - Found page 107: Care4u - Mỹ phẩm chính hãng
+2026-01-14 09:31:22,935 - FacebookScraper - INFO - Found page 108: Thế Giới Mỹ Phẩm
+2026-01-14 09:31:22,958 - FacebookScraper - INFO - Found page 109: Mỹ phẩm TOÀN TRANG
+2026-01-14 09:31:22,975 - FacebookScraper - INFO - Found page 110: MỸ PHẨM HÀ GIANG
+2026-01-14 09:31:22,994 - FacebookScraper - INFO - Found page 111: Mỹ Phầm 1
+2026-01-14 09:31:23,012 - FacebookScraper - INFO - Found page 112: mỹ phẩm phong lan
+2026-01-14 09:31:23,029 - FacebookScraper - INFO - Found page 113: Mỹ Phẩm Yene
+2026-01-14 09:31:23,047 - FacebookScraper - INFO - Found page 114: Mỹ Phẩm Kose - Predia
+2026-01-14 09:31:23,068 - FacebookScraper - INFO - Found page 115: Mỹ Phẩm Linh Yến
+2026-01-14 09:31:23,088 - FacebookScraper - INFO - Found page 116: Mỹ phẩm An Nhiên
+2026-01-14 09:31:23,110 - FacebookScraper - INFO - Found page 117: Mỹ Phẩm Tóc THT
+2026-01-14 09:31:23,133 - FacebookScraper - INFO - Found page 118: Mỹ phẩm Hạnh Thơm
+2026-01-14 09:31:23,154 - FacebookScraper - INFO - Found page 119: Mỹ Phẩm Nhập Ngoại
+2026-01-14 09:31:23,177 - FacebookScraper - INFO - Found page 120: Mỹ Phẩm Nhập Khẩu Reborn
+2026-01-14 09:31:23,199 - FacebookScraper - INFO - Found page 121: Nana's House - Mỹ phẩm & Làm đẹp
+2026-01-14 09:31:23,222 - FacebookScraper - INFO - Found page 122: Mỹ Phẩm Việt
+2026-01-14 09:31:23,240 - FacebookScraper - INFO - Found page 123: Mỹ Phẩm Queenie Hàn Quốc - Da trắng đẹp 
+2026-01-14 09:31:23,261 - FacebookScraper - INFO - Found page 124: Mỹ Phẩm Huyền Spa
+2026-01-14 09:31:23,283 - FacebookScraper - INFO - Found page 125: Mỹ Phẩm Khánh Chi
+2026-01-14 09:31:23,305 - FacebookScraper - INFO - Found page 126: Mỹ Phẩm chính hãng
+2026-01-14 09:31:23,330 - FacebookScraper - INFO - Found page 127: Mỹ phẩm thiên nhiên
+2026-01-14 09:31:23,352 - FacebookScraper - INFO - Found page 128: Mỹ Phẩm Thiên Nhiên Cao Cấp - Huyền Phi 
+2026-01-14 09:31:23,373 - FacebookScraper - INFO - Found page 129: Thanh Hằng Cosmetics - Mỹ phẩm xách tay 
+2026-01-14 09:31:23,397 - FacebookScraper - INFO - Found page 130: Mỹ Phẩm Tóc Giá Rẻ
+2026-01-14 09:31:23,420 - FacebookScraper - INFO - Found page 131: Mỹ Phẩm Cẩm Tú
+2026-01-14 09:31:23,437 - FacebookScraper - INFO - Found page 132: Mỹ phẩm xách tay hàn quốc- chính hãng
+2026-01-14 09:31:23,455 - FacebookScraper - INFO - Found page 133: Mỹ Phẩm Chính Hãng
+2026-01-14 09:31:23,486 - FacebookScraper - INFO - Found page 134: Viên Dung - Mỹ Phẩm Chính Hãng
+2026-01-14 09:31:23,508 - FacebookScraper - INFO - Found page 135: Mỹ phẩm thiên nhiên Quyên Lara
+2026-01-14 09:31:23,527 - FacebookScraper - INFO - Found page 136: Dược Mỹ Phẩm Queenie Hàn Quốc - Trắng da
+2026-01-14 09:31:23,554 - FacebookScraper - INFO - Found page 137: Mỹ Phẩm Hi Beauty Chính Hãng
+2026-01-14 09:31:23,578 - FacebookScraper - INFO - Found page 138: Mỹ Phẩm Nhập Khẩu Nga
+2026-01-14 09:31:23,601 - FacebookScraper - INFO - Found page 139: Mỹ phẩm Nhật- phong cách Nhật
+2026-01-14 09:31:23,626 - FacebookScraper - INFO - Found page 140: Dược Mỹ Phẩm Queenie - Xóa Sạm Nám
+2026-01-14 09:31:23,643 - FacebookScraper - INFO - Found page 141: Mỹ Phẩm Linh Hương 91
+2026-01-14 09:31:23,666 - FacebookScraper - INFO - Found page 142: Mỹ phẩm thiên nhiên cao cấp
+2026-01-14 09:31:23,684 - FacebookScraper - INFO - Found page 143: Mỹ phẩm trị thâm nám trẻ hóa da
+2026-01-14 09:31:23,705 - FacebookScraper - INFO - Found page 144: Mỹ phẩm Hàn Quốc - Vanesa Korean
+2026-01-14 09:31:23,733 - FacebookScraper - INFO - Found page 145: Cỏ mềm HomeLab
+2026-01-14 09:31:23,755 - FacebookScraper - INFO - Found page 146: Mỹ phẩm thiên nhiên Laco- đẹp từ tâm
+2026-01-14 09:31:23,772 - FacebookScraper - INFO - Found page 147: Mỹ phẩm cao cấp-Lady Store
+2026-01-14 09:31:23,789 - FacebookScraper - INFO - Found page 148: Mỹ Phẩm Giá Sỉ Beauty Chính Hãng
+2026-01-14 09:31:23,810 - FacebookScraper - INFO - Found page 149: Mỹ phẩm Anh Quốc by Huế
+2026-01-14 09:31:23,832 - FacebookScraper - INFO - Found page 150: Mỹ Phẩm HaCos - Trẻ Hóa Da, Xóa Nám Tà
+2026-01-14 09:31:23,854 - FacebookScraper - INFO - Found page 151: Mỹ Phẩm Tóc Chính Hãng
+2026-01-14 09:31:23,872 - FacebookScraper - INFO - Found page 152: Mỹ phẩm xách tay hàn quốc
+2026-01-14 09:31:23,892 - FacebookScraper - INFO - Found page 153: Mỹ phẩm chính hãng Đức
+2026-01-14 09:31:23,912 - FacebookScraper - INFO - Found page 154: GoGreen Mỹ phẩm phục hồi da
+2026-01-14 09:31:23,932 - FacebookScraper - INFO - Found page 155: Mỹ phẩm Thái Lan
+2026-01-14 09:31:23,955 - FacebookScraper - INFO - Found page 156: Mỹ Phẩm Nhật Bản Dr.Placen
+2026-01-14 09:31:23,972 - FacebookScraper - INFO - Found page 157: Mỹ Phẩm thiên nhiên LACO
+2026-01-14 09:31:23,993 - FacebookScraper - INFO - Found page 158: Mỹ phẩm Auth chính hãng
+2026-01-14 09:31:24,015 - FacebookScraper - INFO - Found page 159: Mỹ phẩm thiên nhiên Mộc Nhan
+2026-01-14 09:31:24,033 - FacebookScraper - INFO - Found page 160: Mỹ phẩm Chara quốc tế
+2026-01-14 09:31:24,053 - FacebookScraper - INFO - Found page 161: MỸ PHẨM THANH HẰNG
+2026-01-14 09:31:24,078 - FacebookScraper - INFO - Found page 162: Mỹ phẩm Hàn Quốc RIORI
+2026-01-14 09:31:24,095 - FacebookScraper - INFO - Found page 163: Mỹ phẩm Hàn Quốc Hebecell
+2026-01-14 09:31:24,113 - FacebookScraper - INFO - Found page 164: Mỹ Phẩm Chính Hãng Medi -Peel
+2026-01-14 09:31:24,132 - FacebookScraper - INFO - Found page 165: Mỹ Phẩm Chính Hãng Xách Tay Nhật Bản
+2026-01-14 09:31:24,150 - FacebookScraper - INFO - Found page 166: Mỹ phẩm hàn quốc chính hãng
+2026-01-14 09:31:24,172 - FacebookScraper - INFO - Found page 167: Mỹ Phẩm Cao Cấp Pro Girl
+2026-01-14 09:31:24,214 - FacebookScraper - INFO - Found page 168: Mỹ Phẩm Chính Hãng CosmeticS
+2026-01-14 09:31:24,266 - FacebookScraper - INFO - Found page 169: Mỹ Phẩm Thiên Nhiên Huyền Phi
+2026-01-14 09:31:24,285 - FacebookScraper - INFO - Found page 170: Mỹ phẩm thiên nhiên trầu không
+2026-01-14 09:31:24,306 - FacebookScraper - INFO - Found page 171: Dược Mỹ Phẩm Lamec
+2026-01-14 09:31:24,331 - FacebookScraper - INFO - Found page 172: Mỹ Phẩm Spa Chính Hãng Midora
+2026-01-14 09:31:24,353 - FacebookScraper - INFO - Found page 173: Mỹ Phẩm Xách Tay Hàn - Nhật
+2026-01-14 09:31:24,375 - FacebookScraper - INFO - Found page 174: Mỹ Phẩm & Thời Trang Thùy Dương Xứ Nghệ
+2026-01-14 09:31:24,399 - FacebookScraper - INFO - Found page 175: Mỹ Phẩm Cao Cấp QUIN
+2026-01-14 09:31:24,418 - FacebookScraper - INFO - Found page 176: Mỹ Phẩm Hàn Quốc Chính Hãng
+2026-01-14 09:31:24,439 - FacebookScraper - INFO - Found page 177: Mỹ phẩm chính hãng Hàn Quốc
+2026-01-14 09:31:24,455 - FacebookScraper - INFO - Found page 178: Mỹ Phẩm Hàn Quốc Chính Hãng
+2026-01-14 09:31:24,478 - FacebookScraper - INFO - Found page 179: Mỹ phẩm - Giá tận gốc
+2026-01-14 09:31:24,496 - FacebookScraper - INFO - Found page 180: MỸ PHẨM OLA
+2026-01-14 09:31:24,513 - FacebookScraper - INFO - Found page 181: Mỹ Phẩm làm đẹp- Thực phẩm CN CSSK
+2026-01-14 09:31:24,532 - FacebookScraper - INFO - Found page 182: Mỹ Phẩm Huyền Phi Chính Hãng
+2026-01-14 09:31:24,553 - FacebookScraper - INFO - Found page 183: Mỹ Phẩm Chính Hãng Hoàn Nguyễn
+2026-01-14 09:31:24,573 - FacebookScraper - INFO - Found page 184: Mỹ Phẩm Mộc Linh Hương
+2026-01-14 09:31:24,593 - FacebookScraper - INFO - Found page 185: Mỹ phẩm Beautyone- Thương hiệu mỹ phẩm t
+2026-01-14 09:31:24,617 - FacebookScraper - INFO - Found page 186: Mỹ Phẩm Organic Thanh Mộc Hương
+2026-01-14 09:31:24,634 - FacebookScraper - INFO - Found page 187: Dược Mỹ Phẩm Chính Hãng Dr Nguyễn Quỳnh
+2026-01-14 09:31:24,652 - FacebookScraper - INFO - Found page 188: Siêu Thị Mỹ Phẩm Ngân Bình
+2026-01-14 09:31:24,671 - FacebookScraper - INFO - Found page 189: OLIC - Mỹ Phẩm Chính Hãng
+2026-01-14 09:31:24,692 - FacebookScraper - INFO - Found page 190: 𝐎𝐥𝐚𝐥𝐚 𝐂𝐨𝐬𝐦𝐞𝐭𝐢𝐜
+2026-01-14 09:31:24,712 - FacebookScraper - INFO - Found page 191: Mỹ Phẩm Tóc Ngọc Linh
+2026-01-14 09:31:24,731 - FacebookScraper - INFO - Found page 192: Ana Shop Mỹ Phẩm Chính Hãng
+2026-01-14 09:31:24,750 - FacebookScraper - INFO - Found page 193: Mỹ Phẩm Chính Hãng-Ngọc Ánh
+2026-01-14 09:31:24,766 - FacebookScraper - INFO - Found page 194: Mỹ phẩm cao cấp Rich & Beauty Việt Nam
+2026-01-14 09:31:24,788 - FacebookScraper - INFO - Found page 195: OG Mỹ Phẩm Chính Hãng
+2026-01-14 09:31:24,814 - FacebookScraper - INFO - Found page 196: LUY Store - Nguồn Sỉ Mỹ Phẩm Chính Hãng
+2026-01-14 09:31:24,832 - FacebookScraper - INFO - Found page 197: Thảo Auth - Chuyên dược mỹ phẩm
+2026-01-14 09:31:24,849 - FacebookScraper - INFO - Found page 198: Mỹ Phẩm Tóc Thái Toàn
+2026-01-14 09:31:24,872 - FacebookScraper - INFO - Found page 199: Belif Việt Nam Mỹ phẩm chính hãng Hàn Qu
+2026-01-14 09:31:24,896 - FacebookScraper - INFO - Found page 200: Chuyên dược mỹ phẩm nội địa Pháp
+2026-01-14 09:31:24,917 - FacebookScraper - INFO - Found page 201: Mỹ phẩm Hàn Quốc chính hãng 100%
+2026-01-14 09:31:24,942 - FacebookScraper - INFO - Found page 202: Chợ Mỹ Phẩm Chuyên Nghiệp
+2026-01-14 09:31:24,960 - FacebookScraper - INFO - Found page 203: Shop Mỹ Phẩm Uy Tín
+2026-01-14 09:31:24,981 - FacebookScraper - INFO - Found page 204: Gia Dụng - Mỹ Phẩm Xách Tay
+2026-01-14 09:31:25,000 - FacebookScraper - INFO - Found page 205: Huế Phạm - Dược Mỹ Phẩm Anh Quốc
+2026-01-14 09:31:25,018 - FacebookScraper - INFO - Found page 206: Mỹ phẩm
+2026-01-14 09:31:25,034 - FacebookScraper - INFO - Found page 207: Mỹ phẩm Trang Nhung
+2026-01-14 09:31:25,053 - FacebookScraper - INFO - Found page 208: Mỹ Phẩm Chính Hãng
+2026-01-14 09:31:25,074 - FacebookScraper - INFO - Found page 209: MỸ PHẨM HEYXI
+2026-01-14 09:31:25,099 - FacebookScraper - INFO - Found page 210: Mỹ phẩm philip
+2026-01-14 09:31:25,121 - FacebookScraper - INFO - Found page 211: Mỹ Phẩm Tài Chính
+2026-01-14 09:31:25,145 - FacebookScraper - INFO - Found page 212: Mỹ Phẩm Mẹ Bé Táo
+2026-01-14 09:31:25,162 - FacebookScraper - INFO - Found page 213: Mỹ Phẩm chính hãng
+2026-01-14 09:31:25,180 - FacebookScraper - INFO - Found page 214: Mỹ phẩm làm đẹp
+2026-01-14 09:31:25,198 - FacebookScraper - INFO - Found page 215: Mỹ phẩm OHUI, WHOO CÔNG TY CHÍNH HÃNG Ol
+2026-01-14 09:31:25,217 - FacebookScraper - INFO - Found page 216: Mỹ phẩm nhật
+2026-01-14 09:31:25,234 - FacebookScraper - INFO - Found page 217: Mỹ Phẩm ADA cosmetic
+2026-01-14 09:31:25,251 - FacebookScraper - INFO - Found page 218: Mỹ phẩm chính hãng
+2026-01-14 09:31:25,273 - FacebookScraper - INFO - Found page 219: Mỹ Phẩm Mai Amber
+2026-01-14 09:31:25,296 - FacebookScraper - INFO - Found page 220: Mỹ Phẩm GoldZan
+2026-01-14 09:31:25,314 - FacebookScraper - INFO - Found page 221: MỸ PHẨM KHÁNH LINH
+2026-01-14 09:31:25,335 - FacebookScraper - INFO - Found page 222: Mỹ Phẩm Xuân Thì
+2026-01-14 09:31:25,355 - FacebookScraper - INFO - Found page 223: Mỹ Phẩm Dr.G
+2026-01-14 09:31:25,377 - FacebookScraper - INFO - Found page 224: Trang Sức Mỹ Phẩm Thu Dương
+2026-01-14 09:31:25,400 - FacebookScraper - INFO - Found page 225: Mỹ phẩm trang điểm
+2026-01-14 09:31:25,425 - FacebookScraper - INFO - Found page 226: Phân Phối Mỹ Phẩm Spa Chuyên Nghiệp - NH
+2026-01-14 09:31:25,447 - FacebookScraper - INFO - Found page 227: Mỹ Phẩm Cao Cấp
+2026-01-14 09:31:25,465 - FacebookScraper - INFO - Found page 228: Bán mỹ phẩm
+2026-01-14 09:31:25,484 - FacebookScraper - INFO - Found page 229: Mỹ phẩm trắng da
+2026-01-14 09:31:25,504 - FacebookScraper - INFO - Found page 230: Onvaon - Mỹ Phẩm, Giảm Cân, Mẹ và Bé
+2026-01-14 09:31:25,530 - FacebookScraper - INFO - Found page 231: Mỹ Phẩm Chính Hãng
+2026-01-14 09:31:25,548 - FacebookScraper - INFO - Found page 232: Mỹ phẩm giá tốt
+2026-01-14 09:31:25,565 - FacebookScraper - INFO - Found page 233: Mỹ phẩm xách tay
+2026-01-14 09:31:25,586 - FacebookScraper - INFO - Found page 234: Mỹ Phẩm Út Xuân
+2026-01-14 09:31:25,615 - FacebookScraper - INFO - Found page 235: Dược Mỹ Phẩm Neutidi
+2026-01-14 09:31:25,632 - FacebookScraper - INFO - Found page 236: Mỹ Phẩm Chính Hãng Hoàn Nguyễn
+2026-01-14 09:31:25,653 - FacebookScraper - INFO - Found page 237: Mỹ Phẩm Việt
+2026-01-14 09:31:25,675 - FacebookScraper - INFO - Found page 238: Mỹ phẩm chara pari quốc tế
+2026-01-14 09:31:25,694 - FacebookScraper - INFO - Found page 239: Bách hoá mỹ phẩm
+2026-01-14 09:31:25,715 - FacebookScraper - INFO - Found page 240: Thế Giới Mỹ Phẩm Natural
+2026-01-14 09:31:25,738 - FacebookScraper - INFO - Found page 241: Shop Mỹ Phẩm Bo Bo - Myphambo.com
+2026-01-14 09:31:25,759 - FacebookScraper - INFO - Found page 242: Dược Mỹ Phẩm Queenie - Da trắng đẹp tự n
+2026-01-14 09:31:25,779 - FacebookScraper - INFO - Found page 243: Mỹ phẩm organic
+2026-01-14 09:31:25,808 - FacebookScraper - INFO - Found page 244: Mỹ phẩm SHOYA
+2026-01-14 09:31:25,830 - FacebookScraper - INFO - Found page 245: TIỆM MỸ PHẨM LUY
+2026-01-14 09:31:25,848 - FacebookScraper - INFO - Found page 246: Mỹ phẩm Làm Hồng Xxvirgin Hàn Quốc
+2026-01-14 09:31:25,869 - FacebookScraper - INFO - Found page 247: Mỹ Phẩm Ngành Tóc Cosmetics
+2026-01-14 09:31:25,890 - FacebookScraper - INFO - Found page 248: Lan Phạm _ Siêu Thị Mỹ Phẩm
+2026-01-14 09:31:25,909 - FacebookScraper - INFO - Found page 249: Mỹ phẩm cao cấp Hàn Quốc
+2026-01-14 09:31:25,927 - FacebookScraper - INFO - Found page 250: Mỹ Phẩm Trẻ Hóa Da 8 Trong 1 - Hoshi ローシ
+2026-01-14 09:31:25,945 - FacebookScraper - INFO - Found page 251: Mỹ phẩm Diamond Luxury Trịnh Phương
+2026-01-14 09:31:25,964 - FacebookScraper - INFO - Found page 252: Mỹ Phẩm Cao Cấp Chính Hãng Hàn Quốc
+2026-01-14 09:31:25,986 - FacebookScraper - INFO - Found page 253: Mỹ Phẩm Châu Âu - Ba Lan Xách Tay
+2026-01-14 09:31:26,005 - FacebookScraper - INFO - Found page 254: Mỹ phẩm Nội Địa Trung Official Store
+2026-01-14 09:31:26,027 - FacebookScraper - INFO - Found page 255: Mỹ Phẩm SANDY Chính Hãng
+2026-01-14 09:31:26,047 - FacebookScraper - INFO - Found page 256: TopBeauty- Mỹ Phẩm Trang Điểm
+2026-01-14 09:31:26,066 - FacebookScraper - INFO - Found page 257: Mỹ Phẩm Cao Cấp JaPan- V-N
+2026-01-14 09:31:26,066 - FacebookScraper - INFO - Found 257 unique pages
+2026-01-14 09:31:26,066 - FacebookScraper - INFO - Extracting detailed information...
+2026-01-14 09:31:26,066 - FacebookScraper - INFO - Processing page 1/257: Mỹ Phẩm Đông Anh - Trang Công Ty
+2026-01-14 09:31:36,252 - FacebookScraper - INFO - Phone: 090 998 54 60, Address: Ho Chi Minh City, Vietnam
+2026-01-14 09:31:39,254 - FacebookScraper - INFO - Processing page 2/257: Duy Thường Mỹ Phẩm Chính Hãng
+2026-01-14 09:31:48,997 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 09:31:51,997 - FacebookScraper - INFO - Processing page 3/257: Vu Pham Diem My
+2026-01-14 09:32:01,236 - FacebookScraper - INFO - Phone: 0918353500, Address: Ho Chi Minh City, Vietnam
+2026-01-14 09:32:04,237 - FacebookScraper - INFO - Processing page 4/257: MC Pham My Linh
+2026-01-14 09:32:13,387 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 09:32:16,388 - FacebookScraper - INFO - Processing page 5/257: Mỹ Phẩm Authentic
+2026-01-14 09:32:25,349 - FacebookScraper - INFO - Phone: 0973174650, Address: N/A
+2026-01-14 09:32:28,350 - FacebookScraper - INFO - Processing page 6/257: My phẩm
+2026-01-14 09:32:37,096 - FacebookScraper - INFO - Phone: 084 661 6364, Address: 350 trần phú, Hà Đông, Vietnam
+2026-01-14 09:32:40,097 - FacebookScraper - INFO - Processing page 7/257: My phẩm
+2026-01-14 09:32:48,601 - FacebookScraper - INFO - Phone: 094 736 72 32, Address: 356 nguyễn trãi, Hà Đông, Viet
+2026-01-14 09:32:51,601 - FacebookScraper - INFO - Processing page 8/257: Mỹ phẩm
+2026-01-14 09:32:59,927 - FacebookScraper - INFO - Phone: N/A, Address: Hà Nội, Hà Đông, Vietnam
+2026-01-14 09:33:02,927 - FacebookScraper - INFO - Processing page 9/257: My phẩm
+2026-01-14 09:33:11,106 - FacebookScraper - INFO - Phone: 098 264 66 37, Address: 861 thanh bình, Hà Đông, Vietn
+2026-01-14 09:33:14,109 - FacebookScraper - INFO - Processing page 10/257: Mặt Nạ NMN Meso Kousa - Chăm Sóc Da Cao 
+2026-01-14 09:33:23,461 - FacebookScraper - INFO - Phone: 879999962, Address: N/A
+2026-01-14 09:33:26,462 - FacebookScraper - INFO - Processing page 11/257: My phẩm
+2026-01-14 09:33:34,898 - FacebookScraper - INFO - Phone: 085 763 6445, Address: 546 thanh bình, Hà Đông, Vietn
+2026-01-14 09:33:37,898 - FacebookScraper - INFO - Processing page 12/257: My phẩm
+2026-01-14 09:33:46,864 - FacebookScraper - INFO - Phone: 094 732 32 63, Address: 462 thanh bình, Hà Đông, Vietn
+2026-01-14 09:33:49,865 - FacebookScraper - INFO - Processing page 13/257: My phẩm
+2026-01-14 09:33:58,280 - FacebookScraper - INFO - Phone: 084 736 3632, Address: 451 trần phú, Hà Đông, Vietnam
+2026-01-14 09:34:01,281 - FacebookScraper - INFO - Processing page 14/257: Mỹ Phẩm Chính Hãng
+2026-01-14 09:34:10,490 - FacebookScraper - INFO - Phone: N/A, Address: ha noi, Hanoi, Vietnam
+2026-01-14 09:34:13,492 - FacebookScraper - INFO - Processing page 15/257: Mỹ Phẩm Hàn Quốc
+2026-01-14 09:34:23,793 - FacebookScraper - INFO - Phone: 034 314 5678, Address: 88 Trần Hoà - Hoàng Mai, Hanoi
+2026-01-14 09:34:26,794 - FacebookScraper - INFO - Processing page 16/257: Mỹ phẩm Phạm Hương - Mỹ Phẩm Chính Hãng 
+2026-01-14 09:34:35,515 - FacebookScraper - INFO - Phone: 096 476 44 56, Address: Số 324 , đường Lê Quý Đôn, Thá
+2026-01-14 09:34:38,517 - FacebookScraper - INFO - Processing page 17/257: Mỹ Phẩm Xách Tay Hàn Quốc Chính Hãng
+2026-01-14 09:34:47,396 - FacebookScraper - INFO - Phone: 097 572 61 93, Address: N/A
+2026-01-14 09:34:50,396 - FacebookScraper - INFO - Processing page 18/257: Mỹ Phẩm Thủy Nguyên
+2026-01-14 09:34:59,568 - FacebookScraper - INFO - Phone: N/A, Address: Thủy Sơn, Hai Phong, Vietnam
+2026-01-14 09:35:02,569 - FacebookScraper - INFO - Processing page 19/257: Mỹ Phẩm Linh Hương
+2026-01-14 09:35:11,621 - FacebookScraper - INFO - Phone: 096 990 17 84, Address: Hà Đông, Hanoi, Vietnam
+2026-01-14 09:35:14,635 - FacebookScraper - INFO - Processing page 20/257: Mỹ phẩm, thực phẩm chức năng xách tay Hà
+2026-01-14 09:35:23,855 - FacebookScraper - INFO - Phone: 036 463 5869, Address: N/A
+2026-01-14 09:35:26,867 - FacebookScraper - INFO - Processing page 21/257: Mỹ Phẩm Thái Nguyên
+2026-01-14 09:35:35,636 - FacebookScraper - INFO - Phone: 096 566 69 68, Address: 83 - Lương Ngọc Quyến, Thái Ng
+2026-01-14 09:35:38,646 - FacebookScraper - INFO - Processing page 22/257: Mỹ phẩm, gia dụng mọi người muốn gì cũng
+2026-01-14 09:35:47,673 - FacebookScraper - INFO - Phone: 097 836 06 94, Address: Đường Hồ Chí Minh, Hà Nội, Việ
+2026-01-14 09:35:50,675 - FacebookScraper - INFO - Processing page 23/257: Mỹ Phẩm Pháp BeautyMart
+2026-01-14 09:36:00,418 - FacebookScraper - INFO - Phone: 097 714 72 68, Address: N/A
+2026-01-14 09:36:03,419 - FacebookScraper - INFO - Processing page 24/257: Mỹ phẩm 1
+2026-01-14 09:36:12,154 - FacebookScraper - INFO - Phone: N/A, Address: Phố Hà Cầu, Hà Nội, Việt Nam, 
+2026-01-14 09:36:15,168 - FacebookScraper - INFO - Processing page 25/257: Mỹ Phẩm Mai Linh
+2026-01-14 09:36:24,254 - FacebookScraper - INFO - Phone: 0277 3857 566, Address: 61-63 Cách Mạng Tháng 8, phườn
+2026-01-14 09:36:27,264 - FacebookScraper - INFO - Processing page 26/257: AURA STORE - Phân Phối Mỹ Phẩm Cao Cấp T
+2026-01-14 09:36:36,807 - FacebookScraper - INFO - Phone: 0962849908, Address: L01-L02 An Phú shop Villa, Dươ
+2026-01-14 09:36:39,808 - FacebookScraper - INFO - Processing page 27/257: Tú Beauté - Dược Mỹ Phẩm
+2026-01-14 09:36:48,542 - FacebookScraper - INFO - Phone: 096 817 33 60, Address: Shophouse Mộc Lan 6-12 Vinhome
+2026-01-14 09:36:51,542 - FacebookScraper - INFO - Processing page 28/257: Mỹ Phẩm Min Shop (Min Cosmetics)
+2026-01-14 09:37:00,839 - FacebookScraper - INFO - Phone: 867953864, Address: N/A
+2026-01-14 09:37:03,840 - FacebookScraper - INFO - Processing page 29/257: Mỹ phẩm THE FACE SHOP
+2026-01-14 09:37:13,823 - FacebookScraper - INFO - Phone: 097 479 77 27, Address: 41A Trần Quốc Vượng, Hanoi, Vi
+2026-01-14 09:37:16,825 - FacebookScraper - INFO - Processing page 30/257: Mỹ phẩm 35+
+2026-01-14 09:37:25,619 - FacebookScraper - INFO - Phone: 037 802 2173, Address: Hà Nội, Hà Đông, Vietnam
+2026-01-14 09:37:28,620 - FacebookScraper - INFO - Processing page 31/257: Mỹ Phẩm ADA
+2026-01-14 09:37:37,670 - FacebookScraper - INFO - Phone: N/A, Address: Phố Thành Công, Hà Nội, Việt N
+2026-01-14 09:37:40,679 - FacebookScraper - INFO - Processing page 32/257: Mỹ phẩm Hàn Quốc Queenie
+2026-01-14 09:37:51,053 - FacebookScraper - INFO - Phone: 091 695 69 73, Address: NV10 khu đô thị Trung Văn, Nam
+2026-01-14 09:37:54,058 - FacebookScraper - INFO - Processing page 33/257: MỸ PHẨM HOA DƯƠNG
+2026-01-14 09:38:02,353 - FacebookScraper - INFO - Phone: 097 691 29 28, Address: N/A
+2026-01-14 09:38:05,361 - FacebookScraper - INFO - Processing page 34/257: Mỹ phẩm Nga
+2026-01-14 09:38:14,300 - FacebookScraper - INFO - Phone: 0961416888, Address: N/A
+2026-01-14 09:38:17,301 - FacebookScraper - INFO - Processing page 35/257: Mỹ Phẩm Thiên Nhiên 2
+2026-01-14 09:38:26,079 - FacebookScraper - INFO - Phone: N/A, Address: hà nội, Hanoi, Vietnam
+2026-01-14 09:38:29,080 - FacebookScraper - INFO - Processing page 36/257: Mỹ phẩm Hàn Quốc
+2026-01-14 09:38:38,145 - FacebookScraper - INFO - Phone: 096 428 68 92, Address: Thanh Xuân, Hanoi, Vietnam
+2026-01-14 09:38:41,146 - FacebookScraper - INFO - Processing page 37/257: Mỹ Phẩm Hà My
+2026-01-14 09:38:49,603 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 09:38:52,604 - FacebookScraper - INFO - Processing page 38/257: Mỹ Phẩm Ocadar
+2026-01-14 09:39:01,587 - FacebookScraper - INFO - Phone: 0888561444, Address: 54 ngô quyền, Cam Pha, Vietnam
+2026-01-14 09:39:04,588 - FacebookScraper - INFO - Processing page 39/257: MỸ PHẨM SỐ 1
+2026-01-14 09:39:13,578 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 09:39:16,579 - FacebookScraper - INFO - Processing page 40/257: Mỹ phẩm sân bay
+2026-01-14 09:39:25,520 - FacebookScraper - INFO - Phone: N/A, Address: Phố Lê Hồng Phong, Hà Nội, Việ
+2026-01-14 09:39:28,525 - FacebookScraper - INFO - Processing page 41/257: Mỹ Phẩm MQ Skin
+2026-01-14 09:39:38,063 - FacebookScraper - INFO - Phone: 093 4433 179, Address: 17 Trường Sơn, P.4, Quận Tân B
+2026-01-14 09:39:41,064 - FacebookScraper - INFO - Processing page 42/257: Mỹ Phẩm Diệu Linh
+2026-01-14 09:39:49,818 - FacebookScraper - INFO - Phone: 094 216 36 38, Address: xóm 4 quỳnh đô, Hanoi, Vietnam
+2026-01-14 09:39:52,826 - FacebookScraper - INFO - Processing page 43/257: MỸ PHẨM SỈ &LẺ
+2026-01-14 09:40:01,949 - FacebookScraper - INFO - Phone: N/A, Address: Ngõ Ga Hà Đông, Hà Nội, Việt N
+2026-01-14 09:40:04,949 - FacebookScraper - INFO - Processing page 44/257: Mỹ Phẩm Phạm Thủy
+2026-01-14 09:40:14,002 - FacebookScraper - INFO - Phone: 096 854 51 60, Address: số nhà 15b nguyễn công trứ , H
+2026-01-14 09:40:17,006 - FacebookScraper - INFO - Processing page 45/257: Mỹ phẩm Laone
+2026-01-14 09:40:25,879 - FacebookScraper - INFO - Phone: 096 816 68 46, Address: N/A
+2026-01-14 09:40:28,892 - FacebookScraper - INFO - Processing page 46/257: Mỹ phẩm My Linh
+2026-01-14 09:40:38,397 - FacebookScraper - INFO - Phone: 098 235 53 95, Address: Ngõ 5 Phố Xốm, Hà Nội, Việt Na
+2026-01-14 09:40:41,398 - FacebookScraper - INFO - Processing page 47/257: Mỹ Phẩm Hana
+2026-01-14 09:40:50,613 - FacebookScraper - INFO - Phone: N/A, Address: Phố Xa La, Hà Nội, Việt Nam, H
+2026-01-14 09:40:53,613 - FacebookScraper - INFO - Processing page 48/257: Mỹ phẩm AA Cosmetics
+2026-01-14 09:41:02,617 - FacebookScraper - INFO - Phone: 098 770 95 85, Address: Dương Nội, Hà Đông, Vietnam
+2026-01-14 09:41:05,621 - FacebookScraper - INFO - Processing page 49/257: Mỹ Phẩm Min Shop (Cosmetic)
+2026-01-14 09:41:15,381 - FacebookScraper - INFO - Phone: 867953864, Address: N/A
+2026-01-14 09:41:18,381 - FacebookScraper - INFO - Processing page 50/257: Mỹ phẩm Kissme
+2026-01-14 09:41:27,182 - FacebookScraper - INFO - Phone: 093 500 15 91, Address: 150 Cù Chính Lan, Da Nang, Vie
+2026-01-14 09:41:30,190 - FacebookScraper - INFO - Processing page 51/257: Mỹ phẩm Linh Anh
+2026-01-14 09:41:38,851 - FacebookScraper - INFO - Phone: N/A, Address: Hà nội, Hà Đông, Vietnam
+2026-01-14 09:41:41,851 - FacebookScraper - INFO - Processing page 52/257: MỸ PHẨM CAO CẤP
+2026-01-14 09:41:50,631 - FacebookScraper - INFO - Phone: 077 731 7778, Address: N/A
+2026-01-14 09:41:53,644 - FacebookScraper - INFO - Processing page 53/257: Mỹ Phẩm MH
+2026-01-14 09:42:02,842 - FacebookScraper - INFO - Phone: 0122 921 5695, Address: tòa nhà 34T hoàng đạo thúy , H
+2026-01-14 09:42:05,843 - FacebookScraper - INFO - Processing page 54/257: Mỹ Phẩm Giá Gốc
+2026-01-14 09:42:14,577 - FacebookScraper - INFO - Phone: 094 910 9788, Address: Số nhà 8, Ngõ 34 Vĩnh Tuy, Hai
+2026-01-14 09:42:17,578 - FacebookScraper - INFO - Processing page 55/257: Độc Mộc Charmy
+2026-01-14 09:42:27,148 - FacebookScraper - INFO - Phone: 097 886 37 69, Address: VG Building, 235 Nguyễn Trãi, 
+2026-01-14 09:42:30,148 - FacebookScraper - INFO - Processing page 56/257: Mỹ Phẩm Hà Nội
+2026-01-14 09:42:38,683 - FacebookScraper - INFO - Phone: N/A, Address: Phố Văn Quán, Hà Nội, Việt Nam
+2026-01-14 09:42:41,689 - FacebookScraper - INFO - Processing page 57/257: Mỹ phẩm trị Nám - Hi Beauty
+2026-01-14 09:42:50,411 - FacebookScraper - INFO - Phone: 038 495 3513, Address: N/A
+2026-01-14 09:42:53,415 - FacebookScraper - INFO - Processing page 58/257: Mỹ phẩm Linh Nhâm
+2026-01-14 09:43:02,333 - FacebookScraper - INFO - Phone: 096 888 69 92, Address: Tầng 25, Tòa nhà B2 - Roman Pl
+2026-01-14 09:43:05,349 - FacebookScraper - INFO - Processing page 59/257: Mỹ phẩm Authentic
+2026-01-14 09:43:14,470 - FacebookScraper - INFO - Phone: N/A, Address: ha noi, Phúc Lý, Vietnam
+2026-01-14 09:43:17,471 - FacebookScraper - INFO - Processing page 60/257: Mỹ Phẩm 24H
+2026-01-14 09:43:26,867 - FacebookScraper - INFO - Phone: 098 198 63 21, Address: 116 Nguyễn Xiển, Phùng Khoang,
+2026-01-14 09:43:29,881 - FacebookScraper - INFO - Processing page 61/257: Mỹ Phẩm Chính Hãng
+2026-01-14 09:43:38,886 - FacebookScraper - INFO - Phone: 032 665 2345, Address: Phùng Khoang, Vietnam
+2026-01-14 09:43:41,890 - FacebookScraper - INFO - Processing page 62/257: Mỹ Phẩm Hà Nội
+2026-01-14 09:43:51,034 - FacebookScraper - INFO - Phone: +43 3689 580, Address: hữu bằng, Hà Đông, Vietnam
+2026-01-14 09:43:54,046 - FacebookScraper - INFO - Processing page 63/257: Mỹ Phẩm Lâm Hà
+2026-01-14 09:44:04,155 - FacebookScraper - INFO - Phone: 094 356 05 08, Address: 378 Lê Duẩn , Phương Liên , Đố
+2026-01-14 09:44:07,157 - FacebookScraper - INFO - Processing page 64/257: Mỹ Phẩm Queenie - Trang điểm thời thượng
+2026-01-14 09:44:16,167 - FacebookScraper - INFO - Phone: 091 695 69 73, Address: Biệt thự nhà vườn 10 khu đô Th
+2026-01-14 09:44:19,179 - FacebookScraper - INFO - Processing page 65/257: Mỹ phẩm Huyền Oanh
+2026-01-14 09:44:28,050 - FacebookScraper - INFO - Phone: 098 972 34 88, Address: N/A
+2026-01-14 09:44:31,055 - FacebookScraper - INFO - Processing page 66/257: Mỹ Phẩm Anh Quốc - Phạm Huế
+2026-01-14 09:44:40,270 - FacebookScraper - INFO - Phone: N/A, Address: BT-04 Ngõ 6 Nguyễn Văn Lộc, Hà
+2026-01-14 09:44:43,270 - FacebookScraper - INFO - Processing page 67/257: Mỹ Phẩm Chính Hãng Huyền Phi
+2026-01-14 09:44:52,042 - FacebookScraper - INFO - Phone: N/A, Address: Cầu Đuống Nôi, Hà Nội, Việt Na
+2026-01-14 09:44:55,045 - FacebookScraper - INFO - Processing page 68/257: Lagumi - Mỹ phẩm thiên nhiên
+2026-01-14 09:45:03,899 - FacebookScraper - INFO - Phone: N/A, Address: 61 Ngụy Như Kon Tum, Hanoi, Vi
+2026-01-14 09:45:06,906 - FacebookScraper - INFO - Processing page 69/257: Mỹ phẩm chính hãng Emilia
+2026-01-14 09:45:15,833 - FacebookScraper - INFO - Phone: N/A, Address: Văn Phú - Phú La - Hà Đông, Hà
+2026-01-14 09:45:18,834 - FacebookScraper - INFO - Processing page 70/257: Mỹ phẩm Hàn Quốc chính hãng
+2026-01-14 09:45:27,865 - FacebookScraper - INFO - Phone: N/A, Address: lê Trọng Tấn , Hà Đông, Hà Nội
+2026-01-14 09:45:30,866 - FacebookScraper - INFO - Processing page 71/257: Mỹ Phẩm Quỳnh Anh
+2026-01-14 09:45:39,852 - FacebookScraper - INFO - Phone: 098 935 23 68, Address: 52 Cầu Trì, Phường Sơn Lộc, So
+2026-01-14 09:45:42,853 - FacebookScraper - INFO - Processing page 72/257: Mỹ phẩm trị Nám - Hibeauty
+2026-01-14 09:45:51,737 - FacebookScraper - INFO - Phone: 038 495 3513, Address: N/A
+2026-01-14 09:45:54,747 - FacebookScraper - INFO - Processing page 73/257: Mỹ Phẩm HÀN QUỐC Chính Hãng Hà Nội, Tphc
+2026-01-14 09:46:03,638 - FacebookScraper - INFO - Phone: 0866269538, Address: Phùng Khoang, Vietnam
+2026-01-14 09:46:06,638 - FacebookScraper - INFO - Processing page 74/257: AOM - Mỹ phẩm Thảo dược Núi rừng
+2026-01-14 09:46:16,029 - FacebookScraper - INFO - Phone: 038 629 2799, Address: Số 9, ngách 73/6, ngõ 1194 Đườ
+2026-01-14 09:46:19,031 - FacebookScraper - INFO - Processing page 75/257: OAM Offical _Dược Mỹ Phẩm
+2026-01-14 09:46:29,201 - FacebookScraper - INFO - Phone: 097 390 87 62, Address: U8L40, Khu đô thị Đô Nghĩa ,Yê
+2026-01-14 09:46:32,201 - FacebookScraper - INFO - Processing page 76/257: Mỹ phẩm C. Thuỷ La Khê
+2026-01-14 09:46:41,571 - FacebookScraper - INFO - Phone: 090 445 61 61, Address: Số 10-ngõ 5, đường Ngô Đình Mẫ
+2026-01-14 09:46:44,572 - FacebookScraper - INFO - Processing page 77/257: Mỹ Phẩm Nhập Khẩu Chính Hãng
+2026-01-14 09:46:54,300 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 09:46:57,301 - FacebookScraper - INFO - Processing page 78/257: Mỹ phẩm xách tay hàn chính hãng
+2026-01-14 09:47:06,049 - FacebookScraper - INFO - Phone: 038 920 8517, Address: Khu đô thị văn khê la khê hà đ
+2026-01-14 09:47:09,059 - FacebookScraper - INFO - Processing page 79/257: Mỹ phẩm xách tay hàn quốc
+2026-01-14 09:47:18,399 - FacebookScraper - INFO - Phone: N/A, Address: Phố Lê Lợi, Hà Nội, Việt Nam, 
+2026-01-14 09:47:21,407 - FacebookScraper - INFO - Processing page 80/257: Hali-Beauty academy-Dưỡng sinh&Mỹ phẩm
+2026-01-14 09:47:31,339 - FacebookScraper - INFO - Phone: 0835194134, Address: Đường 286- Thị trấn chờ - Yên 
+2026-01-14 09:47:34,340 - FacebookScraper - INFO - Processing page 81/257: Mỹ phẩm xách tay hàn chính hãng
+2026-01-14 09:47:43,179 - FacebookScraper - INFO - Phone: 038 920 8517, Address: khu đô thị văn khê la khê hà đ
+2026-01-14 09:47:46,186 - FacebookScraper - INFO - Processing page 82/257: MỸ PHẨM GIÁ ĐẸP zalo 0868149946
+2026-01-14 09:47:54,986 - FacebookScraper - INFO - Phone: 0868149946, Address: Cầu Đuống Nôi, Hà Nội, Việt Na
+2026-01-14 09:47:57,987 - FacebookScraper - INFO - Processing page 83/257: Mỹ Phẩm Tóc Chính Hãng
+2026-01-14 09:48:06,748 - FacebookScraper - INFO - Phone: 10002850640, Address: hà nội , Hà Đông, Vietnam
+2026-01-14 09:48:09,759 - FacebookScraper - INFO - Processing page 84/257: Mỹ Phẩm Tóc Tiện Dụng
+2026-01-14 09:48:19,258 - FacebookScraper - INFO - Phone: 097 217 77 88, Address: Đường Phúc La-Văn Phú, Hà Nội,
+2026-01-14 09:48:22,259 - FacebookScraper - INFO - Processing page 85/257: Mỹ Phẩm Chính Hãng Giá Tốt
+2026-01-14 09:48:31,723 - FacebookScraper - INFO - Phone: 076 668 2234, Address: Hà Nội , Hà Đông, Vietnam
+2026-01-14 09:48:34,724 - FacebookScraper - INFO - Processing page 86/257: Mỹ phẩm hàn quốc 2021
+2026-01-14 09:48:43,111 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 09:48:46,112 - FacebookScraper - INFO - Processing page 87/257: Mỹ Phẩm Navoco Beauty chính hãng
+2026-01-14 09:48:55,308 - FacebookScraper - INFO - Phone: 085 603 3737, Address: N/A
+2026-01-14 09:48:58,310 - FacebookScraper - INFO - Processing page 88/257: Mỹ Phẩm Tóc Tại Nhà
+2026-01-14 09:49:07,340 - FacebookScraper - INFO - Phone: 096 444 22 52, Address: Đường Phúc La-Văn Phú, Hà Nội,
+2026-01-14 09:49:10,341 - FacebookScraper - INFO - Processing page 89/257: Mỹ Phẩm Tùng Linh - Hà Đông
+2026-01-14 09:49:19,302 - FacebookScraper - INFO - Phone: 0901639366, Address: 42 Quang Trung - Hà Đông - Hà 
+2026-01-14 09:49:22,303 - FacebookScraper - INFO - Processing page 90/257: Mỹ phẩm nội địa Trung
+2026-01-14 09:49:31,213 - FacebookScraper - INFO - Phone: N/A, Address: hà nội, Hà Đông, Vietnam
+2026-01-14 09:49:34,214 - FacebookScraper - INFO - Processing page 91/257: Mỹ phẩm dược liệu MINH ANH
+2026-01-14 09:49:43,348 - FacebookScraper - INFO - Phone: N/A, Address: Đường Phúc La-Văn Phú, Hà Nội,
+2026-01-14 09:49:46,348 - FacebookScraper - INFO - Processing page 92/257: Xanh Cosmetics - Mỹ phẩm chính hãng
+2026-01-14 09:49:55,926 - FacebookScraper - INFO - Phone: 096 383 87 29, Address: 26 Trần Phú - Thường Tín , Han
+2026-01-14 09:49:58,927 - FacebookScraper - INFO - Processing page 93/257: Mỹ Phẩm Sammy Korea Beauty - Hàn Quốc Ch
+2026-01-14 09:50:08,290 - FacebookScraper - INFO - Phone: 879015196, Address: Cầu Am, Hà Đông, Hà Nội, Hà Đô
+2026-01-14 09:50:11,291 - FacebookScraper - INFO - Processing page 94/257: Mỹ Phẩm Huyền Phi Chính Hãng
+2026-01-14 09:50:21,471 - FacebookScraper - INFO - Phone: 0362 536 102, Address: 68 Khúc Thừa Dụ- Cầu Giấy, Han
+2026-01-14 09:50:24,472 - FacebookScraper - INFO - Processing page 95/257: Mỹ phẩm ROSA Beauty & Spa
+2026-01-14 09:50:33,568 - FacebookScraper - INFO - Phone: 096 246 46 04, Address: AION Hà Đông , Hà Đông, Vietna
+2026-01-14 09:50:36,569 - FacebookScraper - INFO - Processing page 96/257: Mỹ phẩm thiên nhiên thu trang
+2026-01-14 09:50:45,858 - FacebookScraper - INFO - Phone: N/A, Address: Cầu Đuống Nôi, Hà Nội, Việt Na
+2026-01-14 09:50:48,860 - FacebookScraper - INFO - Processing page 97/257: Mỹ Phẩm Xách Tay Chính Hãng Am Cosmetics
+2026-01-14 09:50:57,872 - FacebookScraper - INFO - Phone: 038 314 5658, Address: Hà Nội, Hà Đông, Vietnam
+2026-01-14 09:51:00,873 - FacebookScraper - INFO - Processing page 98/257: Mỹ phẩm thiên nhiên Huyền Phi
+2026-01-14 09:51:10,084 - FacebookScraper - INFO - Phone: N/A, Address: Phố Phú Lương, Hà Nội, Việt Na
+2026-01-14 09:51:13,084 - FacebookScraper - INFO - Processing page 99/257: Mỹ Phẩm Hàn Quốc - Hoàn Nguyễn
+2026-01-14 09:51:22,151 - FacebookScraper - INFO - Phone: 247
+247
+225, Address: N/A
+2026-01-14 09:51:25,151 - FacebookScraper - INFO - Processing page 100/257: Hội Review Mỹ Phẩm Và Kinh Nghiệm Làm Đẹ
+2026-01-14 09:51:34,976 - FacebookScraper - INFO - Phone: N/A, Address: Số 6 Nguyễn Trung Trực Phường 
+2026-01-14 09:51:37,977 - FacebookScraper - INFO - Processing page 101/257: Mỹ phẩm chính hãng giá gốc
+2026-01-14 09:51:46,896 - FacebookScraper - INFO - Phone: N/A, Address: Hà nôi, Hà Đông, Vietnam
+2026-01-14 09:51:49,896 - FacebookScraper - INFO - Processing page 102/257: Mỹ Phẩm - Nước Hoa Authentic
+2026-01-14 09:51:58,504 - FacebookScraper - INFO - Phone: N/A, Address: Phố Hà Cầu, Hà Nội, Việt Nam, 
+2026-01-14 09:52:01,505 - FacebookScraper - INFO - Processing page 103/257: Mỹ Phẩm Cao Cấp - Hi Beauty
+2026-01-14 09:52:10,534 - FacebookScraper - INFO - Phone: N/A, Address: Hà Đông, Hà Đông, Vietnam
+2026-01-14 09:52:13,535 - FacebookScraper - INFO - Processing page 104/257: Cam Cam Cosmetics - Shop mỹ phẩm
+2026-01-14 09:52:22,388 - FacebookScraper - INFO - Phone: 092 966 36 63, Address: 233 Trương Định, Hoàng Mai, Hà
+2026-01-14 09:52:25,390 - FacebookScraper - INFO - Processing page 105/257: Mỹ phẩm hera
+2026-01-14 09:52:34,019 - FacebookScraper - INFO - Phone: N/A, Address: Hà Nội, Hà Đông, Vietnam
+2026-01-14 09:52:37,020 - FacebookScraper - INFO - Processing page 106/257: MỸ PHẨM 5
+2026-01-14 09:52:45,583 - FacebookScraper - INFO - Phone: N/A, Address: HÀ NỘI, Hà Đông, Vietnam
+2026-01-14 09:52:48,583 - FacebookScraper - INFO - Processing page 107/257: Care4u - Mỹ phẩm chính hãng
+2026-01-14 09:52:57,536 - FacebookScraper - INFO - Phone: 098 298 82 98, Address: Green Diamond, 93 Láng Hạ, Han
+2026-01-14 09:53:00,536 - FacebookScraper - INFO - Processing page 108/257: Thế Giới Mỹ Phẩm
+2026-01-14 09:53:09,244 - FacebookScraper - INFO - Phone: 034 579 0789, Address: Sân bay cam ranh , Khanh Hoa, 
+2026-01-14 09:53:12,245 - FacebookScraper - INFO - Processing page 109/257: Mỹ phẩm TOÀN TRANG
+2026-01-14 09:53:21,559 - FacebookScraper - INFO - Phone: 056 322 8333, Address: N/A
+2026-01-14 09:53:24,560 - FacebookScraper - INFO - Processing page 110/257: MỸ PHẨM HÀ GIANG
+2026-01-14 09:53:33,883 - FacebookScraper - INFO - Phone: 038 511 1996, Address: Đường tình lộ 422- thôn lũng k
+2026-01-14 09:53:36,883 - FacebookScraper - INFO - Processing page 111/257: Mỹ Phầm 1
+2026-01-14 09:53:45,669 - FacebookScraper - INFO - Phone: N/A, Address: Trung Văn, Hà Đông, Vietnam
+2026-01-14 09:53:48,670 - FacebookScraper - INFO - Processing page 112/257: mỹ phẩm phong lan
+2026-01-14 09:53:57,290 - FacebookScraper - INFO - Phone: 036 883 9989, Address: Kiến Hưng, Hà Đông, Vietnam
+2026-01-14 09:54:00,291 - FacebookScraper - INFO - Processing page 113/257: Mỹ Phẩm Yene
+2026-01-14 09:54:09,712 - FacebookScraper - INFO - Phone: 098 544 82 28, Address: Vạn Phúc - Hà Đông, Hanoi, Vie
+2026-01-14 09:54:12,713 - FacebookScraper - INFO - Processing page 114/257: Mỹ Phẩm Kose - Predia
+2026-01-14 09:54:21,522 - FacebookScraper - INFO - Phone: 096 882 11 66, Address: Văn Phú, Hà Đông, Vietnam
+2026-01-14 09:54:24,522 - FacebookScraper - INFO - Processing page 115/257: Mỹ Phẩm Linh Yến
+2026-01-14 09:54:33,710 - FacebookScraper - INFO - Phone: 096 698 07 02, Address: CT1B - KĐT Tân Tây Đô, Hanoi, 
+2026-01-14 09:54:36,711 - FacebookScraper - INFO - Processing page 116/257: Mỹ phẩm An Nhiên
+2026-01-14 09:54:46,198 - FacebookScraper - INFO - Phone: 098 976 61 76, Address: ba La - Hà Đông - Hà Nội, Hà Đ
+2026-01-14 09:54:49,199 - FacebookScraper - INFO - Processing page 117/257: Mỹ Phẩm Tóc THT
+2026-01-14 09:54:58,652 - FacebookScraper - INFO - Phone: 097 222 06 58, Address: 112 Nguyễn khuyến, văn quán hà
+2026-01-14 09:55:01,654 - FacebookScraper - INFO - Processing page 118/257: Mỹ phẩm Hạnh Thơm
+2026-01-14 09:55:11,728 - FacebookScraper - INFO - Phone: 098 212 35 67, Address: 217 Giảng Võ, Hanoi, Vietnam
+2026-01-14 09:55:14,729 - FacebookScraper - INFO - Processing page 119/257: Mỹ Phẩm Nhập Ngoại
+2026-01-14 09:55:27,719 - FacebookScraper - INFO - Phone: 096 845 67 89, Address: N/A
+2026-01-14 09:55:30,720 - FacebookScraper - INFO - Processing page 120/257: Mỹ Phẩm Nhập Khẩu Reborn
+2026-01-14 09:55:42,027 - FacebookScraper - INFO - Phone: 091 485 86 86, Address: N/A
+2026-01-14 09:55:45,027 - FacebookScraper - INFO - Processing page 121/257: Nana's House - Mỹ phẩm & Làm đẹp
+2026-01-14 09:55:56,269 - FacebookScraper - INFO - Phone: 096 330 57 66, Address: 53 Triều khúc, Hanoi, Vietnam
+2026-01-14 09:55:59,270 - FacebookScraper - INFO - Processing page 122/257: Mỹ Phẩm Việt
+2026-01-14 09:56:09,932 - FacebookScraper - INFO - Phone: 096 781 92 33, Address: cầu giấy hà nội, Trung Hà, Vie
+2026-01-14 09:56:12,933 - FacebookScraper - INFO - Processing page 123/257: Mỹ Phẩm Queenie Hàn Quốc - Da trắng đẹp 
+2026-01-14 09:56:23,174 - FacebookScraper - INFO - Phone: 091 695 69 73, Address: Biệt thự nhà vườn 10 khu đô Th
+2026-01-14 09:56:26,175 - FacebookScraper - INFO - Processing page 124/257: Mỹ Phẩm Huyền Spa
+2026-01-14 09:56:36,852 - FacebookScraper - INFO - Phone: N/A, Address: Trần Vỹ - Cầu Giấy - Hà Nội, H
+2026-01-14 09:56:39,853 - FacebookScraper - INFO - Processing page 125/257: Mỹ Phẩm Khánh Chi
+2026-01-14 09:56:49,724 - FacebookScraper - INFO - Phone: 097 549 12 66, Address: N/A
+2026-01-14 09:56:52,726 - FacebookScraper - INFO - Processing page 126/257: Mỹ Phẩm chính hãng
+2026-01-14 09:57:02,817 - FacebookScraper - INFO - Phone: 039 776 1200, Address: Phùng Khoang, Vietnam
+2026-01-14 09:57:05,818 - FacebookScraper - INFO - Processing page 127/257: Mỹ phẩm thiên nhiên
+2026-01-14 09:57:16,056 - FacebookScraper - INFO - Phone: N/A, Address: Lieu Giai, Hanoi, Vietnam
+2026-01-14 09:57:19,056 - FacebookScraper - INFO - Processing page 128/257: Mỹ Phẩm Thiên Nhiên Cao Cấp - Huyền Phi 
+2026-01-14 09:57:29,121 - FacebookScraper - INFO - Phone: 033 333 3313, Address: N/A
+2026-01-14 09:57:32,122 - FacebookScraper - INFO - Processing page 129/257: Thanh Hằng Cosmetics - Mỹ phẩm xách tay 
+2026-01-14 09:57:41,643 - FacebookScraper - INFO - Phone: 0978289788, Address: 301 Nguyễn Trãi, Thanh Xuân, H
+2026-01-14 09:57:44,645 - FacebookScraper - INFO - Processing page 130/257: Mỹ Phẩm Tóc Giá Rẻ
+2026-01-14 09:57:55,229 - FacebookScraper - INFO - Phone: 097 748 42 69, Address: Cầu Giấy, Hanoi, Vietnam
+2026-01-14 09:57:58,230 - FacebookScraper - INFO - Processing page 131/257: Mỹ Phẩm Cẩm Tú
+2026-01-14 09:58:07,916 - FacebookScraper - INFO - Phone: 096 366 40 88, Address: 59 Trần Đăng Ninh, Hanoi, Viet
+2026-01-14 09:58:10,917 - FacebookScraper - INFO - Processing page 132/257: Mỹ phẩm xách tay hàn quốc- chính hãng
+2026-01-14 09:58:20,596 - FacebookScraper - INFO - Phone: N/A, Address: Phố Lê Lợi, Hà Nội, Việt Nam, 
+2026-01-14 09:58:23,597 - FacebookScraper - INFO - Processing page 133/257: Mỹ Phẩm Chính Hãng
+2026-01-14 09:58:34,083 - FacebookScraper - INFO - Phone: 038 399 8829, Address: Đội 9 Hậu Dưỡng KIm Chung Đông
+2026-01-14 09:58:37,084 - FacebookScraper - INFO - Processing page 134/257: Viên Dung - Mỹ Phẩm Chính Hãng
+2026-01-14 09:58:46,954 - FacebookScraper - INFO - Phone: 0972796578, Address: tổ Dân phố đội cấn vĩnh tường 
+2026-01-14 09:58:49,955 - FacebookScraper - INFO - Processing page 135/257: Mỹ phẩm thiên nhiên Quyên Lara
+2026-01-14 09:59:00,074 - FacebookScraper - INFO - Phone: 035 827 9319, Address: số 6 ngõ 18 Võ Văn Dũng, Hoàng
+2026-01-14 09:59:03,076 - FacebookScraper - INFO - Processing page 136/257: Dược Mỹ Phẩm Queenie Hàn Quốc - Trắng da
+2026-01-14 09:59:12,987 - FacebookScraper - INFO - Phone: 091 695 69 73, Address: Nhà vườn 10 Khu đô thị mới Han
+2026-01-14 09:59:15,987 - FacebookScraper - INFO - Processing page 137/257: Mỹ Phẩm Hi Beauty Chính Hãng
+2026-01-14 09:59:25,392 - FacebookScraper - INFO - Phone: 038 343 1999, Address: Số nhà 33D5, Khu giãn dân, Yên
+2026-01-14 09:59:28,393 - FacebookScraper - INFO - Processing page 138/257: Mỹ Phẩm Nhập Khẩu Nga
+2026-01-14 09:59:38,322 - FacebookScraper - INFO - Phone: 096 565 89 20, Address: 30 Trần Hữu Dực, Hanoi, Vie
+2026-01-14 09:59:41,323 - FacebookScraper - INFO - Processing page 139/257: Mỹ phẩm Nhật- phong cách Nhật
+2026-01-14 09:59:51,012 - FacebookScraper - INFO - Phone: 097 576 93 59, Address: Tòa G3, Vinhome Greenbay Mễ Tr
+2026-01-14 09:59:54,013 - FacebookScraper - INFO - Processing page 140/257: Dược Mỹ Phẩm Queenie - Xóa Sạm Nám
+2026-01-14 10:00:04,866 - FacebookScraper - INFO - Phone: 038 688 9892, Address: NV10, khu đô thị Trung Văn Han
+2026-01-14 10:00:07,867 - FacebookScraper - INFO - Processing page 141/257: Mỹ Phẩm Linh Hương 91
+2026-01-14 10:00:17,040 - FacebookScraper - INFO - Phone: 098 507 51 91, Address: Hà nội , Hà Đông, Vietnam
+2026-01-14 10:00:20,041 - FacebookScraper - INFO - Processing page 142/257: Mỹ phẩm thiên nhiên cao cấp
+2026-01-14 10:00:29,955 - FacebookScraper - INFO - Phone: 091 988 11 55, Address: N/A
+2026-01-14 10:00:32,956 - FacebookScraper - INFO - Processing page 143/257: Mỹ phẩm trị thâm nám trẻ hóa da
+2026-01-14 10:00:42,307 - FacebookScraper - INFO - Phone: 866063096, Address: 79 đường 19/5 Văn Quán, Hà Đôn
+2026-01-14 10:00:45,307 - FacebookScraper - INFO - Processing page 144/257: Mỹ phẩm Hàn Quốc - Vanesa Korean
+2026-01-14 10:00:55,897 - FacebookScraper - INFO - Phone: 867496535, Address: 143 Nguyễn Tuân, Thanh Xuân, H
+2026-01-14 10:00:58,899 - FacebookScraper - INFO - Processing page 145/257: Cỏ mềm HomeLab
+2026-01-14 10:01:08,648 - FacebookScraper - INFO - Phone: 1800 646890, Address: N/A
+2026-01-14 10:01:11,649 - FacebookScraper - INFO - Processing page 146/257: Mỹ phẩm thiên nhiên Laco- đẹp từ tâm
+2026-01-14 10:01:20,647 - FacebookScraper - INFO - Phone: N/A, Address: Dương nội, Hà Đông, Vietnam
+2026-01-14 10:01:23,648 - FacebookScraper - INFO - Processing page 147/257: Mỹ phẩm cao cấp-Lady Store
+2026-01-14 10:01:33,141 - FacebookScraper - INFO - Phone: 0123 451 1331, Address: N/A
+2026-01-14 10:01:36,142 - FacebookScraper - INFO - Processing page 148/257: Mỹ Phẩm Giá Sỉ Beauty Chính Hãng
+2026-01-14 10:01:46,728 - FacebookScraper - INFO - Phone: N/A, Address: Phố Nguyễn Văn Lộc, Hà Nội, Vi
+2026-01-14 10:01:49,729 - FacebookScraper - INFO - Processing page 149/257: Mỹ phẩm Anh Quốc by Huế
+2026-01-14 10:01:59,748 - FacebookScraper - INFO - Phone: 0333 58 1818, Address: BT06 ngõ 6 Nguyễn Văn Lộc, Mộ 
+2026-01-14 10:02:02,749 - FacebookScraper - INFO - Processing page 150/257: Mỹ Phẩm HaCos - Trẻ Hóa Da, Xóa Nám Tà
+2026-01-14 10:02:12,667 - FacebookScraper - INFO - Phone: 096 277 84 48, Address: Lê Trọng Tấn, Hà Đông, Hà 
+2026-01-14 10:02:15,668 - FacebookScraper - INFO - Processing page 151/257: Mỹ Phẩm Tóc Chính Hãng
+2026-01-14 10:02:26,371 - FacebookScraper - INFO - Phone: 096 959 33 34, Address: geleximco Dương Nội, Hanoi, Vi
+2026-01-14 10:02:29,371 - FacebookScraper - INFO - Processing page 152/257: Mỹ phẩm xách tay hàn quốc
+2026-01-14 10:02:39,572 - FacebookScraper - INFO - Phone: 083 366 1825, Address: Phường kiến hưng, Hà Đông, Vie
+2026-01-14 10:02:42,572 - FacebookScraper - INFO - Processing page 153/257: Mỹ phẩm chính hãng Đức
+2026-01-14 10:02:51,396 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 10:02:54,397 - FacebookScraper - INFO - Processing page 154/257: GoGreen Mỹ phẩm phục hồi da
+2026-01-14 10:03:03,860 - FacebookScraper - INFO - Phone: 096 473 86 69, Address: Mễ trì hạ - Nam từ liêm , Hano
+2026-01-14 10:03:06,861 - FacebookScraper - INFO - Processing page 155/257: Mỹ phẩm Thái Lan
+2026-01-14 10:03:17,227 - FacebookScraper - INFO - Phone: N/A, Address: trần phú, Hà Đông, Vietnam
+2026-01-14 10:03:20,228 - FacebookScraper - INFO - Processing page 156/257: Mỹ Phẩm Nhật Bản Dr.Placen
+2026-01-14 10:03:29,334 - FacebookScraper - INFO - Phone: 0985986736, Address: số 9, ngõ 16, Phan ĐÌnh Giót, 
+2026-01-14 10:03:32,335 - FacebookScraper - INFO - Processing page 157/257: Mỹ Phẩm thiên nhiên LACO
+2026-01-14 10:03:42,935 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 10:03:45,936 - FacebookScraper - INFO - Processing page 158/257: Mỹ phẩm Auth chính hãng
+2026-01-14 10:03:55,024 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 10:03:58,025 - FacebookScraper - INFO - Processing page 159/257: Mỹ phẩm thiên nhiên Mộc Nhan
+2026-01-14 10:04:07,599 - FacebookScraper - INFO - Phone: 098 738 88 20, Address: Hà Nội, Hà Đông, Vietnam
+2026-01-14 10:04:10,600 - FacebookScraper - INFO - Processing page 160/257: Mỹ phẩm Chara quốc tế
+2026-01-14 10:04:19,663 - FacebookScraper - INFO - Phone: N/A, Address: Đường Vạn Phúc, Hà Nội, Việt N
+2026-01-14 10:04:22,665 - FacebookScraper - INFO - Processing page 161/257: MỸ PHẨM THANH HẰNG
+2026-01-14 10:04:31,285 - FacebookScraper - INFO - Phone: 094 400 11 22, Address: 215 LÝ CHÍNH THẮNG - P. VÕ THỊ
+2026-01-14 10:04:34,286 - FacebookScraper - INFO - Processing page 162/257: Mỹ phẩm Hàn Quốc RIORI
+2026-01-14 10:04:44,019 - FacebookScraper - INFO - Phone: 034 378 6588, Address: 815 Giải Phóng, Hoàng Mai, Hà 
+2026-01-14 10:04:47,020 - FacebookScraper - INFO - Processing page 163/257: Mỹ phẩm Hàn Quốc Hebecell
+2026-01-14 10:04:56,877 - FacebookScraper - INFO - Phone: 089 859 46 78, Address: Phố Xa La, Hà Nội, Việt Nam, H
+2026-01-14 10:04:59,878 - FacebookScraper - INFO - Processing page 164/257: Mỹ Phẩm Chính Hãng Medi -Peel
+2026-01-14 10:05:09,604 - FacebookScraper - INFO - Phone: N/A, Address: Hà đông, Hà Đông, Vietnam
+2026-01-14 10:05:12,604 - FacebookScraper - INFO - Processing page 165/257: Mỹ Phẩm Chính Hãng Xách Tay Nhật Bản
+2026-01-14 10:05:22,616 - FacebookScraper - INFO - Phone: 094 196 91 94, Address: N/A
+2026-01-14 10:05:25,617 - FacebookScraper - INFO - Processing page 166/257: Mỹ phẩm hàn quốc chính hãng
+2026-01-14 10:05:35,977 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 10:05:38,978 - FacebookScraper - INFO - Processing page 167/257: Mỹ Phẩm Cao Cấp Pro Girl
+2026-01-14 10:05:52,569 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 10:05:55,570 - FacebookScraper - INFO - Processing page 168/257: Mỹ Phẩm Chính Hãng CosmeticS
+2026-01-14 10:06:05,687 - FacebookScraper - INFO - Phone: 033 228 1297, Address: Hà Nội, Phường Mai Dịch, Vietn
+2026-01-14 10:06:08,688 - FacebookScraper - INFO - Processing page 169/257: Mỹ Phẩm Thiên Nhiên Huyền Phi
+2026-01-14 10:06:18,797 - FacebookScraper - INFO - Phone: 094 276 19 86, Address: N/A
+2026-01-14 10:06:21,798 - FacebookScraper - INFO - Processing page 170/257: Mỹ phẩm thiên nhiên trầu không
+2026-01-14 10:06:31,587 - FacebookScraper - INFO - Phone: 032 824 2544, Address: Hà Đông , Hà Đông, Vietnam
+2026-01-14 10:06:34,588 - FacebookScraper - INFO - Processing page 171/257: Dược Mỹ Phẩm Lamec
+2026-01-14 10:06:44,989 - FacebookScraper - INFO - Phone: 097 362 57 12, Address: 18 Hoàng Quốc Việt - Cầu Giấy,
+2026-01-14 10:06:47,990 - FacebookScraper - INFO - Processing page 172/257: Mỹ Phẩm Spa Chính Hãng Midora
+2026-01-14 10:06:57,521 - FacebookScraper - INFO - Phone: 091 600 12 44, Address: Số 4 Ngõ 389 Hoàng Quốc Việt, 
+2026-01-14 10:07:00,521 - FacebookScraper - INFO - Processing page 173/257: Mỹ Phẩm Xách Tay Hàn - Nhật
+2026-01-14 10:07:10,019 - FacebookScraper - INFO - Phone: 094 436 26 38, Address: N/A
+2026-01-14 10:07:13,019 - FacebookScraper - INFO - Processing page 174/257: Mỹ Phẩm & Thời Trang Thùy Dương Xứ Nghệ
+2026-01-14 10:07:24,707 - FacebookScraper - INFO - Phone: 091 126 21 18, Address: P2011 Tháp G5, Five Star Garde
+2026-01-14 10:07:27,708 - FacebookScraper - INFO - Processing page 175/257: Mỹ Phẩm Cao Cấp QUIN
+2026-01-14 10:07:38,018 - FacebookScraper - INFO - Phone: 093 469 88 88, Address: Tòa nhà VINAHUD 536A Minh Khai
+2026-01-14 10:07:41,019 - FacebookScraper - INFO - Processing page 176/257: Mỹ Phẩm Hàn Quốc Chính Hãng
+2026-01-14 10:07:50,085 - FacebookScraper - INFO - Phone: N/A, Address: cầu giấy, Hanoi, Vietnam
+2026-01-14 10:07:53,086 - FacebookScraper - INFO - Processing page 177/257: Mỹ phẩm chính hãng Hàn Quốc
+2026-01-14 10:08:03,379 - FacebookScraper - INFO - Phone: 0985 858 848, Address: N/A
+2026-01-14 10:08:06,380 - FacebookScraper - INFO - Processing page 178/257: Mỹ Phẩm Hàn Quốc Chính Hãng
+2026-01-14 10:08:16,502 - FacebookScraper - INFO - Phone: 866965179, Address: Số 89 Trần Vỹ - Mai Dịch- Cầu 
+2026-01-14 10:08:19,502 - FacebookScraper - INFO - Processing page 179/257: Mỹ phẩm - Giá tận gốc
+2026-01-14 10:08:29,320 - FacebookScraper - INFO - Phone: 038 200 9358, Address: Cầu Giấy, Hà Nội, Việt Nam, Ha
+2026-01-14 10:08:32,321 - FacebookScraper - INFO - Processing page 180/257: MỸ PHẨM OLA
+2026-01-14 10:08:43,366 - FacebookScraper - INFO - Phone: 091 522 52 11, Address: Hà Nội, Tay Ho, Vietnam
+2026-01-14 10:08:46,367 - FacebookScraper - INFO - Processing page 181/257: Mỹ Phẩm làm đẹp- Thực phẩm CN CSSK
+2026-01-14 10:08:56,966 - FacebookScraper - INFO - Phone: 091 909 84 95, Address: Đường Lê Trọng Tấn, Hà Nội, Vi
+2026-01-14 10:08:59,967 - FacebookScraper - INFO - Processing page 182/257: Mỹ Phẩm Huyền Phi Chính Hãng
+2026-01-14 10:09:10,683 - FacebookScraper - INFO - Phone: 091 568 74 89, Address: 86, Trần Vỹ, Cầu Giấy, Hanoi, 
+2026-01-14 10:09:13,684 - FacebookScraper - INFO - Processing page 183/257: Mỹ Phẩm Chính Hãng Hoàn Nguyễn
+2026-01-14 10:09:22,678 - FacebookScraper - INFO - Phone: 036 857 6546, Address: N/A
+2026-01-14 10:09:25,679 - FacebookScraper - INFO - Processing page 184/257: Mỹ Phẩm Mộc Linh Hương
+2026-01-14 10:09:36,364 - FacebookScraper - INFO - Phone: 096 438 88 82, Address: 162 cầu diễn hà nội, Hanoi, Vi
+2026-01-14 10:09:39,365 - FacebookScraper - INFO - Processing page 185/257: Mỹ phẩm Beautyone- Thương hiệu mỹ phẩm t
+2026-01-14 10:09:49,992 - FacebookScraper - INFO - Phone: 090 226 87 92, Address: Kiến Hưng, Hà Đông, Hà Nội., H
+2026-01-14 10:09:52,993 - FacebookScraper - INFO - Processing page 186/257: Mỹ Phẩm Organic Thanh Mộc Hương
+2026-01-14 10:10:03,487 - FacebookScraper - INFO - Phone: 033 415 5868, Address: Khu Đô Thị Sunny, Xã Sài Sơn, 
+2026-01-14 10:10:06,487 - FacebookScraper - INFO - Processing page 187/257: Dược Mỹ Phẩm Chính Hãng Dr Nguyễn Quỳnh
+2026-01-14 10:10:16,567 - FacebookScraper - INFO - Phone: 034 705 0055, Address: Số 10, ngõ 58 đường Thanh Bình
+2026-01-14 10:10:19,568 - FacebookScraper - INFO - Processing page 188/257: Siêu Thị Mỹ Phẩm Ngân Bình
+2026-01-14 10:10:28,194 - FacebookScraper - INFO - Phone: N/A, Address: Cầu Đuống Nôi, Hà Nội, Việt Na
+2026-01-14 10:10:31,195 - FacebookScraper - INFO - Processing page 189/257: OLIC - Mỹ Phẩm Chính Hãng
+2026-01-14 10:10:41,431 - FacebookScraper - INFO - Phone: 039 875 5663, Address: Cầu Mới Phường Yên Nghĩa, Hà N
+2026-01-14 10:10:44,433 - FacebookScraper - INFO - Processing page 190/257: 𝐎𝐥𝐚𝐥𝐚 𝐂𝐨𝐬𝐦𝐞𝐭𝐢𝐜
+2026-01-14 10:10:53,712 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 10:10:56,712 - FacebookScraper - INFO - Processing page 191/257: Mỹ Phẩm Tóc Ngọc Linh
+2026-01-14 10:11:08,159 - FacebookScraper - INFO - Phone: 033 992 4908, Address: Lê Văn Hiến, P.Đức Thắng, Q. B
+2026-01-14 10:11:11,160 - FacebookScraper - INFO - Processing page 192/257: Ana Shop Mỹ Phẩm Chính Hãng
+2026-01-14 10:11:20,636 - FacebookScraper - INFO - Phone: 51726583947, Address: Cầu Đuống Nôi, Hà Nội, Việt Na
+2026-01-14 10:11:23,637 - FacebookScraper - INFO - Processing page 193/257: Mỹ Phẩm Chính Hãng-Ngọc Ánh
+2026-01-14 10:11:34,219 - FacebookScraper - INFO - Phone: 039 848 4095, Address: N/A
+2026-01-14 10:11:37,220 - FacebookScraper - INFO - Processing page 194/257: Mỹ phẩm cao cấp Rich & Beauty Việt Nam
+2026-01-14 10:11:47,290 - FacebookScraper - INFO - Phone: 097 737 21 17, Address: Nhật Tân- Tây Hồ- Hà Nội, Tay 
+2026-01-14 10:11:50,292 - FacebookScraper - INFO - Processing page 195/257: OG Mỹ Phẩm Chính Hãng
+2026-01-14 10:12:00,643 - FacebookScraper - INFO - Phone: 035 368 7439, Address: Hà Nội, Hanoi, Vietnam
+2026-01-14 10:12:03,643 - FacebookScraper - INFO - Processing page 196/257: LUY Store - Nguồn Sỉ Mỹ Phẩm Chính Hãng
+2026-01-14 10:12:12,979 - FacebookScraper - INFO - Phone: 098 598 23 91, Address: 145 yên hoà cầu giấy hà nội, H
+2026-01-14 10:12:15,980 - FacebookScraper - INFO - Processing page 197/257: Thảo Auth - Chuyên dược mỹ phẩm
+2026-01-14 10:12:25,917 - FacebookScraper - INFO - Phone: N/A, Address: Ngõ Ga Hà Đông, Hà Nội, Việt N
+2026-01-14 10:12:28,918 - FacebookScraper - INFO - Processing page 198/257: Mỹ Phẩm Tóc Thái Toàn
+2026-01-14 10:12:39,071 - FacebookScraper - INFO - Phone: 0989830015, Address: Số 6 ngõ 285 - Khuất Duy Tiến 
+2026-01-14 10:12:42,072 - FacebookScraper - INFO - Processing page 199/257: Belif Việt Nam Mỹ phẩm chính hãng Hàn Qu
+2026-01-14 10:12:52,324 - FacebookScraper - INFO - Phone: 0945292498, Address: 25T2 Nguyễn Thị Thập , Hanoi, 
+2026-01-14 10:12:55,325 - FacebookScraper - INFO - Processing page 200/257: Chuyên dược mỹ phẩm nội địa Pháp
+2026-01-14 10:13:05,469 - FacebookScraper - INFO - Phone: 096 908 52 58, Address: N/A
+2026-01-14 10:13:08,470 - FacebookScraper - INFO - Processing page 201/257: Mỹ phẩm Hàn Quốc chính hãng 100%
+2026-01-14 10:13:18,608 - FacebookScraper - INFO - Phone: 098 581 02 29, Address: Hà Nội, Hà Đông, Vietnam
+2026-01-14 10:13:21,610 - FacebookScraper - INFO - Processing page 202/257: Chợ Mỹ Phẩm Chuyên Nghiệp
+2026-01-14 10:13:31,585 - FacebookScraper - INFO - Phone: 036 404 3568, Address: Phố Văn Quán, Hà Nội, Việt Nam
+2026-01-14 10:13:34,587 - FacebookScraper - INFO - Processing page 203/257: Shop Mỹ Phẩm Uy Tín
+2026-01-14 10:13:45,007 - FacebookScraper - INFO - Phone: N/A, Address: Quan hoa cầu giấy hà nội, Vong
+2026-01-14 10:13:48,007 - FacebookScraper - INFO - Processing page 204/257: Gia Dụng - Mỹ Phẩm Xách Tay
+2026-01-14 10:13:58,384 - FacebookScraper - INFO - Phone: 093 430 04 88, Address: N/A
+2026-01-14 10:14:01,385 - FacebookScraper - INFO - Processing page 205/257: Huế Phạm - Dược Mỹ Phẩm Anh Quốc
+2026-01-14 10:14:11,057 - FacebookScraper - INFO - Phone: 033 358 1818, Address: BT06 ngõ 6 Nguyễn Văn Lộc, Mộ 
+2026-01-14 10:14:14,058 - FacebookScraper - INFO - Processing page 206/257: Mỹ phẩm
+2026-01-14 10:14:23,869 - FacebookScraper - INFO - Phone: 0945475231, Address: Đội 2_Đại độ _Võng La_Đông Anh
+2026-01-14 10:14:26,869 - FacebookScraper - INFO - Processing page 207/257: Mỹ phẩm Trang Nhung
+2026-01-14 10:14:37,306 - FacebookScraper - INFO - Phone: 097 181 02 85, Address: 136 Hồ Tùng Mậu Phú Diễn Bắc T
+2026-01-14 10:14:40,309 - FacebookScraper - INFO - Processing page 208/257: Mỹ Phẩm Chính Hãng
+2026-01-14 10:14:49,233 - FacebookScraper - INFO - Phone: N/A, Address: Hà nội, Hà Đông, Vietnam
+2026-01-14 10:14:52,234 - FacebookScraper - INFO - Processing page 209/257: MỸ PHẨM HEYXI
+2026-01-14 10:15:00,875 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 10:15:03,876 - FacebookScraper - INFO - Processing page 210/257: Mỹ phẩm philip
+2026-01-14 10:15:12,655 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 10:15:15,656 - FacebookScraper - INFO - Processing page 211/257: Mỹ Phẩm Tài Chính
+2026-01-14 10:15:25,465 - FacebookScraper - INFO - Phone: 098 550 13 39, Address: Số 99 Lê Văn Hiến, Hanoi, Viet
+2026-01-14 10:15:28,466 - FacebookScraper - INFO - Processing page 212/257: Mỹ Phẩm Mẹ Bé Táo
+2026-01-14 10:15:37,373 - FacebookScraper - INFO - Phone: 096 663 07 90, Address: 125 Nguyễn Đức Cảnh, Quận Hoàn
+2026-01-14 10:15:40,374 - FacebookScraper - INFO - Processing page 213/257: Mỹ Phẩm chính hãng
+2026-01-14 10:15:49,241 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 10:15:52,242 - FacebookScraper - INFO - Processing page 214/257: Mỹ phẩm làm đẹp
+2026-01-14 10:16:00,931 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 10:16:03,932 - FacebookScraper - INFO - Processing page 215/257: Mỹ phẩm OHUI, WHOO CÔNG TY CHÍNH HÃNG Ol
+2026-01-14 10:16:14,264 - FacebookScraper - INFO - Phone: 0166 796 8381, Address: N/A
+2026-01-14 10:16:17,265 - FacebookScraper - INFO - Processing page 216/257: Mỹ phẩm nhật
+2026-01-14 10:16:26,745 - FacebookScraper - INFO - Phone: N/A, Address: Phố Phúc La, Hà Nội, Việt Nam,
+2026-01-14 10:16:29,746 - FacebookScraper - INFO - Processing page 217/257: Mỹ Phẩm ADA cosmetic
+2026-01-14 10:16:40,141 - FacebookScraper - INFO - Phone: N/A, Address: Phố Thành Công, Hà Nội, Việt N
+2026-01-14 10:16:43,142 - FacebookScraper - INFO - Processing page 218/257: Mỹ phẩm chính hãng
+2026-01-14 10:16:53,423 - FacebookScraper - INFO - Phone: N/A, Address: Phố Nguyễn Văn Lộc, Hà Nội, Vi
+2026-01-14 10:16:56,423 - FacebookScraper - INFO - Processing page 219/257: Mỹ Phẩm Mai Amber
+2026-01-14 10:17:07,024 - FacebookScraper - INFO - Phone: 0986 492 589, Address: N/A
+2026-01-14 10:17:10,025 - FacebookScraper - INFO - Processing page 220/257: Mỹ Phẩm GoldZan
+2026-01-14 10:17:20,933 - FacebookScraper - INFO - Phone: 093 164 00 45, Address: thanh hà, Hà Đông, Vietnam
+2026-01-14 10:17:23,935 - FacebookScraper - INFO - Processing page 221/257: MỸ PHẨM KHÁNH LINH
+2026-01-14 10:17:32,834 - FacebookScraper - INFO - Phone: 985
+985
+166, Address: 136 Hồ Tùng Mậu , Hanoi, Vietn
+2026-01-14 10:17:35,835 - FacebookScraper - INFO - Processing page 222/257: Mỹ Phẩm Xuân Thì
+2026-01-14 10:17:45,015 - FacebookScraper - INFO - Phone: 083 254 8061, Address: A46 TT3, Khu đô thị Văn Quán, 
+2026-01-14 10:17:48,015 - FacebookScraper - INFO - Processing page 223/257: Mỹ Phẩm Dr.G
+2026-01-14 10:17:57,394 - FacebookScraper - INFO - Phone: 876599966, Address: Hà Nội, Tay Ho, Vietnam
+2026-01-14 10:18:00,395 - FacebookScraper - INFO - Processing page 224/257: Trang Sức Mỹ Phẩm Thu Dương
+2026-01-14 10:18:09,639 - FacebookScraper - INFO - Phone: 096 158 28 80, Address: 91 nguyễn chí thanh, Hanoi, Vi
+2026-01-14 10:18:12,640 - FacebookScraper - INFO - Processing page 225/257: Mỹ phẩm trang điểm
+2026-01-14 10:18:22,631 - FacebookScraper - INFO - Phone: 0164 540 5180, Address: N/A
+2026-01-14 10:18:25,631 - FacebookScraper - INFO - Processing page 226/257: Phân Phối Mỹ Phẩm Spa Chuyên Nghiệp - NH
+2026-01-14 10:18:35,346 - FacebookScraper - INFO - Phone: 0868 229 499, Address: N/A
+2026-01-14 10:18:38,347 - FacebookScraper - INFO - Processing page 227/257: Mỹ Phẩm Cao Cấp
+2026-01-14 10:18:48,398 - FacebookScraper - INFO - Phone: 096 883 30 83, Address: N/A
+2026-01-14 10:18:51,399 - FacebookScraper - INFO - Processing page 228/257: Bán mỹ phẩm
+2026-01-14 10:19:00,400 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 10:19:03,401 - FacebookScraper - INFO - Processing page 229/257: Mỹ phẩm trắng da
+2026-01-14 10:19:13,156 - FacebookScraper - INFO - Phone: 096 295 59 78, Address: Vĩnh phúc, Vĩnh Phúc, Vietnam
+2026-01-14 10:19:16,157 - FacebookScraper - INFO - Processing page 230/257: Onvaon - Mỹ Phẩm, Giảm Cân, Mẹ và Bé
+2026-01-14 10:19:26,993 - FacebookScraper - INFO - Phone: 098 965 20 51, Address: Ngõ 2 Phú Đô, Nam Từ Liêm,, Ha
+2026-01-14 10:19:29,994 - FacebookScraper - INFO - Processing page 231/257: Mỹ Phẩm Chính Hãng
+2026-01-14 10:19:39,998 - FacebookScraper - INFO - Phone: 097 623 51 31, Address: 11 Duy Tân, Cầu Giấy, Hanoi, V
+2026-01-14 10:19:42,998 - FacebookScraper - INFO - Processing page 232/257: Mỹ phẩm giá tốt
+2026-01-14 10:19:53,545 - FacebookScraper - INFO - Phone: 097 587 90 58, Address: Hà nội, Ha Loi, Vietnam
+2026-01-14 10:19:56,548 - FacebookScraper - INFO - Processing page 233/257: Mỹ phẩm xách tay
+2026-01-14 10:20:07,450 - FacebookScraper - INFO - Phone: 0129 666 1386, Address: N/A
+2026-01-14 10:20:10,451 - FacebookScraper - INFO - Processing page 234/257: Mỹ Phẩm Út Xuân
+2026-01-14 10:20:21,795 - FacebookScraper - INFO - Phone: 090 477 17 22, Address: N/A
+2026-01-14 10:20:24,796 - FacebookScraper - INFO - Processing page 235/257: Dược Mỹ Phẩm Neutidi
+2026-01-14 10:20:34,864 - FacebookScraper - INFO - Phone: 096 916 89 95, Address: Số 36A, ngách 34/156 Vĩnh Tuy,
+2026-01-14 10:20:37,865 - FacebookScraper - INFO - Processing page 236/257: Mỹ Phẩm Chính Hãng Hoàn Nguyễn
+2026-01-14 10:20:46,795 - FacebookScraper - INFO - Phone: 036 857 6546, Address: N/A
+2026-01-14 10:20:49,797 - FacebookScraper - INFO - Processing page 237/257: Mỹ Phẩm Việt
+2026-01-14 10:21:00,206 - FacebookScraper - INFO - Phone: 097 850 25 61, Address: 51, Tôn Đức Thắng, Đống Đa, Ha
+2026-01-14 10:21:03,207 - FacebookScraper - INFO - Processing page 238/257: Mỹ phẩm chara pari quốc tế
+2026-01-14 10:21:12,204 - FacebookScraper - INFO - Phone: N/A, Address: Đường Vạn Phúc, Hà Nội, Việt N
+2026-01-14 10:21:15,205 - FacebookScraper - INFO - Processing page 239/257: Bách hoá mỹ phẩm
+2026-01-14 10:21:25,540 - FacebookScraper - INFO - Phone: 096 993 17 24, Address: Đường Phúc La-Văn Phú, Hà Nội,
+2026-01-14 10:21:28,541 - FacebookScraper - INFO - Processing page 240/257: Thế Giới Mỹ Phẩm Natural
+2026-01-14 10:21:38,675 - FacebookScraper - INFO - Phone: N/A, Address: Số 244 đường 3.1 KĐT Gamuda Ga
+2026-01-14 10:21:41,676 - FacebookScraper - INFO - Processing page 241/257: Shop Mỹ Phẩm Bo Bo - Myphambo.com
+2026-01-14 10:21:52,981 - FacebookScraper - INFO - Phone: 097 934 89 93, Address: Số 14, đường 70 ( Gần khu đô t
+2026-01-14 10:21:55,982 - FacebookScraper - INFO - Processing page 242/257: Dược Mỹ Phẩm Queenie - Da trắng đẹp tự n
+2026-01-14 10:22:06,075 - FacebookScraper - INFO - Phone: N/A, Address: Nhà vườn 10 khu đô thị mới Han
+2026-01-14 10:22:09,076 - FacebookScraper - INFO - Processing page 243/257: Mỹ phẩm organic
+2026-01-14 10:22:19,792 - FacebookScraper - INFO - Phone: N/A, Address: N/A
+2026-01-14 10:22:22,793 - FacebookScraper - INFO - Processing page 244/257: Mỹ phẩm SHOYA
+2026-01-14 10:22:32,231 - FacebookScraper - INFO - Phone: 058 523 5875, Address: TT4-8 Him Lam, phường Vạn Phúc
+2026-01-14 10:22:35,232 - FacebookScraper - INFO - Processing page 245/257: TIỆM MỸ PHẨM LUY
+2026-01-14 10:22:45,091 - FacebookScraper - INFO - Phone: 098 598 23 91, Address: 40 cổ nhuế , Hanoi, Vietnam
+2026-01-14 10:22:48,092 - FacebookScraper - INFO - Processing page 246/257: Mỹ phẩm Làm Hồng Xxvirgin Hàn Quốc
+2026-01-14 10:22:58,487 - FacebookScraper - INFO - Phone: 0377812194, Address: 1008 Quang Trung - Hà Đông - H
+2026-01-14 10:23:01,488 - FacebookScraper - INFO - Processing page 247/257: Mỹ Phẩm Ngành Tóc Cosmetics
+2026-01-14 10:23:10,649 - FacebookScraper - INFO - Phone: N/A, Address: ROYAL CITY, 72A Nguyễn Trãi, P
+2026-01-14 10:23:13,652 - FacebookScraper - INFO - Processing page 248/257: Lan Phạm _ Siêu Thị Mỹ Phẩm
+2026-01-14 10:23:23,790 - FacebookScraper - INFO - Phone: 039 493 1861, Address: Văn Quán Hà Đông Hà Nội, Hanoi
+2026-01-14 10:23:26,791 - FacebookScraper - INFO - Processing page 249/257: Mỹ phẩm cao cấp Hàn Quốc
+2026-01-14 10:23:36,973 - FacebookScraper - INFO - Phone: 862378568, Address: khu cán bộ bv 103 , Hà Đông, V
+2026-01-14 10:23:39,973 - FacebookScraper - INFO - Processing page 250/257: Mỹ Phẩm Trẻ Hóa Da 8 Trong 1 - Hoshi ローシ
+2026-01-14 10:23:50,160 - FacebookScraper - INFO - Phone: 038 257 0997, Address: Số 10 trần phú Hà Đông, Hanoi,
+2026-01-14 10:23:53,160 - FacebookScraper - INFO - Processing page 251/257: Mỹ phẩm Diamond Luxury Trịnh Phương
+2026-01-14 10:24:04,468 - FacebookScraper - INFO - Phone: 098 444 38 45, Address: N/A
+2026-01-14 10:24:07,469 - FacebookScraper - INFO - Processing page 252/257: Mỹ Phẩm Cao Cấp Chính Hãng Hàn Quốc
+2026-01-14 10:24:17,685 - FacebookScraper - INFO - Phone: 091 943 11 93, Address: Hà Nội, Hà Đông, Vietnam
+2026-01-14 10:24:20,687 - FacebookScraper - INFO - Processing page 253/257: Mỹ Phẩm Châu Âu - Ba Lan Xách Tay
+2026-01-14 10:24:31,768 - FacebookScraper - INFO - Phone: 037 264 0407, Address: Ngõ 58 Cầu Am, Hà Đông, Hanoi,
+2026-01-14 10:24:34,769 - FacebookScraper - INFO - Processing page 254/257: Mỹ phẩm Nội Địa Trung Official Store
+2026-01-14 10:24:44,646 - FacebookScraper - INFO - Phone: N/A, Address: Đường Đại Mỗ, Hà Nội, Việt Nam
+2026-01-14 10:24:47,647 - FacebookScraper - INFO - Processing page 255/257: Mỹ Phẩm SANDY Chính Hãng
+2026-01-14 10:24:57,719 - FacebookScraper - INFO - Phone: 033 333 0364, Address: hanoi, Phùng Khoang, Vietnam
+2026-01-14 10:25:00,720 - FacebookScraper - INFO - Processing page 256/257: TopBeauty- Mỹ Phẩm Trang Điểm
+2026-01-14 10:25:10,300 - FacebookScraper - INFO - Phone: N/A, Address: 96 Cầu Giấy, Hanoi, Vietnam
+2026-01-14 10:25:13,301 - FacebookScraper - INFO - Processing page 257/257: Mỹ Phẩm Cao Cấp JaPan- V-N
+2026-01-14 10:25:23,046 - FacebookScraper - INFO - Phone: 098 504 21 45, Address: - Dạ địa chỉ shop em đây ạ 6 Đ
+2026-01-14 10:25:26,047 - FacebookScraper - INFO - Completed extracting 257 pages
+2026-01-14 10:25:28,653 - FacebookScraper - INFO - Browser closed

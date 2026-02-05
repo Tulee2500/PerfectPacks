@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Scraper Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1877f2;
+            --primary-dark: #145dbf;
+            --success: #42b72a;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --secondary: #65676b;
+            --bg-light: #f0f2f5;
+            --bg-white: #ffffff;
+            --text-dark: #1c1e21;
+            --text-light: #65676b;
+            --border: #dddfe2;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px var(--shadow);
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--primary);
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .status-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .status-card h2 {
+            color: white;
+        }
+
+        #status {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .status-icon {
+            font-size: 2rem;
+        }
+
+        .status-idle { color: white; }
+        .status-running {
+            background: rgba(66, 183, 42, 0.2);
+            animation: pulse 2s infinite;
+        }
+        .status-error { background: rgba(231, 76, 60, 0.2); }
+        .status-success { background: rgba(66, 183, 42, 0.3); }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            animation: progressAnimation 2s infinite;
+        }
+
+        .results-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .results-summary p {
+            font-size: 1.1rem;
+        }
+
+        .results-summary strong {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        .results-table-container {
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-table th {
+            background: var(--bg-light);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .results-table tr:hover {
+            background: var(--bg-light);
+        }
+
+        .results-table a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .results-table a:hover {
+            text-decoration: underline;
+        }
+
+        .files-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .file-item:hover {
+            background: #e4e6eb;
+            transform: translateX(5px);
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .file-meta {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .file-actions .btn {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        .text-muted {
+            color: var(--text-light);
+            text-align: center;
+            padding: 20px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes progressAnimation {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .results-summary {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🔍 Facebook Scraper Tool</h1>
+            <p>Công cụ quét dữ liệu Facebook tự động</p>
+        </header>
+
+        <main class="main-content">
+            <div class="card">
+                <h2>Thông tin đăng nhập</h2>
+                <form id="scraperForm">
+                    <div class="form-group">
+                        <label for="email">📧 Email Facebook:</label>
+                        <!-- ✅ MỚI - BỎ VALIDATION -->
+<input type="text" id="email" placeholder="email@example.com hoặc số điện thoại">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">🔒 Mật khẩu:</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="keyword">🔎 Từ khóa tìm kiếm:</label>
+                        <input type="text" id="keyword" placeholder="Ví dụ: Mỹ phẩm" required>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="headless">
+                            Chạy ẩn (không hiển thị trình duyệt)
+                        </label>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary" id="startBtn">
+                            ▶️ Bắt đầu quét
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="stopBtn" disabled>
+                            ⏹️ Dừng lại
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card status-card">
+                <h2>📊 Trạng thái</h2>
+                <div id="status" class="status-idle">
+                    <span class="status-icon">⏸️</span>
+                    <span class="status-text">Đang chờ...</span>
+                </div>
+                <div id="progress" class="progress-bar" style="display: none;">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="card results-card" id="resultsCard" style="display: none;">
+                <h2>✅ Kết quả</h2>
+                <div class="results-summary">
+                    <p>Tìm thấy: <strong id="resultCount">0</strong> kết quả</p>
+                    <button class="btn btn-success" id="downloadBtn">
+                        💾 Tải xuống CSV
+                    </button>
+                </div>
+                <div class="results-table-container">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tên</th>
+                                <th>Link</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card files-card">
+                <h2>📂 Lịch sử file</h2>
+                <button class="btn btn-info" id="refreshFilesBtn">🔄 Làm mới</button>
+                <div id="filesList" class="files-list">
+                    <p class="text-muted">Chưa có file nào</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>© 2025 Facebook Scraper Tool | Made with ❤️</p>
+        </footer>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3333/api';
+
+        const form = document.getElementById('scraperForm');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const statusEl = document.getElementById('status');
+        const progressEl = document.getElementById('progress');
+        const resultsCard = document.getElementById('resultsCard');
+        const resultsBody = document.getElementById('resultsBody');
+        const resultCount = document.getElementById('resultCount');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const refreshFilesBtn = document.getElementById('refreshFilesBtn');
+        const filesList = document.getElementById('filesList');
+
+        let currentFilename = '';
+
+        function updateStatus(message, type = 'idle', icon = '⏸️') {
+            statusEl.className = `status-${type}`;
+            statusEl.innerHTML = `
+                <span class="status-icon">${icon}</span>
+                <span class="status-text">${message}</span>
+            `;
+        }
+
+        function showProgress(show = true) {
+            progressEl.style.display = show ? 'block' : 'none';
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const keyword = document.getElementById('keyword').value;
+            const headless = document.getElementById('headless').checked;
+
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+
+            updateStatus('Đang khởi động...', 'running', '🚀');
+            showProgress(true);
+            resultsCard.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_URL}/start`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                        keyword,
+                        headless
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    updateStatus(`Hoàn thành! Tìm thấy ${data.data.count} kết quả`, 'success', '✅');
+                    currentFilename = data.data.filename;
+                    displayResults(data.data.results, data.data.count);
+                    resultsCard.style.display = 'block';
+                    loadFiles();
+                } else {
+                    updateStatus(data.message || 'Có lỗi xảy ra', 'error', '❌');
+                }
+
+            } catch (error) {
+                updateStatus(`Lỗi: ${error.message}`, 'error', '❌');
+            } finally {
+                showProgress(false);
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        });
+
+        stopBtn.addEventListener('click', async () => {
+            try {
+                await fetch(`${API_URL}/stop`, {
+                    method: 'POST'
+                });
+
+                updateStatus('Đã dừng', 'idle', '⏹️');
+                showProgress(false);
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+
+            } catch (error) {
+                console.error('Stop error:', error);
+            }
+        });
+
+        function displayResults(results, total) {
+            resultCount.textContent = total;
+            resultsBody.innerHTML = '';
+
+            results.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>
+                        ${item.link ? `<a href="${item.link}" target="_blank">🔗 Link</a>` : '-'}
+                    </td>
+                `;
+                resultsBody.appendChild(row);
+            });
+        }
+
+        downloadBtn.addEventListener('click', () => {
+            if (currentFilename) {
+                window.open(`${API_URL}/download/${currentFilename}`, '_blank');
+            }
+        });
+
+        async function loadFiles() {
+            try {
+                const response = await fetch(`${API_URL}/files`);
+                const data = await response.json();
+
+                if (data.success && data.files.length > 0) {
+                    filesList.innerHTML = data.files.map(file => `
+                        <div class="file-item">
+                            <div class="file-info">
+                                <div class="file-name">📄 ${file.name}</div>
+                                <div class="file-meta">
+                                    ${formatFileSize(file.size)} • ${file.created}
+                                </div>
+                            </div>
+                            <div class="file-actions">
+                                <button class="btn btn-success" onclick="downloadFile('${file.name}')">
+                                    💾 Tải
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    filesList.innerHTML = '<p class="text-muted">Chưa có file nào</p>';
+                }
+
+            } catch (error) {
+                console.error('Load files error:', error);
+            }
+        }
+
+        function downloadFile(filename) {
+            window.open(`${API_URL}/download/${filename}`, '_blank');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        refreshFilesBtn.addEventListener('click', loadFiles);
+
+        loadFiles();
+    </script>
+</body>
+</html>
