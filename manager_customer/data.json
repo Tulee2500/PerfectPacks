@@ -1,0 +1,64 @@
+{
+  "products": [
+    {
+      "company": "TNHH Sao Việt",
+      "product": "Hộp serum dưỡng da",
+      "owner": "Trần Thị Lan",
+      "sector": "Mỹ phẩm",
+      "date": "2026-03-28",
+      "cycle": 22,
+      "image": "/uploads/d56a291de6c4401cbcd302adeb17000c.jpeg",
+      "note": "",
+      "history": [
+        {
+          "date": "2026-03-28",
+          "note": "300",
+          "qty": 500,
+          "skip": false
+        }
+      ],
+      "id": 9
+    },
+    {
+      "company": "CÔNG TY TNHH KINH DOANH THỰC PHẨM HƯNG THỊNH",
+      "product": "Hộp serum dưỡng da",
+      "owner": "Lê An Hạ Vân",
+      "sector": "Mỹ phẩm",
+      "date": "2026-04-09",
+      "cycle": 50,
+      "image": "/uploads/e19b3cb7a1c14fa0a9637806fbffcd12.jpg",
+      "note": "10000",
+      "history": [
+        {
+          "date": "2026-04-09",
+          "skip": false,
+          "qty": 2000,
+          "note": "10000"
+        }
+      ],
+      "id": 10
+    }
+  ],
+  "customers": [
+    {
+      "id": 2,
+      "company": "TNHH Sao Việt",
+      "owner": "Trần Thị Lan",
+      "phone": "0912 345 678",
+      "sector": "Mỹ phẩm",
+      "personality": "Quyết đoán",
+      "note": "Khách VIP, yêu cầu in ấn tỉ mỉ"
+    },
+    {
+      "company": "CÔNG TY TNHH KINH DOANH THỰC PHẨM HƯNG THỊNH",
+      "owner": "Lê An Hạ Vân",
+      "phone": "0977456325",
+      "sector": "Mỹ phẩm",
+      "personality": "Dễ chịu",
+      "note": "Khách VIP, yêu cầu in ấn tỉ mỉ",
+      "id": 6
+    }
+  ],
+  "pid_cnt": 11,
+  "cid_cnt": 7
+}

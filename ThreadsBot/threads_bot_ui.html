@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threads Bot</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
+  :root {
+    --bg:#0a0a0f; --surface:#12121a; --surface2:#1a1a26; --border:#2a2a3d;
+    --accent:#7c6fff; --accent2:#ff6f91; --accent3:#6fffd4;
+    --text:#e8e8f0; --dim:#7070a0; --danger:#ff4d6d; --ok:#4dffb4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;padding:28px 20px 80px;
+    background-image:radial-gradient(ellipse 60% 40% at 80% 10%,rgba(124,111,255,.08) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 30% at 10% 80%,rgba(255,111,145,.06) 0%,transparent 60%)}
+  h1{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+  .sub{color:var(--dim);font-size:11px;margin-bottom:28px}
+  .section{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:18px}
+  .sec-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+    color:var(--dim);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  label{display:block;font-size:10px;color:var(--dim);margin-bottom:5px;letter-spacing:1px;text-transform:uppercase}
+  input[type=text],input[type=password],input[type=time],input[type=number],textarea,select{
+    width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;
+    color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:10px 14px;
+    outline:none;transition:border-color .2s;margin-bottom:13px}
+  input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+  textarea{resize:vertical;min-height:68px}
+  .row{display:flex;gap:10px}.row>*{flex:1}
+  .tabs{display:flex;gap:8px;margin-bottom:20px}
+  .tab{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--dim);
+    font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:11px;cursor:pointer;text-align:center;transition:all .2s}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .tab-panel{display:none}.tab-panel.active{display:block}
+  .card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:15px;margin-bottom:10px}
+  .card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
+  .card-lbl{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px}
+  .toggle-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+  .toggle-row:last-child{border-bottom:none}
+  .toggle{position:relative;width:42px;height:23px;flex-shrink:0}
+  .toggle input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:var(--border);border-radius:24px;cursor:pointer;transition:.3s}
+  .slider:before{content:'';position:absolute;width:17px;height:17px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s}
+  input:checked+.slider{background:var(--accent)}
+  input:checked+.slider:before{transform:translateX(19px)}
+  .btn{border:none;border-radius:10px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:10px 16px;transition:all .2s}
+  .btn-add{background:rgba(111,255,212,.1);border:1px solid rgba(111,255,212,.3);color:var(--accent3);
+    display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:4px}
+  .btn-add:hover{background:rgba(111,255,212,.18)}
+  .btn-del{background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.25);color:var(--danger);padding:5px 11px;border-radius:8px;font-size:11px}
+  .btn-del:hover{background:rgba(255,77,109,.2)}
+  .btn-run{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;width:100%;
+    padding:16px;font-size:14px;border-radius:14px;margin-top:10px;letter-spacing:.5px}
+  .btn-run:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,111,255,.3)}
+  .badge{background:var(--accent);color:#fff;border-radius:100px;padding:2px 8px;
+    font-size:10px;font-family:'Syne',sans-serif;font-weight:700;margin-left:6px}
+  #status{background:var(--bg);border:1px solid var(--accent);border-radius:12px;padding:14px;
+    font-size:12px;color:var(--accent3);margin-top:12px;white-space:pre-wrap;display:none;max-height:180px;overflow-y:auto}
+  .dl-links{display:flex;gap:10px;margin-top:10px}
+  .dl-btn{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+    color:var(--accent);font-family:'Syne',sans-serif;font-weight:700;font-size:12px;
+    padding:11px;text-align:center;cursor:pointer;text-decoration:none;transition:all .2s}
+  .dl-btn:hover{border-color:var(--accent);background:rgba(124,111,255,.1)}
+</style>
+</head>
+<body>
+
+<h1>⚡ Threads Bot</h1>
+<p class="sub">Cấu hình tự động đăng bài & comment — tất cả trong 1 file</p>
+
+<!-- TÀI KHOẢN -->
+<div class="section">
+  <div class="sec-title"><span>🔐</span> Tài khoản Threads</div>
+  <label>Email / Username / SĐT</label>
+  <input type="text" id="username" placeholder="tulee2501@gmail.com">
+  <label>Mật khẩu</label>
+  <input type="password" id="password" placeholder="••••••••">
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('posts')">📝 Đăng bài <span class="badge" id="post-count">0</span></div>
+  <div class="tab" onclick="switchTab('comments')">💬 Comment <span class="badge" id="comment-count">0</span></div>
+</div>
+
+<!-- TAB ĐĂNG BÀI -->
+<div class="tab-panel active" id="tab-posts">
+  <div class="section">
+    <div class="sec-title"><span>📅</span> Phiên đăng</div>
+    <div class="toggle-row">
+      <span style="font-size:13px">🌅 Buổi sáng</span>
+      <label class="toggle"><input type="checkbox" id="en-morning" onchange="toggleSess('morning')"><span class="slider"></span></label>
+    </div>
+    <div id="morning-time" style="display:none;padding:10px 0 0">
+      <label>Giờ đăng sáng</label><input type="time" id="morning-hr" value="08:00">
+    </div>
+    <div class="toggle-row">
+      <span style="font-size:13px">🌆 Buổi chiều/tối</span>
+      <label class="toggle"><input type="checkbox" id="en-evening" onchange="toggleSess('evening')"><span class="slider"></span></label>
+    </div>
+    <div id="evening-time" style="display:none;padding:10px 0 0">
+      <label>Giờ đăng chiều</label><input type="time" id="evening-hr" value="18:00">
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-title"><span>✍️</span> Danh sách bài đăng</div>
+    <div id="posts-list"></div>
+    <button class="btn btn-add" onclick="addPost()">＋ Thêm bài đăng</button>
+  </div>
+</div>
+
+<!-- TAB COMMENT -->
+<div class="tab-panel" id="tab-comments">
+  <div class="section">
+    <div class="sec-title"><span>🔍</span> Chiến dịch comment</div>
+    <div id="comments-list"></div>
+    <button class="btn btn-add" onclick="addComment()">＋ Thêm chiến dịch</button>
+  </div>
+</div>
+
+<!-- XUẤT -->
+<div class="section">
+  <div class="sec-title"><span>💾</span> Xuất & chạy</div>
+  <button class="btn btn-run" onclick="exportAll()">⬇ Tải xuống threads_bot.py + bot_config.json</button>
+  <div class="dl-links" id="dl-links" style="display:none">
+    <a class="dl-btn" id="dl-py" download="threads_bot.py">🐍 threads_bot.py</a>
+    <a class="dl-btn" id="dl-json" download="bot_config.json">⚙ bot_config.json</a>
+  </div>
+  <div id="status"></div>
+</div>
+
+<script>
+let pc=0,cc=0;
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['posts','comments'][i]===t));
+  document.querySelectorAll('.tab-panel').forEach((el,i)=>el.classList.toggle('active',['tab-posts','tab-comments'][i]===`tab-${t}`));
+}
+
+function toggleSess(s){
+  document.getElementById(`${s}-time`).style.display=document.getElementById(`en-${s}`).checked?'block':'none';
+}
+
+function getTimeOptions(){
+  let o='<option value="">— Đăng ngay —</option>';
+  if(document.getElementById('en-morning').checked){const v=document.getElementById('morning-hr').value;o+=`<option value="${v}">🌅 Sáng — ${v}</option>`}
+  if(document.getElementById('en-evening').checked){const v=document.getElementById('evening-hr').value;o+=`<option value="${v}">🌆 Chiều — ${v}</option>`}
+  return o;
+}
+
+function selStyle(){return 'width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:"DM Mono",monospace;font-size:13px;padding:10px 14px;outline:none;margin-bottom:13px;'}
+
+function addPost(){
+  pc++;const id=`post-${pc}`;
+  const d=document.createElement('div');d.className='card';d.id=id;
+  d.innerHTML=`<div class="card-hdr"><span class="card-lbl">BÀI #${pc}</span><button class="btn btn-del" onclick="document.getElementById('${id}').remove();updateBadge()">✕ Xóa</button></div>
+    <label>Thời gian đăng</label><select class="post-time" style="${selStyle()}">${getTimeOptions()}</select>
+    <label>Nội dung bài đăng</label><textarea class="post-content" placeholder="Nhập nội dung..."></textarea>`;
+  document.getElementById('posts-list').appendChild(d);updateBadge();
+}
+
+function addComment(){
+  cc++;const id=`comment-${cc}`;
+  const d=document.createElement('div');d.className='card';d.id=id;
+  d.innerHTML=`<div class="card-hdr"><span class="card-lbl">CHIẾN DỊCH #${cc}</span><button class="btn btn-del" onclick="document.getElementById('${id}').remove();updateBadge()">✕ Xóa</button></div>
+    <label>Thời gian chạy</label><select class="cm-time" style="${selStyle()}">${getTimeOptions()}</select>
+    <label>Từ khóa tìm kiếm</label><input type="text" class="cm-kw" placeholder="ví dụ: du lịch hà nội">
+    <div class="row"><div><label>Số bài comment</label><input type="number" class="cm-cnt" value="3" min="1" max="50"></div>
+    <div></div></div>
+    <label>Nội dung comment</label><textarea class="cm-txt" placeholder="Nhập nội dung comment..."></textarea>`;
+  document.getElementById('comments-list').appendChild(d);updateBadge();
+}
+
+function updateBadge(){
+  document.getElementById('post-count').textContent=document.querySelectorAll('#posts-list .card').length;
+  document.getElementById('comment-count').textContent=document.querySelectorAll('#comments-list .card').length;
+}
+
+function exportAll(){
+  const username=document.getElementById('username').value.trim();
+  const password=document.getElementById('password').value.trim();
+  if(!username||!password){alert('⚠ Vui lòng điền tài khoản và mật khẩu!');return;}
+
+  const posts=[];
+  document.querySelectorAll('#posts-list .card').forEach(c=>{
+    const time=c.querySelector('.post-time')?.value||'';
+    const content=c.querySelector('.post-content')?.value.trim()||'';
+    if(content) posts.push({time,content});
+  });
+
+  const comments=[];
+  document.querySelectorAll('#comments-list .card').forEach(c=>{
+    const time=c.querySelector('.cm-time')?.value||'';
+    const keyword=c.querySelector('.cm-kw')?.value.trim()||'';
+    const count=parseInt(c.querySelector('.cm-cnt')?.value||'3');
+    const text=c.querySelector('.cm-txt')?.value.trim()||'';
+    if(keyword&&text) comments.push({time,keyword,count,text});
+  });
+
+  const config={username,password,posts,comments};
+  const configJson=JSON.stringify(config,null,2);
+
+  // ─── NỘI DUNG FILE threads_bot.py ───
+  const botPy=`"""
+Threads Bot - Tự động đăng bài & comment
+Yêu cầu: pip install selenium webdriver-manager
+Cách dùng: đặt bot_config.json cùng thư mục, chạy: python threads_bot.py
+"""
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import TimeoutException
+import time, json, sys, os
+from datetime import datetime
+
+
+def setup_driver():
+    options = webdriver.ChromeOptions()
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option("useAutomationExtension", False)
+    try:
+        from webdriver_manager.chrome import ChromeDriverManager
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    except ImportError:
+        driver = webdriver.Chrome(options=options)
+    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+    driver.maximize_window()
+    return driver
+
+
+def wait_and_click(driver, xpath, timeout=15, description=""):
+    print(f"  -> Click: {description or xpath[:50]}...")
+    el = WebDriverWait(driver, timeout).until(EC.element_to_be_clickable((By.XPATH, xpath)))
+    driver.execute_script("arguments[0].scrollIntoView(true);", el)
+    time.sleep(0.5)
+    el.click()
+    print("  OK")
+    return el
+
+
+def wait_and_type(driver, xpath, text, timeout=15, description="", use_enter=False):
+    print(f"  -> Nhap: {description or xpath[:50]}...")
+    el = WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.XPATH, xpath)))
+    if el.tag_name.lower() not in ("input", "textarea"):
+        try: el = el.find_element(By.XPATH, './/input | .//textarea')
+        except: pass
+    driver.execute_script("arguments[0].scrollIntoView(true);arguments[0].focus();", el)
+    time.sleep(0.3)
+    try: el.click()
+    except: driver.execute_script("arguments[0].click();", el)
+    time.sleep(0.2)
+    driver.execute_script("arguments[0].value = '';", el)
+    el.send_keys(text)
+    driver.execute_script("arguments[0].dispatchEvent(new Event('input',{bubbles:true}));", el)
+    time.sleep(0.2)
+    if use_enter: el.send_keys(Keys.RETURN)
+    print("  OK")
+    return el
+
+
+def type_ce(driver, xpath, text, timeout=15, description="", use_enter=False):
+    print(f"  -> Nhap CE: {description or xpath[:50]}...")
+    el = WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.XPATH, xpath)))
+    driver.execute_script("arguments[0].scrollIntoView(true);arguments[0].focus();", el)
+    time.sleep(0.3)
+    try: el.click()
+    except: driver.execute_script("arguments[0].click();", el)
+    time.sleep(0.3)
+    el.send_keys(Keys.CONTROL + "a")
+    el.send_keys(Keys.DELETE)
+    time.sleep(0.2)
+    el.send_keys(text)
+    time.sleep(0.3)
+    if use_enter: el.send_keys(Keys.RETURN)
+    print("  OK")
+    return el
+
+
+def login_form_visible(driver, timeout=4):
+    try:
+        WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((By.XPATH, '//*[@id="login_form"]')))
+        return True
+    except TimeoutException:
+        return False
+
+
+def do_login(driver, username, password):
+    print("\\n=== DANG NHAP ===")
+    driver.get("https://www.threads.com/")
+    time.sleep(3)
+
+    try:
+        wait_and_click(driver, '//*[@id="barcelona-header"]/div[2]/a', timeout=8, description="Header login")
+    except TimeoutException:
+        wait_and_click(driver, '//*[@id="barcelona-page-layout"]/div/div[3]/div[1]/div', timeout=8, description="Fallback login")
+    time.sleep(2)
+
+    if not login_form_visible(driver, timeout=3):
+        try:
+            wait_and_click(driver, '//*[@id="mount_0_0_xl"]/div/div/div[2]/div/div/div/div[2]/div[1]/div[3]/div/a', timeout=8, description="Link login")
+            time.sleep(2)
+        except TimeoutException: pass
+        if not login_form_visible(driver, timeout=3):
+            try:
+                wait_and_click(driver, '//*[@id="mount_0_0_xl"]/div/div/div[2]/div/div/div/div[2]/div[1]/div[2]/form/div/div[3]/div[2]', timeout=8, description="Form btn")
+                time.sleep(2)
+            except TimeoutException: pass
+
+    wait_and_type(driver, '//*[@id="login_form"]/div/div[1]/div/div[1]/div/div', username, description="Tai khoan")
+    time.sleep(0.5)
+    wait_and_type(driver, '//*[@id="login_form"]/div/div[1]/div/div[2]/div/div', password, description="Mat khau")
+    time.sleep(0.5)
+    wait_and_click(driver, '//*[@id="login_form"]/div/div[1]/div/div[3]/div/div/div', description="Nut dang nhap")
+    time.sleep(4)
+
+    save_xpaths = [
+        ('//*[@id="mount_0_0_/q"]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/main/div/div/section/div/button', "XPath goc"),
+        ("//button[contains(text(),'Save info')]", "Save info btn"),
+        ("//div[@role='button' and contains(text(),'Save info')]", "Save info div"),
+    ]
+    for attempt in range(4):
+        saved = False
+        for xp, desc in save_xpaths:
+            try:
+                wait_and_click(driver, xp, timeout=5, description=desc)
+                saved = True; time.sleep(2); break
+            except TimeoutException: continue
+        if saved: break
+        print(f"  cho them 3s... ({attempt+1}/4)"); time.sleep(3)
+    print("\\n=== DANG NHAP XONG ===")
+
+
+def do_post(driver, content):
+    print(f"\\n  Dang bai: {content[:40]}...")
+    wait_and_click(driver, '//*[@id="barcelona-page-layout"]/div/div/div[2]/div/div[1]/div[3]/div/div[1]',
+                   timeout=15, description="O soan bai")
+    time.sleep(1)
+    type_ce(driver, '//*[@id="barcelona-page-layout"]/div/div/div[2]/div/div[1]/div[3]/div/div[1]',
+            content, description="Noi dung bai")
+    time.sleep(1)
+    wait_and_click(driver, '//*[@id="barcelona-page-layout"]/div/div/div[2]/div/div[1]/div[3]/div/div[2]/div',
+                   timeout=15, description="Nut Post")
+    time.sleep(3)
+    print("  Da dang bai!")
+
+
+def do_search_and_comment(driver, keyword, count, comment_text):
+    print(f"\\n  Tim kiem: '{keyword}' - Comment {count} bai")
+    wait_and_click(driver,
+        '//*[@id="mount_0_0_qu"]/div/div/div[2]/div[1]/div[2]/div[2]/a/div/div[1]',
+        timeout=15, description="Nut tim kiem")
+    time.sleep(2)
+    wait_and_type(driver,
+        '//*[@id="barcelona-page-layout"]/div/div/div[2]/div/div[1]/div[1]/div/div[1]/div/div/div',
+        keyword, timeout=15, description="O tim kiem", use_enter=True)
+    time.sleep(3)
+
+    comment_xpaths = [
+        '//*[@id="barcelona-page-layout"]/div/div/div[2]/div/div[1]/div[1]/div/div[2]/div/div/div[1]/div[1]/div/div/div/div/div[3]/div/div[3]/div/div[2]/div/div',
+        '//*[@id="barcelona-page-layout"]/div/div/div[2]/div/div[1]/div[1]/div/div[2]/div/div/div[1]/div[2]/div/div[1]/div/div/div[4]/div/div[3]/div/div[2]/div/div',
+    ]
+    for i in range(count):
+        xp = comment_xpaths[i % len(comment_xpaths)]
+        print(f"\\n    Comment bai #{i+1}")
+        try:
+            wait_and_click(driver, xp, timeout=10, description=f"Nut comment {i+1}")
+            time.sleep(2)
+            type_ce(driver,
+                '//*[@id="mount_0_0_qu"]/div/div/div[3]/div/div/div[1]/div/div[2]/div/div/div/div[2]/div/div/div/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/div[1]/p',
+                comment_text, timeout=10, description="O comment", use_enter=True)
+            time.sleep(2)
+            print(f"    Da comment bai #{i+1}")
+            if i < count - 1:
+                driver.back(); time.sleep(2)
+        except TimeoutException:
+            print(f"    Bo qua bai #{i+1}")
+            try: driver.back(); time.sleep(2)
+            except: pass
+
+
+def wait_until(target):
+    while True:
+        now = datetime.now().strftime("%H:%M")
+        if now >= target: return
+        secs = (datetime.strptime(target,"%H:%M")-datetime.strptime(now,"%H:%M")).total_seconds()
+        print(f"\\r  Cho den {target} - con {int(secs//60)} phut...   ", end="", flush=True)
+        time.sleep(30)
+    print()
+
+
+def main():
+    cfg_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bot_config.json")
+    if not os.path.exists(cfg_file):
+        print("Khong tim thay bot_config.json"); input(); sys.exit(1)
+    with open(cfg_file, "r", encoding="utf-8") as f:
+        cfg = json.load(f)
+
+    username = cfg["username"]
+    password = cfg["password"]
+    posts    = cfg.get("posts", [])
+    comments = cfg.get("comments", [])
+
+    print("=" * 50)
+    print("  THREADS BOT")
+    print(f"  Tai khoan : {username}")
+    print(f"  Bai dang  : {len(posts)}")
+    print(f"  Comment   : {len(comments)} chien dich")
+    print("=" * 50)
+
+    driver = setup_driver()
+    try:
+        do_login(driver, username, password)
+
+        if posts:
+            print("\\n=== DANG BAI ===")
+            for idx, p in enumerate(posts):
+                content = p.get("content","")
+                if not content: continue
+                t = p.get("time","")
+                if t:
+                    print(f"[Bai {idx+1}] Len lich luc {t}")
+                    wait_until(t)
+                else:
+                    print(f"[Bai {idx+1}] Dang ngay")
+                do_post(driver, content)
+                time.sleep(2)
+
+        if comments:
+            print("\\n=== COMMENT ===")
+            for idx, cm in enumerate(comments):
+                kw   = cm.get("keyword","")
+                cnt  = int(cm.get("count",1))
+                txt  = cm.get("text","")
+                t    = cm.get("time","")
+                if not kw or not txt: continue
+                if t:
+                    print(f"[Comment {idx+1}] Len lich luc {t}")
+                    wait_until(t)
+                do_search_and_comment(driver, kw, cnt, txt)
+                time.sleep(2)
+
+        print("\\n=== HOAN THANH ===")
+        input("Nhan Enter de dong...")
+    except Exception as e:
+        print(f"Loi: {e}")
+        import traceback; traceback.print_exc()
+        input("Nhan Enter de dong...")
+    finally:
+        driver.quit()
+
+if __name__ == "__main__":
+    main()
+`;
+
+  // Tải xuống bot_config.json
+  const blob1 = new Blob([configJson], {type:'application/json'});
+  document.getElementById('dl-json').href = URL.createObjectURL(blob1);
+
+  // Tải xuống threads_bot.py
+  const blob2 = new Blob([botPy], {type:'text/plain'});
+  document.getElementById('dl-py').href = URL.createObjectURL(blob2);
+
+  // Hiện links + trigger cả 2
+  document.getElementById('dl-links').style.display = 'flex';
+
+  // Auto download cả 2
+  const a1 = document.createElement('a'); a1.href = URL.createObjectURL(blob1); a1.download = 'bot_config.json'; a1.click();
+  setTimeout(()=>{
+    const a2 = document.createElement('a'); a2.href = URL.createObjectURL(blob2); a2.download = 'threads_bot.py'; a2.click();
+  }, 500);
+
+  const st = document.getElementById('status');
+  st.style.display = 'block';
+  st.textContent = `✅ Đã xuất 2 file!\n\n📄 threads_bot.py  — script bot chính\n⚙  bot_config.json — cấu hình bên dưới:\n\n${configJson}\n\n👉 Đặt 2 file cùng thư mục rồi chạy:\n   python threads_bot.py`;
+}
+</script>
+</body>
+</html>

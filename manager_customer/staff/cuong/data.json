@@ -1,0 +1,36 @@
+{
+  "products": [
+    {
+      "company": "CÔNG TY TNHH KINH DOANH THỰC PHẨM HƯNG THỊNH",
+      "product": "Hộp carton cao cấp",
+      "owner": "Lê An Hạ Vân",
+      "sector": "Thực phẩm",
+      "date": "2026-04-04",
+      "cycle": 30,
+      "image": "/staff-uploads/cuong/04083c68d0214142bee44de47b069032.png",
+      "note": "thêm 2000 hàng",
+      "history": [
+        {
+          "date": "2026-04-04",
+          "skip": false,
+          "qty": 500,
+          "note": "thêm 2000 hàng"
+        }
+      ],
+      "id": 1
+    }
+  ],
+  "customers": [
+    {
+      "company": "CÔNG TY TNHH KINH DOANH THỰC PHẨM HƯNG THỊNH",
+      "owner": "Lê An Hạ Vân",
+      "phone": "0977456325",
+      "sector": "Thực phẩm",
+      "personality": "Cẩn thận",
+      "note": "Tiền tỷ",
+      "id": 1
+    }
+  ],
+  "pid_cnt": 2,
+  "cid_cnt": 2
+}

@@ -1,0 +1,28 @@
+{
+  "staff": [
+    {
+      "id": "e387acd8",
+      "slug": "cuong",
+      "name": "Cường",
+      "role": "Nhân Viên Kinh Doanh",
+      "phone": "",
+      "note": "3"
+    },
+    {
+      "id": "909bc4de",
+      "slug": "quyen",
+      "name": "Quyên",
+      "role": "Nhân viên KD",
+      "phone": "",
+      "note": ""
+    },
+    {
+      "id": "c3b241e0",
+      "slug": "c_tuyen",
+      "name": "C.Tuyen",
+      "role": "Nhân viên KD",
+      "phone": "082321587",
+      "note": ""
+    }
+  ]
+}

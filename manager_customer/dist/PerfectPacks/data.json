@@ -1,0 +1,83 @@
+{
+  "products": [
+    {
+      "company": "TNHH Sao Việt",
+      "product": "Hộp carton cao cấp",
+      "owner": "Trần Thị Lan",
+      "sector": "Mỹ phẩm",
+      "date": "2026-04-03",
+      "cycle": 50,
+      "image": "/uploads/247b8452000e40d8887f652aca1ecd9a.jpg",
+      "note": "thêm 2000 hàng",
+      "history": [
+        {
+          "date": "2026-04-03",
+          "skip": false,
+          "qty": 500,
+          "note": "thêm 2000 hàng"
+        }
+      ],
+      "id": 9
+    },
+    {
+      "company": "CÔNG TY TNHH KINH DOANH THỰC PHẨM HƯNG THỊNH",
+      "product": "Hộp carton cao cấp",
+      "owner": "Lê An Hạ Vân",
+      "sector": "Mỹ phẩm",
+      "date": "2026-04-03",
+      "cycle": 600,
+      "image": "/uploads/ea633f621ae34ea483583a9b3d1a9f72.jpeg",
+      "note": "300",
+      "history": [
+        {
+          "date": "2026-04-03",
+          "skip": false,
+          "qty": 600,
+          "note": "300"
+        }
+      ],
+      "id": 10
+    },
+    {
+      "company": "CÔNG TY TNHH KINH DOANH THỰC PHẨM HƯNG THỊNH",
+      "product": "Hộp carton cao cấp",
+      "owner": "Lê An Hạ Vân",
+      "sector": "Mỹ phẩm",
+      "date": "2026-04-03",
+      "cycle": 2,
+      "image": "/uploads/97801ca6a0454d1d88fdc75964b3a1a4.png",
+      "note": "",
+      "history": [
+        {
+          "date": "2026-04-03",
+          "skip": false,
+          "qty": 500,
+          "note": ""
+        }
+      ],
+      "id": 11
+    }
+  ],
+  "customers": [
+    {
+      "id": 2,
+      "company": "TNHH Sao Việt",
+      "owner": "Trần Thị Lan",
+      "phone": "0912 345 678",
+      "sector": "Mỹ phẩm",
+      "personality": "Chuyên nghiệp",
+      "note": "Khách VIP, yêu cầu in ấn tỉ mỉ"
+    },
+    {
+      "company": "CÔNG TY TNHH KINH DOANH THỰC PHẨM HƯNG THỊNH",
+      "owner": "Lê An Hạ Vân",
+      "phone": "0977456325",
+      "sector": "Mỹ phẩm",
+      "personality": "Quyết đoán",
+      "note": "Tiền tỷ",
+      "id": 6
+    }
+  ],
+  "pid_cnt": 12,
+  "cid_cnt": 7
+}

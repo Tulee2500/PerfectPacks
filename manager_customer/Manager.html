@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfect Packs – Quản Lý</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b2a; --navy-mid: #162032; --navy-light: #1e2d40;
+    --gold: #c9a84c; --gold-light: #e2c97e; --gold-dim: #7a6128;
+    --cream: #f5f0e8; --cream-mid: #ede6d6;
+    --text-main: #1a1a2e; --text-muted: #6b7280; --text-light: #9ca3af;
+    --white: #ffffff; --success: #2d9c6f; --danger: #c0392b; --warning: #d4890a;
+    --sidebar-w: 240px; --radius: 12px;
+    --shadow: 0 4px 24px rgba(13,27,42,0.10); --shadow-lg: 0 8px 40px rgba(13,27,42,0.18);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-main); min-height: 100vh; display: flex; overflow: hidden; }
+
+  /* SIDEBAR */
+  .sidebar { width: var(--sidebar-w); background: var(--navy); display: flex; flex-direction: column; height: 100vh; position: fixed; left: 0; top: 0; z-index: 100; box-shadow: 4px 0 30px rgba(0,0,0,0.25); }
+  .brand { padding: 28px 22px 22px; border-bottom: 1px solid rgba(201,168,76,0.2); }
+  .brand-logo { width: 38px; height: 38px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 18px; box-shadow: 0 2px 12px rgba(201,168,76,0.35); }
+  .brand-name { font-family: 'Playfair Display', serif; color: var(--white); font-size: 15px; font-weight: 700; }
+  .brand-name span { display: block; color: var(--gold); font-size: 11px; font-family: 'DM Sans',sans-serif; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+  .nav-section { padding: 18px 12px 0; flex: 1; }
+  .nav-label { font-size: 10px; color: rgba(201,168,76,0.5); text-transform: uppercase; letter-spacing: 0.15em; padding: 0 10px; margin-bottom: 8px; font-weight: 600; }
+  .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; cursor: pointer; color: rgba(255,255,255,0.55); font-size: 14px; transition: all 0.22s ease; margin-bottom: 3px; user-select: none; position: relative; }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+  .nav-item.active { background: linear-gradient(135deg, rgba(201,168,76,0.22), rgba(201,168,76,0.08)); color: var(--gold-light); font-weight: 500; }
+  .nav-item.active::before { content: ''; position: absolute; left: 0; top: 20%; bottom: 20%; width: 3px; background: var(--gold); border-radius: 0 3px 3px 0; }
+  .nav-item .icon { width: 18px; height: 18px; opacity: 0.7; flex-shrink: 0; }
+  .nav-item.active .icon { opacity: 1; }
+  .sidebar-footer { padding: 16px 22px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 11px; color: rgba(255,255,255,0.25); }
+
+  /* MAIN */
+  .main { margin-left: var(--sidebar-w); flex: 1; height: 100vh; overflow-y: auto; }
+  .page { display: none; padding: 32px 36px; animation: fadeIn .3s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .page-title { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--navy); font-weight: 700; }
+  .page-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; margin-bottom: 28px; }
+
+  /* TOOLBAR */
+  .toolbar { background: var(--white); border-radius: var(--radius); padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.1); }
+  .toolbar-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .filter-chip-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
+  .chip { padding: 5px 13px; border-radius: 20px; border: 1.5px solid var(--cream-mid); background: var(--cream); font-size: 12px; font-family: 'DM Sans',sans-serif; color: var(--text-muted); cursor: pointer; transition: all .18s; font-weight: 500; white-space: nowrap; }
+  .chip:hover { border-color: var(--gold); color: var(--gold-dim); }
+  .chip.active { background: var(--navy); color: var(--gold-light); border-color: var(--navy); }
+
+  .input-wrap { position: relative; }
+  .input-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-light); pointer-events: none; width: 15px; height: 15px; }
+  .inp { padding: 9px 13px 9px 34px; border: 1.5px solid var(--cream-mid); border-radius: 8px; font-size: 13px; font-family: 'DM Sans',sans-serif; background: var(--cream); color: var(--text-main); outline: none; transition: border-color .2s, box-shadow .2s; min-width: 155px; }
+  .inp:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+  .inp::placeholder { color: var(--text-light); }
+  .sel { padding: 9px 13px; border: 1.5px solid var(--cream-mid); border-radius: 8px; font-size: 13px; font-family: 'DM Sans',sans-serif; background: var(--cream); color: var(--text-main); outline: none; transition: border-color .2s; cursor: pointer; min-width: 140px; }
+  .sel:focus { border-color: var(--gold); }
+
+  .btn { padding: 9px 18px; border-radius: 8px; border: none; font-size: 13px; font-family: 'DM Sans',sans-serif; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: all .2s; white-space: nowrap; }
+  .btn svg { width: 15px; height: 15px; }
+  .btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); box-shadow: 0 2px 10px rgba(201,168,76,0.3); }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,168,76,0.4); }
+  .btn-secondary { background: var(--navy-light); color: var(--white); }
+  .btn-secondary:hover { background: var(--navy-mid); }
+  .btn-danger { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; }
+  .btn-danger:hover { background: #fee2e2; }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+  .btn-cancel { background: var(--cream); color: var(--text-muted); border: 1.5px solid var(--cream-mid); }
+  .btn-cancel:hover { background: var(--cream-mid); }
+
+  /* TABLE */
+  .table-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.08); overflow: hidden; }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  thead { background: var(--navy); }
+  thead th { color: var(--gold-light); font-weight: 500; padding: 14px 16px; text-align: left; font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid rgba(0,0,0,0.04); transition: background .15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(201,168,76,0.04); }
+  td { padding: 13px 16px; vertical-align: middle; white-space: nowrap; }
+  .stt { color: var(--text-light); font-weight: 600; font-size: 12px; }
+
+  .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 500; }
+  .badge-blue { background: #eff6ff; color: #1d4ed8; }
+  .badge-green { background: #f0fdf4; color: var(--success); }
+  .badge-orange { background: #fff7ed; color: var(--warning); }
+  .badge-purple { background: #faf5ff; color: #7c3aed; }
+  .badge-red { background: #fef2f2; color: var(--danger); }
+  .badge-cyan { background: #ecfeff; color: #0e7490; }
+
+  .cycle-pill { display:inline-block; background: linear-gradient(135deg,#0d1b2a11,#c9a84c18); border: 1px solid rgba(201,168,76,0.25); color: var(--navy); padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .cycle-pill.long { background: #fff7ed; border-color: rgba(212,137,10,0.3); color: var(--warning); }
+  .cycle-pill.vlong { background: #fef2f2; border-color: rgba(192,57,43,0.25); color: var(--danger); }
+  .count-pill { background: var(--navy); color: var(--gold); padding: 3px 11px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .phone-link { color: var(--navy); text-decoration: none; font-weight: 500; }
+  .phone-link:hover { color: var(--gold-dim); text-decoration: underline; }
+  .table-footer { padding: 12px 20px; border-top: 1px solid var(--cream-mid); display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; color: var(--text-muted); }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 18px; margin-bottom: 28px; }
+  .stat-card { background: var(--white); border-radius: var(--radius); padding: 22px 24px; box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.08); position: relative; overflow: hidden; transition: transform .2s, box-shadow .2s; cursor: default; }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .stat-card::after { content: ''; position: absolute; right: -20px; top: -20px; width: 90px; height: 90px; border-radius: 50%; background: rgba(201,168,76,0.07); }
+  .stat-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 14px; }
+  .stat-icon.navy { background: linear-gradient(135deg,var(--navy),var(--navy-light)); }
+  .stat-icon.gold { background: linear-gradient(135deg,var(--gold-dim),var(--gold)); }
+  .stat-icon.green { background: linear-gradient(135deg,#166534,#22c55e); }
+  .stat-icon.blue { background: linear-gradient(135deg,#1e3a5f,#3b82f6); }
+  .stat-val { font-family: 'Playfair Display',serif; font-size: 32px; font-weight: 700; color: var(--navy); line-height: 1; margin-bottom: 6px; }
+  .stat-label { font-size: 13px; color: var(--text-muted); }
+  .stat-sub { font-size: 12px; color: var(--success); margin-top: 6px; font-weight: 500; }
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .chart-card { background: var(--white); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.08); }
+  .chart-title { font-family: 'Playfair Display',serif; font-size: 16px; color: var(--navy); font-weight: 700; margin-bottom: 4px; }
+  .chart-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; }
+  .bar-chart { display: flex; flex-direction: column; gap: 12px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; }
+  .bar-label { font-size: 12.5px; color: var(--text-muted); width: 90px; flex-shrink: 0; text-align: right; }
+  .bar-track { flex: 1; height: 8px; background: var(--cream-mid); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; }
+  .bar-val { font-size: 12px; font-weight: 600; color: var(--navy); width: 28px; }
+  .donut-wrap { display: flex; align-items: center; gap: 20px; }
+  .donut-legend { display: flex; flex-direction: column; gap: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* MODAL — slide-up sheet */
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(13,27,42,0.55); backdrop-filter: blur(5px); z-index: 200; align-items: flex-end; justify-content: center; }
+  .overlay.open { display: flex; animation: fadeIn .22s ease; }
+  .modal { background: var(--white); border-radius: 20px 20px 0 0; width: 660px; max-width: 100vw; max-height: 92vh; overflow-y: auto; box-shadow: 0 -8px 50px rgba(0,0,0,0.22); animation: slideUp .28s cubic-bezier(.32,1,.45,1); }
+  @keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .modal-drag { width: 40px; height: 4px; background: var(--cream-mid); border-radius: 2px; margin: 12px auto 0; }
+
+  /* Modal Tab Bar */
+  .modal-tabs { display: flex; border-bottom: 1.5px solid var(--cream-mid); }
+  .modal-tab { flex: 1; padding: 14px 12px; cursor: pointer; font-size: 13.5px; font-weight: 500; color: var(--text-muted); border: none; border-bottom: 2.5px solid transparent; margin-bottom: -1.5px; transition: all .2s; background: none; font-family: 'DM Sans',sans-serif; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .modal-tab:hover { color: var(--navy); background: rgba(201,168,76,0.04); }
+  .modal-tab.active { color: var(--navy); border-bottom-color: var(--gold); font-weight: 600; }
+  .tab-badge { background: var(--navy); color: var(--gold); font-size: 10px; padding: 1px 6px; border-radius: 10px; font-weight: 700; }
+
+  .modal-panel { display: none; padding: 22px 26px 4px; }
+  .modal-panel.active { display: block; animation: fadeIn .2s ease; }
+
+  /* Form */
+  .form-section-title { font-size: 11.5px; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .form-section-title::before { content: ''; width: 3px; height: 13px; background: var(--gold); border-radius: 2px; flex-shrink: 0; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group.full { grid-column: 1/-1; }
+  .form-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .form-label .req { color: var(--danger); }
+  .fi-wrap { position: relative; }
+  .fi-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none; font-size: 14px; line-height: 1; }
+  .form-inp { padding: 10px 13px; border: 1.5px solid var(--cream-mid); border-radius: 9px; font-size: 13.5px; font-family: 'DM Sans',sans-serif; background: var(--cream); outline: none; transition: border-color .2s, box-shadow .2s; color: var(--text-main); width: 100%; }
+  .form-inp.pl { padding-left: 36px; }
+  .form-inp:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+  .cycle-preview { font-size: 13px; color: var(--text-muted); padding: 9px 13px; background: var(--cream); border-radius: 8px; min-height: 38px; display:flex; align-items:center; border: 1.5px solid var(--cream-mid); }
+
+  /* Info grid (view tab) */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .info-item { display: flex; flex-direction: column; gap: 4px; }
+  .info-label { font-size: 10.5px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.07em; }
+  .info-val { font-size: 14px; color: var(--text-main); font-weight: 500; }
+  .info-val.gold { color: var(--gold-dim); font-weight: 700; font-family: 'Playfair Display',serif; font-size: 18px; }
+
+  .modal-footer { padding: 14px 26px 20px; display: flex; gap: 10px; justify-content: flex-end; background: var(--white); border-top: 1px solid var(--cream-mid); position: sticky; bottom: 0; }
+
+  /* Products list in customer modal */
+  .prod-mini { background: var(--cream); border-radius: 10px; padding: 13px 16px; border: 1px solid var(--cream-mid); margin-bottom: 10px; }
+  .prod-mini-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+  .prod-mini-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+  .prod-mini-meta { display: flex; gap: 14px; font-size: 12px; color: var(--text-muted); }
+
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+  .empty-state .em-icon { font-size: 36px; margin-bottom: 10px; }
+  .empty-state p { font-size: 14px; }
+
+  .toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+  .toast { background: var(--navy); color: var(--white); padding: 12px 18px; border-radius: 10px; font-size: 13px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.25); animation: slideUpT .3s ease; border-left: 3px solid var(--gold); }
+  @keyframes slideUpT { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-logo">📦</div>
+    <div class="brand-name">Perfect Packs<span>Quản lý doanh nghiệp</span></div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-label">Menu chính</div>
+    <div class="nav-item active" onclick="navigate('stats',this)">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Thống Kê</span>
+    </div>
+    <div class="nav-item" onclick="navigate('products',this)">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+      <span>Sản Phẩm</span>
+    </div>
+    <div class="nav-item" onclick="navigate('customers',this)">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      <span>Khách Hàng</span>
+    </div>
+  </nav>
+  <div class="sidebar-footer">v2.0 · Perfect Packs</div>
+</aside>
+
+<main class="main">
+
+  <!-- THỐNG KÊ -->
+  <div class="page active" id="page-stats">
+    <div class="page-title">Tổng Quan</div>
+    <div class="page-subtitle">Báo cáo hiệu suất kinh doanh</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon navy">📦</div><div class="stat-val" id="stat-products">0</div><div class="stat-label">Tổng sản phẩm</div><div class="stat-sub">↑ Cập nhật mới nhất</div></div>
+      <div class="stat-card"><div class="stat-icon gold">👥</div><div class="stat-val" id="stat-customers">0</div><div class="stat-label">Tổng khách hàng</div><div class="stat-sub">↑ Khách hàng hiện tại</div></div>
+      <div class="stat-card"><div class="stat-icon green">🏢</div><div class="stat-val" id="stat-sectors">0</div><div class="stat-label">Lĩnh vực</div><div class="stat-sub">↑ Đa dạng ngành</div></div>
+      <div class="stat-card"><div class="stat-icon blue">⏱</div><div class="stat-val" id="stat-avg-cycle">0</div><div class="stat-label">Chu kỳ TB (ngày)</div><div class="stat-sub">↑ Thời gian hoàn thành TB</div></div>
+    </div>
+    <div class="stats-row">
+      <div class="chart-card">
+        <div class="chart-title">Sản phẩm theo lĩnh vực</div>
+        <div class="chart-sub">Phân bổ theo ngành nghề</div>
+        <div class="bar-chart" id="sector-chart"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Khách hàng theo lĩnh vực</div>
+        <div class="chart-sub">Tỷ lệ phân bổ khách hàng</div>
+        <div class="donut-wrap">
+          <svg width="120" height="120" viewBox="0 0 120 120" id="donut-svg">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="#f0ece2" stroke-width="20"/>
+            <text x="60" y="64" text-anchor="middle" font-size="14" font-family="Playfair Display,serif" fill="#0d1b2a" font-weight="700" id="donut-center">0</text>
+          </svg>
+          <div class="donut-legend" id="donut-legend"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SẢN PHẨM -->
+  <div class="page" id="page-products">
+    <div class="page-title">Sản Phẩm</div>
+    <div class="page-subtitle">Quản lý đơn hàng & sản phẩm</div>
+    <div class="toolbar">
+      <div class="toolbar-row">
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input class="inp" id="p-search" placeholder="Tìm công ty / sản phẩm / chủ DN…" oninput="renderProducts()">
+        </div>
+        <select class="sel" id="p-sector" onchange="renderProducts()"><option value="">Tất cả lĩnh vực</option></select>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <input class="inp" id="p-date-from" type="date" oninput="renderProducts()" title="Từ ngày bắt đầu">
+        </div>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <input class="inp" id="p-date-to" type="date" oninput="renderProducts()" title="Đến ngày kết thúc">
+        </div>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="openProductModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Thêm mới
+        </button>
+      </div>
+      <div class="toolbar-row">
+        <span class="filter-chip-label">Chu kỳ:</span>
+        <div class="chip active" onclick="setChip(this,'p','')">Tất cả</div>
+        <div class="chip" onclick="setChip(this,'p','doing')">🔄 Đang làm</div>
+        <div class="chip" onclick="setChip(this,'p','lt30')">&lt; 30 ngày</div>
+        <div class="chip" onclick="setChip(this,'p','lt60')">&lt; 60 ngày</div>
+        <div class="chip" onclick="setChip(this,'p','gt30')">&gt; 30 ngày</div>
+        <div class="chip" onclick="setChip(this,'p','gt60')">&gt; 60 ngày</div>
+        <div class="chip" onclick="setChip(this,'p','gt90')">&gt; 90 ngày</div>
+        <div class="chip" onclick="setChip(this,'p','gt120')">&gt; 120 ngày</div>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>#</th><th>Tên Công Ty</th><th>Tên Sản Phẩm</th><th>Chủ Doanh Nghiệp</th><th>Lĩnh Vực</th><th>Bắt Đầu</th><th>Hoàn Thành</th><th>Chu Kỳ</th><th>Thao Tác</th></tr></thead>
+          <tbody id="product-tbody"></tbody>
+        </table>
+      </div>
+      <div class="table-footer"><span id="product-count"></span><span style="color:var(--gold-dim);font-weight:500">Perfect Packs</span></div>
+    </div>
+  </div>
+
+  <!-- KHÁCH HÀNG -->
+  <div class="page" id="page-customers">
+    <div class="page-title">Khách Hàng</div>
+    <div class="page-subtitle">Quản lý danh sách khách hàng</div>
+    <div class="toolbar">
+      <div class="toolbar-row">
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input class="inp" id="c-search" placeholder="Tìm công ty / chủ DN / SĐT…" oninput="renderCustomers()">
+        </div>
+        <select class="sel" id="c-sector" onchange="renderCustomers()"><option value="">Tất cả lĩnh vực</option></select>
+        <select class="sel" id="c-personality" onchange="renderCustomers()">
+          <option value="">Tất cả tính cách</option>
+          <option>Thân thiện</option><option>Chuyên nghiệp</option><option>Khó tính</option><option>Dễ chịu</option><option>Quyết đoán</option><option>Cẩn thận</option>
+        </select>
+        <select class="sel" id="c-prod-count" onchange="renderCustomers()">
+          <option value="">Số SP: Tất cả</option>
+          <option value="0">Chưa có SP</option>
+          <option value="1">≥ 1 SP</option>
+          <option value="3">≥ 3 SP</option>
+          <option value="5">≥ 5 SP</option>
+        </select>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="openCustomerModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Thêm mới
+        </button>
+      </div>
+      <div class="toolbar-row">
+        <span class="filter-chip-label">Chu kỳ TB:</span>
+        <div class="chip active" onclick="setChip(this,'c','')">Tất cả</div>
+        <div class="chip" onclick="setChip(this,'c','doing')">⏳ Chưa hoàn thành</div>
+        <div class="chip" onclick="setChip(this,'c','lt30')">&lt; 30 ngày</div>
+        <div class="chip" onclick="setChip(this,'c','lt60')">&lt; 60 ngày</div>
+        <div class="chip" onclick="setChip(this,'c','gt30')">&gt; 30 ngày</div>
+        <div class="chip" onclick="setChip(this,'c','gt60')">&gt; 60 ngày</div>
+        <div class="chip" onclick="setChip(this,'c','gt90')">&gt; 90 ngày</div>
+        <div class="chip" onclick="setChip(this,'c','gt120')">&gt; 120 ngày</div>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>#</th><th>Tên Công Ty</th><th>Chủ Doanh Nghiệp</th><th>Số Điện Thoại</th><th>Lĩnh Vực</th><th>Tính Cách</th><th>Số SP</th><th>Chu Kỳ TB</th><th>Thao Tác</th></tr></thead>
+          <tbody id="customer-tbody"></tbody>
+        </table>
+      </div>
+      <div class="table-footer"><span id="customer-count"></span><span style="color:var(--gold-dim);font-weight:500">Perfect Packs</span></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ════════ MODAL: SẢN PHẨM ════════ -->
+<div class="overlay" id="product-modal">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="pm-t-form" onclick="switchTab('pm','form')">
+        <span id="pm-tab-label">✏️ Thêm mới</span>
+      </button>
+      <button class="modal-tab" id="pm-t-view" onclick="switchTab('pm','view')" style="display:none">
+        👁️ Chi tiết
+      </button>
+    </div>
+
+    <!-- FORM -->
+    <div class="modal-panel active" id="pm-p-form">
+      <div class="form-section-title">Thông tin sản phẩm</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Tên Công Ty <span class="req">*</span></label>
+          <div class="fi-wrap"><span class="fi-icon">🏢</span><input class="form-inp pl" id="pm-company" placeholder="VD: Công ty ABC"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tên Sản Phẩm <span class="req">*</span></label>
+          <div class="fi-wrap"><span class="fi-icon">📦</span><input class="form-inp pl" id="pm-product" placeholder="VD: Hộp carton 3 lớp"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Chủ Doanh Nghiệp <span class="req">*</span></label>
+          <div class="fi-wrap"><span class="fi-icon">👤</span><input class="form-inp pl" id="pm-owner" placeholder="VD: Nguyễn Văn A"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lĩnh Vực <span class="req">*</span></label>
+          <div class="fi-wrap"><span class="fi-icon">🏭</span><input class="form-inp pl" id="pm-sector" list="sl-p" placeholder="VD: Thực phẩm…"><datalist id="sl-p"></datalist></div>
+        </div>
+      </div>
+      <div class="form-section-title">Thời gian sản xuất</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Ngày Bắt Đầu <span class="req">*</span></label>
+          <input class="form-inp" id="pm-start" type="date" oninput="calcCyclePreview()">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ngày Hoàn Thành</label>
+          <input class="form-inp" id="pm-end" type="date" oninput="calcCyclePreview()">
+        </div>
+        <div class="form-group full">
+          <div class="cycle-preview" id="pm-cycle-preview">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW -->
+    <div class="modal-panel" id="pm-p-view">
+      <div class="info-grid" id="pm-view-content" style="padding-bottom:16px"></div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal('product-modal')">Đóng</button>
+      <button class="btn btn-primary" id="pm-save" onclick="saveProduct()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Lưu lại
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ MODAL: KHÁCH HÀNG ════════ -->
+<div class="overlay" id="customer-modal">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="cm-t-form" onclick="switchTab('cm','form')">
+        <span id="cm-tab-label">✏️ Thêm mới</span>
+      </button>
+      <button class="modal-tab" id="cm-t-view" onclick="switchTab('cm','view')" style="display:none">
+        👁️ Chi tiết
+      </button>
+      <button class="modal-tab" id="cm-t-prods" onclick="switchTab('cm','prods')" style="display:none">
+        📦 Sản phẩm <span class="tab-badge" id="cm-prod-badge">0</span>
+      </button>
+    </div>
+
+    <!-- FORM -->
+    <div class="modal-panel active" id="cm-p-form">
+      <div class="form-section-title">Thông tin khách hàng</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Tên Công Ty <span class="req">*</span></label>
+          <div class="fi-wrap"><span class="fi-icon">🏢</span><input class="form-inp pl" id="cm-company" placeholder="VD: Công ty ABC"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Chủ Doanh Nghiệp <span class="req">*</span></label>
+          <div class="fi-wrap"><span class="fi-icon">👤</span><input class="form-inp pl" id="cm-owner" placeholder="VD: Trần Thị B"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Số Điện Thoại</label>
+          <div class="fi-wrap"><span class="fi-icon">📞</span><input class="form-inp pl" id="cm-phone" type="tel" placeholder="VD: 0901 234 567"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lĩnh Vực <span class="req">*</span></label>
+          <div class="fi-wrap"><span class="fi-icon">🏭</span><input class="form-inp pl" id="cm-sector" list="sl-c" placeholder="VD: Thực phẩm…"><datalist id="sl-c"></datalist></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tính Cách</label>
+          <select class="form-inp" id="cm-personality">
+            <option value="">-- Chọn --</option>
+            <option>Thân thiện</option><option>Chuyên nghiệp</option><option>Khó tính</option><option>Dễ chịu</option><option>Quyết đoán</option><option>Cẩn thận</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ghi Chú</label>
+          <input class="form-inp" id="cm-note" placeholder="Ghi chú thêm…">
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW -->
+    <div class="modal-panel" id="cm-p-view">
+      <div class="info-grid" id="cm-view-content" style="padding-bottom:16px"></div>
+    </div>
+
+    <!-- PRODUCTS LIST -->
+    <div class="modal-panel" id="cm-p-prods">
+      <div id="cm-prod-list" style="padding-bottom:16px"></div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal('customer-modal')">Đóng</button>
+      <button class="btn btn-primary" id="cm-save" onclick="saveCustomer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Lưu lại
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+/* ═══════════════════════ DATA ═══════════════════════ */
+let products = [
+  {id:1,company:'Công ty Rồng Vàng',product:'Hộp carton cao cấp',owner:'Nguyễn Minh Tuấn',sector:'Thực phẩm',start:'2024-01-10',end:'2024-02-15'},
+  {id:2,company:'TNHH Sao Việt',product:'Hộp giấy in offset',owner:'Trần Thị Lan',sector:'Mỹ phẩm',start:'2024-02-01',end:'2024-03-05'},
+  {id:3,company:'Công ty Phú Quý',product:'Túi giấy kraft',owner:'Lê Văn Hùng',sector:'May mặc',start:'2024-03-12',end:'2024-04-20'},
+  {id:4,company:'Công ty Rồng Vàng',product:'Hộp đựng quà tết',owner:'Nguyễn Minh Tuấn',sector:'Thực phẩm',start:'2024-04-01',end:'2024-05-10'},
+  {id:5,company:'Nam Phát Co.',product:'Bao bì nhựa PP',owner:'Phạm Quốc Nam',sector:'Điện tử',start:'2024-05-20',end:''},
+];
+let customers = [
+  {id:1,company:'Công ty Rồng Vàng',owner:'Nguyễn Minh Tuấn',phone:'0901 234 567',sector:'Thực phẩm',personality:'Thân thiện',note:''},
+  {id:2,company:'TNHH Sao Việt',owner:'Trần Thị Lan',phone:'0912 345 678',sector:'Mỹ phẩm',personality:'Chuyên nghiệp',note:'Khách VIP'},
+  {id:3,company:'Công ty Phú Quý',owner:'Lê Văn Hùng',phone:'0923 456 789',sector:'May mặc',personality:'Dễ chịu',note:''},
+  {id:4,company:'Nam Phát Co.',owner:'Phạm Quốc Nam',phone:'0934 567 890',sector:'Điện tử',personality:'Quyết đoán',note:'Hay thay đổi YC'},
+];
+let editPid=null, editCid=null, pidCnt=6, cidCnt=5;
+let pFilter='', cFilter='';
+
+const COLORS=['#c9a84c','#0d1b2a','#2d9c6f','#3b82f6','#d4890a','#7c3aed','#c0392b','#16a085'];
+const PCLS={Thân_thiện:'badge-green',Chuyên_nghiệp:'badge-blue',Khó_tính:'badge-red',Dễ_chịu:'badge-orange',Quyết_đoán:'badge-purple',Cẩn_thận:'badge-cyan'};
+function pCls(p){return PCLS[p?.replace(/ /g,'_')]||'badge-blue';}
+
+/* ═══════════════════════ UTILS ═══════════════════════ */
+const norm=s=>String(s||'').trim().toLowerCase();
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function days(a,b){if(!a||!b)return null;return Math.round((new Date(b)-new Date(a))/86400000);}
+function fmtD(d){if(!d)return'—';const[y,m,dd]=d.split('-');return`${dd}/${m}/${y}`;}
+function cyclePill(d,suffix=''){
+  if(d===null)return'<span class="badge badge-orange">Đang làm</span>';
+  const cls=d>90?'vlong':d>60?'long':'';
+  return`<span class="cycle-pill ${cls}">${d} ngày${suffix}</span>`;
+}
+function getSectors(){
+  return[...new Set([...products.map(p=>p.sector),...customers.map(c=>c.sector)].filter(Boolean))].sort();
+}
+function getProdsOf(company){return products.filter(p=>norm(p.company)===norm(company));}
+function avgCycleOf(company){
+  const ps=getProdsOf(company).filter(p=>p.start&&p.end);
+  if(!ps.length)return null;
+  return Math.round(ps.reduce((a,p)=>a+days(p.start,p.end),0)/ps.length);
+}
+
+/* ═══════════════════════ NAVIGATE ═══════════════════════ */
+function navigate(page,el){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  if(page==='stats')updateStats();
+  if(page==='products'){renderProducts();syncSels();}
+  if(page==='customers'){renderCustomers();syncSels();}
+}
+
+/* ═══════════════════════ CHIPS ═══════════════════════ */
+function setChip(el,tab,val){
+  const parent=el.parentElement;
+  parent.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  if(tab==='p'){pFilter=val;renderProducts();}
+  else{cFilter=val;renderCustomers();}
+}
+function matchCycle(daysVal,filter){
+  if(!filter)return true;
+  if(filter==='doing')return daysVal===null;
+  if(filter==='lt30')return daysVal!==null&&daysVal<30;
+  if(filter==='lt60')return daysVal!==null&&daysVal<60;
+  if(filter==='gt30')return daysVal!==null&&daysVal>30;
+  if(filter==='gt60')return daysVal!==null&&daysVal>60;
+  if(filter==='gt90')return daysVal!==null&&daysVal>90;
+  if(filter==='gt120')return daysVal!==null&&daysVal>120;
+  return true;
+}
+
+/* ═══════════════════════ SECTOR SELECTS ═══════════════════════ */
+function syncSels(){
+  ['p-sector','c-sector'].forEach(id=>{
+    const el=document.getElementById(id); if(!el)return;
+    const cur=el.value;
+    el.innerHTML='<option value="">Tất cả lĩnh vực</option>';
+    getSectors().forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;if(s===cur)o.selected=true;el.appendChild(o);});
+  });
+  ['sl-p','sl-c'].forEach(id=>{
+    const dl=document.getElementById(id); if(!dl)return;
+    dl.innerHTML='';
+    getSectors().forEach(s=>{const o=document.createElement('option');o.value=s;dl.appendChild(o);});
+  });
+}
+
+/* ═══════════════════════ PRODUCTS RENDER ═══════════════════════ */
+function renderProducts(){
+  const q=document.getElementById('p-search').value.toLowerCase();
+  const sec=document.getElementById('p-sector').value;
+  const df=document.getElementById('p-date-from').value;
+  const dt=document.getElementById('p-date-to').value;
+  const data=products.filter(p=>{
+    const d=days(p.start,p.end);
+    return(!q||norm(p.company).includes(q)||norm(p.product).includes(q)||norm(p.owner).includes(q))
+      &&(!sec||p.sector===sec)
+      &&(!df||p.start>=df)
+      &&(!dt||(p.end&&p.end<=dt)||!p.end)
+      &&matchCycle(d,pFilter);
+  });
+  const tbody=document.getElementById('product-tbody');
+  if(!data.length){
+    tbody.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="em-icon">📭</div><p>Không tìm thấy sản phẩm nào</p></div></td></tr>`;
+    document.getElementById('product-count').textContent='0 sản phẩm';return;
+  }
+  tbody.innerHTML=data.map((p,i)=>`<tr>
+    <td class="stt">${i+1}</td>
+    <td><strong>${esc(p.company)}</strong></td>
+    <td>${esc(p.product)}</td>
+    <td>${esc(p.owner)}</td>
+    <td><span class="badge badge-blue">${esc(p.sector)}</span></td>
+    <td>${fmtD(p.start)}</td>
+    <td>${fmtD(p.end)}</td>
+    <td>${cyclePill(days(p.start,p.end))}</td>
+    <td><div class="action-btns">
+      <button class="btn btn-secondary btn-sm" onclick="openProductModal(${p.id})">✏️ Sửa</button>
+      <button class="btn btn-danger btn-sm" onclick="delProduct(${p.id})">🗑</button>
+    </div></td>
+  </tr>`).join('');
+  document.getElementById('product-count').textContent=`${data.length} / ${products.length} sản phẩm`;
+}
+
+/* ═══════════════════════ PRODUCT MODAL ═══════════════════════ */
+function openProductModal(id=null){
+  editPid=id;
+  switchTab('pm','form');
+  const viewBtn=document.getElementById('pm-t-view');
+  if(id){
+    const p=products.find(x=>x.id===id);
+    document.getElementById('pm-tab-label').textContent='✏️ Chỉnh sửa';
+    document.getElementById('pm-company').value=p.company;
+    document.getElementById('pm-product').value=p.product;
+    document.getElementById('pm-owner').value=p.owner;
+    document.getElementById('pm-sector').value=p.sector;
+    document.getElementById('pm-start').value=p.start;
+    document.getElementById('pm-end').value=p.end||'';
+    calcCyclePreview();
+    viewBtn.style.display='';
+    // Fill view
+    const d=days(p.start,p.end);
+    document.getElementById('pm-view-content').innerHTML=`
+      <div class="info-item"><div class="info-label">Tên Công Ty</div><div class="info-val">${esc(p.company)}</div></div>
+      <div class="info-item"><div class="info-label">Tên Sản Phẩm</div><div class="info-val">${esc(p.product)}</div></div>
+      <div class="info-item"><div class="info-label">Chủ Doanh Nghiệp</div><div class="info-val">${esc(p.owner)}</div></div>
+      <div class="info-item"><div class="info-label">Lĩnh Vực</div><div class="info-val"><span class="badge badge-blue">${esc(p.sector)}</span></div></div>
+      <div class="info-item"><div class="info-label">Ngày Bắt Đầu</div><div class="info-val">${fmtD(p.start)}</div></div>
+      <div class="info-item"><div class="info-label">Ngày Hoàn Thành</div><div class="info-val">${fmtD(p.end)}</div></div>
+      <div class="info-item" style="grid-column:1/-1"><div class="info-label">Chu Kỳ Sản Xuất</div><div class="info-val gold">${d!==null?d+' ngày':'⏳ Đang sản xuất'}</div></div>`;
+  } else {
+    document.getElementById('pm-tab-label').textContent='✏️ Thêm mới';
+    ['pm-company','pm-product','pm-owner','pm-sector','pm-start','pm-end'].forEach(f=>document.getElementById(f).value='');
+    document.getElementById('pm-cycle-preview').textContent='—';
+    viewBtn.style.display='none';
+  }
+  syncSels();
+  document.getElementById('product-modal').classList.add('open');
+}
+function calcCyclePreview(){
+  const s=document.getElementById('pm-start').value;
+  const e=document.getElementById('pm-end').value;
+  const el=document.getElementById('pm-cycle-preview');
+  if(s&&e){const d=days(s,e);el.innerHTML=d>=0?`⏱ Chu kỳ: <strong style="color:var(--navy)">${d} ngày</strong>`:'<span style="color:var(--danger)">⚠️ Ngày kết thúc phải sau ngày bắt đầu</span>';}
+  else if(s){el.textContent='📅 Chưa có ngày hoàn thành — đang sản xuất';}
+  else{el.textContent='—';}
+}
+function saveProduct(){
+  const v=f=>document.getElementById(f).value.trim();
+  const company=v('pm-company'),product=v('pm-product'),owner=v('pm-owner'),sector=v('pm-sector');
+  const start=document.getElementById('pm-start').value,end=document.getElementById('pm-end').value;
+  if(!company||!product||!owner||!sector||!start){toast('⚠️ Vui lòng điền đầy đủ thông tin bắt buộc!',true);return;}
+  if(end&&days(start,end)<0){toast('⚠️ Ngày hoàn thành phải sau ngày bắt đầu!',true);return;}
+  if(editPid){
+    const i=products.findIndex(p=>p.id===editPid);
+    products[i]={...products[i],company,product,owner,sector,start,end};
+    toast('✅ Đã cập nhật sản phẩm!');
+  } else {
+    products.push({id:pidCnt++,company,product,owner,sector,start,end});
+    toast('✅ Đã thêm sản phẩm mới!');
+  }
+  closeModal('product-modal');
+  renderProducts();syncSels();
+}
+function delProduct(id){
+  if(!confirm('Xóa sản phẩm này?'))return;
+  products=products.filter(p=>p.id!==id);
+  renderProducts();toast('🗑️ Đã xóa sản phẩm!');
+}
+
+/* ═══════════════════════ CUSTOMERS RENDER ═══════════════════════ */
+function renderCustomers(){
+  const q=document.getElementById('c-search').value.toLowerCase();
+  const sec=document.getElementById('c-sector').value;
+  const pers=document.getElementById('c-personality').value;
+  const minP=document.getElementById('c-prod-count').value;
+  const data=customers.filter(c=>{
+    const cnt=getProdsOf(c.company).length;
+    const avg=avgCycleOf(c.company);
+    return(!q||norm(c.company).includes(q)||norm(c.owner).includes(q)||norm(c.phone).includes(q))
+      &&(!sec||c.sector===sec)
+      &&(!pers||c.personality===pers)
+      &&(minP===''?true:minP==='0'?cnt===0:cnt>=parseInt(minP))
+      &&matchCycle(avg,cFilter);
+  });
+  const tbody=document.getElementById('customer-tbody');
+  if(!data.length){
+    tbody.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="em-icon">👤</div><p>Không tìm thấy khách hàng nào</p></div></td></tr>`;
+    document.getElementById('customer-count').textContent='0 khách hàng';return;
+  }
+  tbody.innerHTML=data.map((c,i)=>{
+    const cnt=getProdsOf(c.company).length;
+    const avg=avgCycleOf(c.company);
+    return`<tr>
+      <td class="stt">${i+1}</td>
+      <td><strong>${esc(c.company)}</strong></td>
+      <td>${esc(c.owner)}</td>
+      <td>${c.phone?`<a href="tel:${c.phone}" class="phone-link">📞 ${esc(c.phone)}</a>`:'<span style="color:var(--text-light)">—</span>'}</td>
+      <td><span class="badge badge-blue">${esc(c.sector)}</span></td>
+      <td>${c.personality?`<span class="badge ${pCls(c.personality)}">${esc(c.personality)}</span>`:'—'}</td>
+      <td><span class="count-pill">${cnt}</span></td>
+      <td>${avg!==null?cyclePill(avg,' TB'):'<span style="color:var(--text-light);font-size:12px">—</span>'}</td>
+      <td><div class="action-btns">
+        <button class="btn btn-secondary btn-sm" onclick="openCustomerModal(${c.id})">✏️ Sửa</button>
+        <button class="btn btn-danger btn-sm" onclick="delCustomer(${c.id})">🗑</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('customer-count').textContent=`${data.length} / ${customers.length} khách hàng`;
+}
+
+/* ═══════════════════════ CUSTOMER MODAL ═══════════════════════ */
+function openCustomerModal(id=null){
+  editCid=id;
+  switchTab('cm','form');
+  const viewBtn=document.getElementById('cm-t-view');
+  const prodBtn=document.getElementById('cm-t-prods');
+  if(id){
+    const c=customers.find(x=>x.id===id);
+    document.getElementById('cm-tab-label').textContent='✏️ Chỉnh sửa';
+    document.getElementById('cm-company').value=c.company;
+    document.getElementById('cm-owner').value=c.owner;
+    document.getElementById('cm-phone').value=c.phone||'';
+    document.getElementById('cm-sector').value=c.sector;
+    document.getElementById('cm-personality').value=c.personality;
+    document.getElementById('cm-note').value=c.note||'';
+    const prods=getProdsOf(c.company);
+    const avg=avgCycleOf(c.company);
+    viewBtn.style.display='';prodBtn.style.display='';
+    document.getElementById('cm-prod-badge').textContent=prods.length;
+    // View
+    document.getElementById('cm-view-content').innerHTML=`
+      <div class="info-item"><div class="info-label">Tên Công Ty</div><div class="info-val">${esc(c.company)}</div></div>
+      <div class="info-item"><div class="info-label">Chủ Doanh Nghiệp</div><div class="info-val">${esc(c.owner)}</div></div>
+      <div class="info-item"><div class="info-label">Số Điện Thoại</div><div class="info-val">${c.phone?`<a href="tel:${c.phone}" class="phone-link">📞 ${esc(c.phone)}</a>`:'—'}</div></div>
+      <div class="info-item"><div class="info-label">Lĩnh Vực</div><div class="info-val"><span class="badge badge-blue">${esc(c.sector)}</span></div></div>
+      <div class="info-item"><div class="info-label">Tính Cách</div><div class="info-val">${c.personality?`<span class="badge ${pCls(c.personality)}">${esc(c.personality)}</span>`:'—'}</div></div>
+      <div class="info-item"><div class="info-label">Số Sản Phẩm</div><div class="info-val"><span class="count-pill">${prods.length}</span></div></div>
+      <div class="info-item"><div class="info-label">Chu Kỳ TB</div><div class="info-val gold">${avg!==null?avg+' ngày':'—'}</div></div>
+      <div class="info-item"><div class="info-label">Ghi Chú</div><div class="info-val">${esc(c.note)||'—'}</div></div>`;
+    // Products
+    document.getElementById('cm-prod-list').innerHTML=prods.length
+      ?prods.map(p=>`<div class="prod-mini">
+          <div class="prod-mini-top"><span class="prod-mini-name">${esc(p.product)}</span>${cyclePill(days(p.start,p.end))}</div>
+          <div class="prod-mini-meta"><span>📅 ${fmtD(p.start)}</span><span>→ ${fmtD(p.end)}</span><span class="badge badge-blue" style="font-size:11px">${esc(p.sector)}</span></div>
+        </div>`).join('')
+      :'<div class="empty-state"><div class="em-icon">📦</div><p>Chưa có sản phẩm nào</p></div>';
+  } else {
+    document.getElementById('cm-tab-label').textContent='✏️ Thêm mới';
+    ['cm-company','cm-owner','cm-phone','cm-sector','cm-personality','cm-note'].forEach(f=>document.getElementById(f).value='');
+    viewBtn.style.display='none';prodBtn.style.display='none';
+  }
+  syncSels();
+  document.getElementById('customer-modal').classList.add('open');
+}
+function saveCustomer(){
+  const v=f=>document.getElementById(f).value.trim();
+  const company=v('cm-company'),owner=v('cm-owner'),phone=v('cm-phone'),sector=v('cm-sector');
+  const personality=document.getElementById('cm-personality').value,note=v('cm-note');
+  if(!company||!owner||!sector){toast('⚠️ Vui lòng điền đầy đủ thông tin bắt buộc!',true);return;}
+  if(editCid){
+    const i=customers.findIndex(c=>c.id===editCid);
+    customers[i]={...customers[i],company,owner,phone,sector,personality,note};
+    toast('✅ Đã cập nhật khách hàng!');
+  } else {
+    customers.push({id:cidCnt++,company,owner,phone,sector,personality,note});
+    toast('✅ Đã thêm khách hàng mới!');
+  }
+  closeModal('customer-modal');renderCustomers();syncSels();
+}
+function delCustomer(id){
+  if(!confirm('Xóa khách hàng này?'))return;
+  customers=customers.filter(c=>c.id!==id);
+  renderCustomers();toast('🗑️ Đã xóa khách hàng!');
+}
+
+/* ═══════════════════════ MODAL TAB SWITCH ═══════════════════════ */
+function switchTab(prefix,tab){
+  const tabs=['form','view','prods'];
+  tabs.forEach(t=>{
+    const btn=document.getElementById(`${prefix}-t-${t}`);
+    const panel=document.getElementById(`${prefix}-p-${t}`);
+    if(btn)btn.classList.toggle('active',t===tab);
+    if(panel)panel.classList.toggle('active',t===tab);
+  });
+  const saveBtn=document.getElementById(`${prefix}-save`);
+  if(saveBtn)saveBtn.style.display=tab==='form'?'':'none';
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+
+/* ═══════════════════════ STATS ═══════════════════════ */
+function updateStats(){
+  document.getElementById('stat-products').textContent=products.length;
+  document.getElementById('stat-customers').textContent=customers.length;
+  document.getElementById('stat-sectors').textContent=getSectors().length;
+  const cycs=products.filter(p=>p.start&&p.end).map(p=>days(p.start,p.end)).filter(d=>d>=0);
+  document.getElementById('stat-avg-cycle').textContent=cycs.length?Math.round(cycs.reduce((a,b)=>a+b,0)/cycs.length):0;
+
+  const sc={};products.forEach(p=>{if(p.sector)sc[p.sector]=(sc[p.sector]||0)+1;});
+  const se=Object.entries(sc).sort((a,b)=>b[1]-a[1]),mx=se.length?se[0][1]:1;
+  document.getElementById('sector-chart').innerHTML=se.length
+    ?se.map(([s,v],i)=>`<div class="bar-row"><div class="bar-label">${s}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/mx*100)}%;background:${COLORS[i%COLORS.length]}"></div></div><div class="bar-val">${v}</div></div>`).join('')
+    :'<div class="empty-state"><div class="em-icon">📊</div><p>Chưa có dữ liệu</p></div>';
+
+  const cc={};customers.forEach(c=>{if(c.sector)cc[c.sector]=(cc[c.sector]||0)+1;});
+  const ce=Object.entries(cc),total=ce.reduce((a,[,v])=>a+v,0);
+  const svg=document.getElementById('donut-svg');
+  svg.querySelectorAll('.arc').forEach(e=>e.remove());
+  document.getElementById('donut-center').textContent=total;
+  const legend=document.getElementById('donut-legend');
+  if(!ce.length){legend.innerHTML='<div class="empty-state"><p>Chưa có dữ liệu</p></div>';return;}
+  const R=48,cx=60,cy=60,circ=2*Math.PI*R;let offset=0;
+  ce.forEach(([s,v],i)=>{
+    const dash=v/total*circ;
+    const c2=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c2.setAttribute('class','arc');c2.setAttribute('cx',cx);c2.setAttribute('cy',cy);c2.setAttribute('r',R);
+    c2.setAttribute('fill','none');c2.setAttribute('stroke',COLORS[i%COLORS.length]);c2.setAttribute('stroke-width','20');
+    c2.setAttribute('stroke-dasharray',`${dash} ${circ-dash}`);c2.setAttribute('stroke-dashoffset',-offset);
+    c2.setAttribute('transform',`rotate(-90 ${cx} ${cy})`);
+    svg.insertBefore(c2,svg.querySelector('text'));offset+=dash;
+  });
+  legend.innerHTML=ce.map(([s,v],i)=>`<div class="legend-item"><div class="legend-dot" style="background:${COLORS[i%COLORS.length]}"></div><span>${s} (${v})</span></div>`).join('');
+}
+
+/* ═══════════════════════ TOAST ═══════════════════════ */
+function toast(msg,warn=false){
+  const t=document.createElement('div');t.className='toast';
+  if(warn)t.style.borderLeftColor='#d4890a';t.textContent=msg;
+  document.getElementById('toast-wrap').appendChild(t);
+  setTimeout(()=>t.remove(),3000);
+}
+
+/* ═══════════════════════ INIT ═══════════════════════ */
+window.addEventListener('DOMContentLoaded',()=>{updateStats();syncSels();});
+</script>
+</body>
+</html>

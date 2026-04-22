@@ -123,16 +123,6 @@
             background: #e0e0e0;
         }
 
-        .info-box {
-            background: #f5f7fa;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            color: #555;
-        }
-
         .results-section {
             display: none;
         }
@@ -246,12 +236,6 @@
             display: block;
         }
 
-        .helper-text {
-            font-size: 0.85rem;
-            color: #999;
-            margin-top: 5px;
-        }
-
         .progress-bar {
             width: 100%;
             height: 25px;
@@ -272,6 +256,7 @@
             color: white;
             font-weight: 600;
             font-size: 0.85rem;
+            width: 100%;
         }
 
         @media (max-width: 768px) {
@@ -306,13 +291,12 @@
             <form id="scrapForm">
                 <div class="form-group">
                     <label for="url">URL tra cứu từ masothue.com</label>
-                    <input 
-                        type="url" 
-                        id="url" 
-                        name="url" 
-                        placeholder="https://masothue.com"
-                        required
-                        style="width: 100%;">
+                    <input
+                        type="url"
+                        id="url"
+                        name="url"
+                        placeholder="https://masothue.com/..."
+                        required>
                 </div>
 
                 <div class="form-row">
@@ -336,7 +320,7 @@
                 <div class="spinner"></div>
                 <p id="loadingText">Đang lấy dữ liệu...</p>
                 <div class="progress-bar" id="progressBar">
-                    <div class="progress-fill" id="progressFill">0%</div>
+                    <div class="progress-fill" id="progressFill">Đang xử lý...</div>
                 </div>
             </div>
         </div>
@@ -351,32 +335,35 @@
                     <tr>
                         <th>STT</th>
                         <th>Tên công ty</th>
+                        <th>Mã số thuế</th>
+                        <th>Người đại diện</th>
+                        <th>Địa chỉ</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
             </table>
-            <a href="#" id="downloadBtn" class="btn-download">📥 Tải file Excel (CSV)</a>
+            <p style="color:#999; font-size:0.85rem; margin-bottom: 8px;">* Bảng chỉ hiển thị 10 kết quả đầu. Tải file để xem toàn bộ.</p>
+            <a href="#" id="downloadBtn" class="btn-download">📥 Tải file CSV</a>
         </div>
     </div>
 
     <script>
         const form = document.getElementById('scrapForm');
-        const loading = document.getElementById('loading');
-        const alert = document.getElementById('alert');
+        const loadingEl = document.getElementById('loading');
+        const alertEl = document.getElementById('alert');
         const resultsSection = document.getElementById('resultsSection');
         const statsBox = document.getElementById('statsBox');
         const tableBody = document.getElementById('tableBody');
         const downloadBtn = document.getElementById('downloadBtn');
         const submitBtn = document.getElementById('submitBtn');
         const progressBar = document.getElementById('progressBar');
-        const progressFill = document.getElementById('progressFill');
         const loadingText = document.getElementById('loadingText');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const formData = {
-                url: document.getElementById('url').value,
+                url: document.getElementById('url').value.trim(),
                 start_page: parseInt(document.getElementById('start_page').value),
                 end_page: parseInt(document.getElementById('end_page').value)
             };
@@ -398,24 +385,23 @@
             }
 
             // Show loading
-            loading.style.display = 'block';
+            const totalPages = formData.end_page - formData.start_page + 1;
+            loadingText.textContent = `Đang lấy dữ liệu từ ${totalPages} trang...`;
+            loadingEl.style.display = 'block';
             progressBar.style.display = 'block';
             submitBtn.disabled = true;
             resultsSection.classList.remove('active');
-            alert.style.display = 'none';
-
-            const totalPages = endPage - startPage + 1;
-            loadingText.textContent = `Đang lấy dữ liệu từ ${totalPages} trang...`;
+            alertEl.style.display = 'none';
+            alertEl.className = 'alert';
 
             try {
                 const response = await fetch('/api/scrape', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        industry_name: industryName,
-                        industry_code: industryCode,
-                        start_page: startPage,
-                        end_page: endPage
+                        url: formData.url,
+                        start_page: formData.start_page,
+                        end_page: formData.end_page
                     })
                 });
 
@@ -431,7 +417,7 @@
             } catch (error) {
                 showAlert(`❌ ${error.message}`, 'error');
             } finally {
-                loading.style.display = 'none';
+                loadingEl.style.display = 'none';
                 progressBar.style.display = 'none';
                 submitBtn.disabled = false;
             }
@@ -445,7 +431,10 @@
                 const row = `
                     <tr>
                         <td>${index + 1}</td>
-                        <td>${item['Tên công ty']}</td>
+                        <td>${item['Tên công ty'] || ''}</td>
+                        <td>${item['Mã số thuế'] || ''}</td>
+                        <td>${item['Người đại diện'] || ''}</td>
+                        <td>${item['Địa chỉ'] || ''}</td>
                     </tr>
                 `;
                 tableBody.innerHTML += row;
@@ -456,9 +445,9 @@
         }
 
         function showAlert(message, type) {
-            alert.textContent = message;
-            alert.className = `alert ${type}`;
-            alert.style.display = 'block';
+            alertEl.textContent = message;
+            alertEl.className = `alert ${type}`;
+            alertEl.style.display = 'block';
         }
     </script>
 </body>

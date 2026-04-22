@@ -7,7 +7,7 @@
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 import requests
-from bs4 import BeautifulSoup       
+from bs4 import BeautifulSoup
 import re
 import time
 import csv
@@ -42,6 +42,33 @@ class HSCTVNScraper:
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         })
 
+    def extract_province(self, full_address):
+        """Trích xuất tên tỉnh/thành phố từ địa chỉ đầy đủ"""
+        if not full_address:
+            return ''
+
+        parts = [p.strip() for p in full_address.split(',') if p.strip()]
+        if not parts:
+            return ''
+
+        # Bỏ qua "Việt Nam" ở cuối nếu có
+        while parts and re.match(r'^Việt\s*Nam$', parts[-1], re.IGNORECASE):
+            parts.pop()
+
+        if not parts:
+            return ''
+
+        last_part = parts[-1]
+
+        # Bỏ tiền tố "Tỉnh ", "Thành phố ", "TP. ", v.v.
+        province = re.sub(
+            r'^(Tỉnh|Thành phố|Thành Phố|TP\.|TP|T\.P\.?)\s+',
+            '',
+            last_part,
+            flags=re.IGNORECASE
+        ).strip()
+
+        return province if province else last_part
     def log(self, message, log_type='info'):
         """Add log message"""
         timestamp = datetime.now().strftime('%H:%M:%S')
@@ -105,7 +132,8 @@ class HSCTVNScraper:
                 'detail_url': self.base_url + '/' + link.get('href', ''),
                 'tax_code': '',
                 'address': '',
-                'phone': ''
+                'phone': '',
+                'industry': ''  # ← THÊM DÒNG NÀY
             }
 
             div = item.find('div')
@@ -114,7 +142,7 @@ class HSCTVNScraper:
 
                 addr_match = re.search(r'Địa chỉ:\s*(.+?)(?:Mã số thuế:|$)', text)
                 if addr_match:
-                    company['address'] = addr_match.group(1).strip()
+                    company['address'] = self.extract_province(addr_match.group(1).strip())
 
                 tax_match = re.search(r'Mã số thuế:\s*(\d+)', text)
                 if tax_match:
@@ -124,54 +152,62 @@ class HSCTVNScraper:
 
         return companies
 
-    def get_phone_from_detail(self, url):
-        """Get phone number from detail page"""
+    def get_details_from_detail(self, url):
+        """Get phone and industry from detail page"""
         try:
             time.sleep(self.delay)
             html = self.get_page(url)
             if not html:
-                return ''
+                return {'phone': '', 'industry': ''}
             soup = BeautifulSoup(html, 'html.parser')
 
-            # Cố gắng giới hạn phạm vi trong khối chi tiết công ty để tránh dính quảng cáo / dữ liệu khác
             detail_block = soup.select_one('div.module_data.detail') or soup
 
-            # Tìm li có icon điện thoại
+            # --- Lấy số điện thoại ---
             phone_li = None
             for li in detail_block.find_all('li'):
-                icon = li.find('i', class_=re.compile('fa-phone'))
+                icon = li.find('i', class_=lambda c: c and 'fa-phone' in c)
                 if icon:
                     phone_li = li
                     break
 
-            text_source = ''
-            if phone_li:
-                text_source = phone_li.get_text(separator=' ', strip=True)
-            else:
-                # Fallback: dùng toàn bộ text trong detail_block
-                text_source = detail_block.get_text(separator=' ', strip=True)
+            text_source = phone_li.get_text(separator=' ', strip=True) if phone_li \
+                else detail_block.get_text(separator=' ', strip=True)
 
-            # Chỉ lấy số điện thoại khi có từ khóa rõ ràng, tránh nhầm MST/tài khoản
+            phone = ''
             phone_patterns = [
                 r'(?:Điện thoại|Điện thoại liên hệ|Số điện thoại|Hotline|Phone|Tel|ĐT)[:\s]*([0-9\s\.\-\(\)]{9,20})',
                 r'(?:Di động|Mobile)[:\s]*([0-9\s\.\-\(\)]{9,20})',
                 r'(?:SĐT|SDT)[:\s]*([0-9\s\.\-\(\)]{9,20})'
             ]
-
             for pattern in phone_patterns:
                 matches = re.findall(pattern, text_source, re.IGNORECASE)
                 if matches:
-                    phone = matches[0].strip()
-                    # Clean only excessive whitespace but preserve formatting like dashes, parentheses
-                    phone = re.sub(r'\s+', ' ', phone)
-                    if len(re.sub(r'[^\d]', '', phone)) >= 9:
-                        return phone
+                    p = re.sub(r'\s+', ' ', matches[0].strip())
+                    if len(re.sub(r'[^\d]', '', p)) >= 9:
+                        phone = p
+                        break
 
-            return ''
+            # --- Lấy ngành nghề chính ---
+            industry = ''
+            for li in detail_block.find_all('li'):
+                icon = li.find('i', class_=lambda c: c and 'fa-anchor' in c)
+                if icon:
+                    a_tag = li.find('a')
+                    if a_tag:
+                        industry = a_tag.get_text(strip=True)
+                    else:
+                        text = li.get_text(separator=' ', strip=True)
+                        m = re.search(r'Ngành nghề chính[:\s]*(.+)', text)
+                        if m:
+                            industry = m.group(1).strip()
+                    break
+
+            return {'phone': phone, 'industry': industry}
 
         except Exception as e:
-            return ''
-
+            self.log(f'Lỗi get_details_from_detail {url}: {str(e)}', 'error')
+            return {'phone': '', 'industry': ''}
     def save_to_excel(self, companies, filename=None):
         """(KHÔNG còn dùng tự động) - Hàm cũ giữ lại cho tương thích, không còn được gọi trong luồng chính"""
         try:
@@ -186,6 +222,7 @@ class HSCTVNScraper:
                     'Tên công ty': company['name'],
                     'Mã số thuế': company['tax_code'],
                     'Số điện thoại': company['phone'] if company['phone'] else '',
+                    'Ngành nghề chính': company.get('industry', ''),  # ← THÊM
                     'Địa chỉ': company['address'],
                     'Ngày lấy dữ liệu': datetime.now().strftime('%d/%m/%Y %H:%M:%S')
                 })
@@ -269,6 +306,7 @@ class HSCTVNScraper:
                 time.sleep(self.delay)
 
             # Phase 2: Get phone numbers
+            # Phase 2: Get phone numbers
             if get_phones and all_companies:
                 self.log(f'Bắt đầu lấy số điện thoại cho {len(all_companies)} công ty...', 'info')
 
@@ -277,11 +315,14 @@ class HSCTVNScraper:
                                          f'Đang lấy SĐT: {company["name"]}')
                     self.log(f'[{i + 1}/{len(all_companies)}] {company["name"]}', 'info')
 
-                    phone = self.get_phone_from_detail(company['detail_url'])                                                    
-                    company['phone'] = phone
+                    details = self.get_details_from_detail(company['detail_url'])  # ← ĐỔI
+                    company['phone'] = details['phone']
+                    company['industry'] = details['industry']  # ← THÊM
 
-                    if phone:
-                        self.log(f'  ✓ Tìm thấy: {phone}', 'success')
+                    if details['phone']:
+                        self.log(f'  ✓ SĐT: {details["phone"]}', 'success')
+                    if details['industry']:
+                        self.log(f'  ✓ Ngành: {details["industry"]}', 'success')
 
                     scraping_progress['companies'] = all_companies
 
@@ -385,7 +426,7 @@ def list_excel_files():
         data_dir = Path("data")
         if not data_dir.exists():
             return jsonify({'files': []})
-        
+
         excel_files = []
         for file_path in data_dir.glob("*.xlsx"):
             stat = file_path.stat()
@@ -394,10 +435,10 @@ def list_excel_files():
                 'size': stat.st_size,
                 'modified': datetime.fromtimestamp(stat.st_mtime).strftime('%d/%m/%Y %H:%M:%S')
             })
-        
+
         # Sắp xếp theo thời gian sửa đổi (mới nhất trước)
         excel_files.sort(key=lambda x: x['modified'], reverse=True)
-        
+
         return jsonify({'files': excel_files})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -405,17 +446,15 @@ def list_excel_files():
 
 @app.route('/api/download/csv', methods=['GET'])
 def download_csv():
-    """Download results as CSV"""
     companies = scraping_progress['companies']
 
     output = io.StringIO()
-    output.write('\ufeff')  # BOM for Excel UTF-8 support
+    output.write('\ufeff')
     writer = csv.writer(output)
 
-    writer.writerow(['STT', 'Tên công ty', 'Mã số thuế', 'Số điện thoại', 'Địa chỉ'])
+    writer.writerow(['STT', 'Tên công ty', 'Mã số thuế', 'Số điện thoại', 'Ngành nghề chính', 'Địa chỉ'])  # ← THÊM
 
     for i, company in enumerate(companies, 1):
-        # Format phone as text for Excel by adding leading apostrophe
         phone_text = company['phone'] if company['phone'] else ''
         if phone_text and not phone_text.startswith("'"):
             phone_text = f"'{phone_text}"
@@ -424,6 +463,7 @@ def download_csv():
             company['name'],
             company['tax_code'],
             phone_text,
+            company.get('industry', ''),   # ← THÊM
             company['address']
         ])
 
@@ -869,6 +909,7 @@ def index():
                                 <th>Mã số thuế</th>
                                 <th>Số điện thoại</th>
                                 <th>Địa chỉ</th>
+                                <th>Ngành nghề chính</th> 
                             </tr>
                         </thead>
                         <tbody id="resultsBody"></tbody>
@@ -999,6 +1040,7 @@ def index():
                     <td>${company.tax_code}</td>
                     <td>${company.phone || '-'}</td>
                     <td>${company.address}</td>
+                    <td>${company.industry || '-'}</td> 
                 </tr>
             `).join('');
         }
@@ -1029,6 +1071,7 @@ def index():
         function copyToClipboard() {
             const text = filteredData.map(c => 
                 `${c.name}\\t${c.tax_code}\\t${c.phone}\\t${c.address}`
+                `${c.name}\t${c.tax_code}\t${c.phone}\t${c.industry || ''}\t${c.address}`
             ).join('\\n');
 
             navigator.clipboard.writeText(text).then(() => {
