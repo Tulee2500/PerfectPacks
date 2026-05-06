@@ -1,6 +1,7 @@
 # ============================================================================
 # BACKEND - Flask API Server (app.py)
-# FIX: version_main=147, trang đầu dùng page_source sau xác nhận, detail_url fix
+# VERSION: Kết nối vào Chrome cá nhân đang chạy (Remote Debugging)
+# KHÔNG mở Chrome mới - dùng Chrome của bạn đang dùng
 # ============================================================================
 
 from flask import Flask, jsonify, request, send_file
@@ -17,8 +18,9 @@ import pandas as pd
 import os
 from pathlib import Path
 
-# pip install undetected-chromedriver selenium
-import undetected_chromedriver as uc
+# pip install selenium
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -29,17 +31,24 @@ CORS(app)
 # Sự kiện để chờ/nhả xác nhận từ người dùng
 _confirm_event = Event()
 
+# Sự kiện để dừng scraping giữa chừng
+_stop_event = Event()
+
 # Global variable để tracking progress
 scraping_progress = {
     'status': 'idle',           # idle | waiting_confirm | running | completed | error
     'progress': 0,
     'total': 0,
     'current_task': '',
-    'waiting_confirm': False,   # True khi đang chờ người dùng nhấn Xác nhận
-    'confirm_message': '',      # Thông báo hiển thị lên UI
+    'waiting_confirm': False,
+    'confirm_message': '',
     'companies': [],
-    'logs': []
+    'logs': [],
+    'chrome_connected': False   # Trạng thái kết nối Chrome
 }
+
+# Cổng remote debugging của Chrome (mặc định 9222)
+CHROME_DEBUG_PORT = 9222
 
 
 # ============================================================================
@@ -55,7 +64,6 @@ class HSCTVNScraper:
     # ── Helpers ──────────────────────────────────────────────────────────────
 
     def extract_province(self, full_address):
-        """Trích xuất tên tỉnh/thành phố từ địa chỉ đầy đủ"""
         if not full_address:
             return ''
         parts = [p.strip() for p in full_address.split(',') if p.strip()]
@@ -87,67 +95,101 @@ class HSCTVNScraper:
         scraping_progress['total'] = total
         scraping_progress['current_task'] = task
 
-    # ── Chrome driver ────────────────────────────────────────────────────────
+    # ── Kết nối Chrome cá nhân ───────────────────────────────────────────────
 
-    def _start_driver(self):
-        """Khởi động Chrome hiển thị (không headless)."""
-        options = uc.ChromeOptions()
-        options.add_argument('--disable-blink-features=AutomationControlled')
-        options.add_argument('--start-maximized')
-        options.add_argument('--disable-notifications')
+    def _connect_to_chrome(self):
+        """Kết nối vào Chrome cá nhân đang chạy qua Remote Debugging Port."""
+        try:
+            options = Options()
+            # Kết nối vào Chrome đang chạy thay vì mở Chrome mới
+            options.add_experimental_option("debuggerAddress", f"127.0.0.1:{CHROME_DEBUG_PORT}")
 
-        # FIX: chỉ định đúng version Chrome đang cài (147)
-        # Nếu bạn nâng Chrome lên 148 sau này thì xóa dòng version_main
-        self.driver = uc.Chrome(options=options, use_subprocess=True, version_main=147)
-        self.log('🌐 Chrome đã khởi động (chế độ hiển thị)', 'success')
+            self.driver = webdriver.Chrome(options=options)
+            self.log(f'✅ Đã kết nối vào Chrome cá nhân (port {CHROME_DEBUG_PORT})', 'success')
+            scraping_progress['chrome_connected'] = True
+            return True
+        except Exception as e:
+            error_msg = str(e)
+            if 'unable to connect' in error_msg.lower() or 'connection refused' in error_msg.lower():
+                self.log(
+                    f'❌ Không kết nối được Chrome! '
+                    f'Hãy bật Chrome với lệnh remote debugging (xem hướng dẫn trên UI)',
+                    'error'
+                )
+            else:
+                self.log(f'❌ Lỗi kết nối Chrome: {error_msg}', 'error')
+            scraping_progress['chrome_connected'] = False
+            return False
 
-    def _quit_driver(self):
-        if self.driver:
-            try:
-                self.driver.quit()
-            except Exception:
-                pass
-            self.driver = None
+    def _disconnect(self):
+        """Ngắt kết nối Selenium — KHÔNG đóng tab, KHÔNG quit Chrome."""
+        # driver.close() đóng tab hiện tại → Chrome về New Tab → SAI
+        # driver.quit()  đóng toàn bộ Chrome          → SAI
+        # Đúng: chỉ bỏ tham chiếu, để Chrome tự nhiên
+        self.driver = None
+        scraping_progress['chrome_connected'] = False
 
     # ── Confirm gate ─────────────────────────────────────────────────────────
 
     def _wait_for_confirm(self, message='Vui lòng xác nhận để tiếp tục...'):
-        """Block thread cho đến khi người dùng nhấn Xác nhận trên UI."""
         _confirm_event.clear()
         scraping_progress['waiting_confirm'] = True
         scraping_progress['confirm_message'] = message
         scraping_progress['status'] = 'waiting_confirm'
         self.log(f'⏸  {message}', 'warning')
-        _confirm_event.wait()   # chờ vô hạn
+        _confirm_event.wait()
         scraping_progress['waiting_confirm'] = False
         scraping_progress['confirm_message'] = ''
         scraping_progress['status'] = 'running'
-        self.log('▶  Người dùng đã xác nhận – tiếp tục...', 'success')
+        self.log('▶  Tiếp tục...', 'success')
 
     # ── Fetch page ───────────────────────────────────────────────────────────
 
     def get_page(self, url):
-        """Tải trang bằng Chrome, trả về page_source."""
         max_retries = 3
         for attempt in range(1, max_retries + 1):
+
+            # ✅ THÊM: thoát ngay đầu mỗi lần retry
+            if _stop_event.is_set():
+                return None
+
             try:
                 self.log(f'Đang tải: {url} (lần {attempt}/{max_retries})', 'info')
-                self.driver.get(url)
-                WebDriverWait(self.driver, 20).until(
+                self.driver.execute_script(f"window.location.href = arguments[0]", url)
+                WebDriverWait(self.driver, 8).until(  # ✅ Bước 3: đổi 20 → 8
                     EC.presence_of_element_located((By.TAG_NAME, 'body'))
                 )
+                current_url = self.driver.current_url
+                if 'google.com' in current_url or current_url in ('chrome://newtab/', 'about:blank'):
+                    raise Exception(f'Chrome vẫn đang ở New Tab/Google thay vì tải {url}')
                 time.sleep(self.delay)
                 return self.driver.page_source
+
             except Exception as e:
                 self.log(f'Lỗi tải {url} (lần {attempt}): {str(e)}', 'warning')
+
+                if attempt < max_retries:
+                    # ✅ THÊM: kiểm tra trước khi thử lại fallback
+                    if _stop_event.is_set():
+                        return None
+                    try:
+                        self.driver.get(url)
+                        time.sleep(self.delay)
+                        return self.driver.page_source
+                    except Exception:
+                        pass
+
+                # ✅ THÊM: kiểm tra trước khi sleep chờ retry
+                if _stop_event.is_set():
+                    return None
                 time.sleep(self.delay)
+
         self.log(f'✗ Không thể tải {url} sau {max_retries} lần', 'error')
         return None
 
     # ── Parse ─────────────────────────────────────────────────────────────────
 
     def parse_company_list(self, html):
-        """Parse danh sách công ty từ HTML trang danh sách."""
         soup = BeautifulSoup(html, 'html.parser')
         companies = []
 
@@ -160,7 +202,6 @@ class HSCTVNScraper:
                 continue
 
             href = link.get('href', '')
-            # FIX: tránh double slash khi href đã bắt đầu bằng '/'
             if href.startswith('http'):
                 detail_url = href
             elif href.startswith('/'):
@@ -192,8 +233,14 @@ class HSCTVNScraper:
         return companies
 
     def get_details_from_detail(self, url):
-        """Lấy số điện thoại và ngành nghề từ trang chi tiết công ty."""
         try:
+            html = self.get_page(url)
+            if _stop_event.is_set():
+                return {'phone': '', 'industry': ''}
+
+
+            if _stop_event.is_set():
+                return {'phone': '', 'industry': ''}
             html = self.get_page(url)
             if not html:
                 return {'phone': '', 'industry': ''}
@@ -251,13 +298,6 @@ class HSCTVNScraper:
 
     def scrape(self, area=None, month=None, from_page=None, to_page=None,
                get_phones=True, start_url=None):
-        """
-        Luồng chính:
-        1. Mở Chrome → mở URL trang 1 → chờ user tick CAPTCHA → Xác nhận
-        2. Dùng page_source trang đang mở (không tải lại) cho trang from_page
-        3. Điều hướng bình thường cho các trang tiếp theo
-        4. Chờ xác nhận lần 2 → lấy SĐT & ngành nghề từng công ty
-        """
         try:
             scraping_progress['status'] = 'running'
             scraping_progress['companies'] = []
@@ -270,51 +310,77 @@ class HSCTVNScraper:
                 to_page = from_page
             if (to_page - from_page + 1) > MAX_PAGES:
                 to_page = from_page + MAX_PAGES - 1
-                self.log(f'⚠ Giới hạn tối đa {MAX_PAGES} trang → điều chỉnh đến trang {to_page}', 'warning')
+                self.log(f'⚠ Giới hạn tối đa {MAX_PAGES} trang → đến trang {to_page}', 'warning')
 
             self.log(f'Bắt đầu scraping từ trang {from_page} đến {to_page}', 'info')
             total_pages = to_page - from_page + 1
             all_companies = []
 
-            # ── 1. Khởi động Chrome ───────────────────────────────────────
-            self._start_driver()
+            # ── 1. Kết nối Chrome cá nhân ─────────────────────────────────
+            self.log('🔌 Đang kết nối vào Chrome cá nhân...', 'info')
+            if not self._connect_to_chrome():
+                scraping_progress['status'] = 'error'
+                return []
 
-            # ── 2. Mở trang đầu, chờ user tick CAPTCHA nếu có ───────────
-            first_url = start_url.rstrip('/') if start_url else f"{self.base_url}/{month}-{area}"
+            # ── 2. Tính URL đúng cho from_page rồi mới mở ────────────────
+            def build_page_url(page_num):
+                if start_url:
+                    normalized = start_url.rstrip('/')
+                    pm = re.match(r'^(.*?/page-)(\d+)$', normalized)
+                    if pm:
+                        return f"{pm.group(1)}{page_num}"
+                    else:
+                        return normalized if page_num == 1 else f"{normalized}/page-{page_num}"
+                else:
+                    return (f"{self.base_url}/{month}-{area}" if page_num == 1
+                            else f"{self.base_url}/{month}-{area}/page-{page_num}")
+
+            # ── FIX PAGE BUG: Mở đúng trang from_page (không phải URL gốc) ──
+            first_url = build_page_url(from_page)
             self.log(f'Mở trang: {first_url}', 'info')
             self.driver.get(first_url)
 
             self._wait_for_confirm(
-                'Chrome đã mở trang. Hãy tick "Tôi là người" nếu có CAPTCHA, '
-                'rồi nhấn "✅ Xác nhận" để bắt đầu thu thập.'
+                f'Trang {from_page} đã mở trong Chrome. '
+                'Nếu có Cloudflare → tick "Verify you are human" → chờ trang load xong → nhấn ✅ Xác nhận.'
             )
 
+            # ── FIX CLOUDFLARE: Kiểm tra trang đã vượt qua Cloudflare chưa ──
+            time.sleep(1)
+            current_src = self.driver.page_source
+            if 'Performing security verification' in current_src or 'cf-browser-verification' in current_src:
+                self.log('⚠️  Cloudflare chưa được vượt qua! Hãy tick checkbox rồi xác nhận lại.', 'warning')
+                self._wait_for_confirm('Cloudflare vẫn đang chặn. Tick "Verify you are human" → chờ load → nhấn ✅ Xác nhận.')
+                time.sleep(2)
+
             # ── 3. Phase 1: Thu thập danh sách công ty ───────────────────
+            _stop_event.clear()
             for page in range(from_page, to_page + 1):
-                # Tính URL cho trang hiện tại
-                if start_url:
-                    normalized = start_url.rstrip('/')
-                    page_match = re.match(r'^(.*?/page-)(\d+)$', normalized)
-                    if page_match:
-                        url = f"{page_match.group(1)}{page}"
-                    else:
-                        url = normalized if page == 1 else f"{normalized}/page-{page}"
-                else:
-                    url = (f"{self.base_url}/{month}-{area}" if page == 1
-                           else f"{self.base_url}/{month}-{area}/page-{page}")
+                # ── Kiểm tra lệnh dừng ──
+                if _stop_event.is_set():
+                    self.log('🛑 Đã dừng theo yêu cầu.', 'warning')
+                    break
+
+                url = build_page_url(page)
 
                 self.log(f'Đang xử lý trang {page}/{to_page}: {url}', 'info')
                 self.update_progress(page - from_page, total_pages, f'Đang tải trang {page}/{to_page}')
 
+                # ── FIX: from_page đã điều hướng đúng ở trên → dùng page_source ──
                 if page == from_page:
-                    # ✅ FIX CHÍNH: Trang đầu tiên dùng source đang mở,
-                    #    KHÔNG gọi driver.get() lại để tránh CAPTCHA xuất hiện lại
-                    self.log('✓ Dùng trang đang hiển thị (không tải lại)', 'success')
+                    self.log('✓ Dùng trang đang hiển thị', 'success')
                     html = self.driver.page_source
                 else:
                     html = self.get_page(url)
 
                 if html:
+                    # ── Kiểm tra Cloudflare block giữa chừng ──
+                    if 'Performing security verification' in html:
+                        self.log(f'⚠️  Trang {page} bị Cloudflare chặn!', 'warning')
+                        self._wait_for_confirm(f'Trang {page} bị Cloudflare chặn. Giải captcha rồi nhấn ✅ Xác nhận.')
+                        time.sleep(2)
+                        html = self.driver.page_source
+
                     companies = self.parse_company_list(html)
                     self.log(f'✓ Tìm thấy {len(companies)} công ty ở trang {page}', 'success')
                     all_companies.extend(companies)
@@ -327,13 +393,14 @@ class HSCTVNScraper:
 
             # ── 4. Phase 2: Lấy SĐT & ngành nghề ────────────────────────
             if get_phones and all_companies:
-                self._wait_for_confirm(
-                    f'Đã thu thập {len(all_companies)} công ty. '
-                    'Nhấn "✅ Xác nhận" để bắt đầu lấy SĐT & ngành nghề.'
-                )
                 self.log(f'Bắt đầu lấy SĐT cho {len(all_companies)} công ty...', 'info')
 
                 for i, company in enumerate(all_companies):
+                    # ── Kiểm tra lệnh dừng ──
+                    if _stop_event.is_set():
+                        self.log('🛑 Đã dừng theo yêu cầu (phase 2).', 'warning')
+                        break
+
                     self.update_progress(
                         i + 1, len(all_companies),
                         f'[{i+1}/{len(all_companies)}] Đang lấy SĐT: {company["name"]}'
@@ -349,7 +416,6 @@ class HSCTVNScraper:
                     if details['industry']:
                         self.log(f'  ✓ Ngành: {details["industry"]}', 'success')
 
-                    # Cập nhật realtime để UI hiển thị từng bước
                     scraping_progress['companies'] = list(all_companies)
 
             scraping_progress['companies'] = all_companies
@@ -362,7 +428,7 @@ class HSCTVNScraper:
             self.log(f'✗ Lỗi nghiêm trọng: {str(e)}', 'error')
             return []
         finally:
-            self._quit_driver()
+            self._disconnect()
 
 
 # ============================================================================
@@ -381,7 +447,6 @@ def start_scraping():
     delay      = float(data.get('delay', 1))
     get_phones = data.get('getPhones', True)
 
-    # Reset toàn bộ state
     scraping_progress.update({
         'status': 'running',
         'progress': 0,
@@ -390,9 +455,11 @@ def start_scraping():
         'waiting_confirm': False,
         'confirm_message': '',
         'companies': [],
-        'logs': []
+        'logs': [],
+        'chrome_connected': False
     })
     _confirm_event.clear()
+    _stop_event.clear()
 
     def run_scraper():
         scraper = HSCTVNScraper(delay=delay)
@@ -415,6 +482,29 @@ def confirm_scraping():
         _confirm_event.set()
         return jsonify({'status': 'confirmed'})
     return jsonify({'status': 'not_waiting'}), 400
+
+
+@app.route('/api/stop', methods=['POST'])
+def stop_scraping():
+    """Dừng scraping giữa chừng. Dữ liệu đã thu thập vẫn được giữ lại."""
+    _stop_event.set()
+    # Nếu đang chờ confirm, unblock luôn để vòng lặp thoát được
+    _confirm_event.set()
+    scraping_progress['status'] = 'completed'
+    scraping_progress['current_task'] = '🛑 Đã dừng theo yêu cầu'
+    return jsonify({'status': 'stopped'})
+
+
+@app.route('/api/chrome-status', methods=['GET'])
+def chrome_status():
+    """Kiểm tra Chrome có đang chạy với remote debugging không."""
+    import socket
+    try:
+        s = socket.create_connection(('127.0.0.1', CHROME_DEBUG_PORT), timeout=1)
+        s.close()
+        return jsonify({'connected': True, 'port': CHROME_DEBUG_PORT})
+    except Exception:
+        return jsonify({'connected': False, 'port': CHROME_DEBUG_PORT})
 
 
 @app.route('/api/download/excel', methods=['GET'])
@@ -455,15 +545,13 @@ def download_excel():
 @app.route('/api/download/csv', methods=['GET'])
 def download_csv():
     companies = scraping_progress.get('companies', [])
-
     output = io.StringIO()
-    output.write('\ufeff')  # BOM cho Excel mở đúng tiếng Việt
+    output.write('\ufeff')
     writer = csv.writer(output)
     writer.writerow(['STT', 'Tên công ty', 'Mã số thuế', 'Số điện thoại', 'Ngành nghề chính', 'Địa chỉ'])
 
     for i, company in enumerate(companies, 1):
         phone_text = company.get('phone', '')
-        # Thêm dấu nháy đơn để Excel không hiểu nhầm số điện thoại
         if phone_text and not phone_text.startswith("'"):
             phone_text = f"'{phone_text}"
         writer.writerow([
@@ -496,28 +584,8 @@ def download_json():
     )
 
 
-@app.route('/api/excel-files', methods=['GET'])
-def list_excel_files():
-    try:
-        data_dir = Path("data")
-        if not data_dir.exists():
-            return jsonify({'files': []})
-        excel_files = []
-        for file_path in data_dir.glob("*.xlsx"):
-            stat = file_path.stat()
-            excel_files.append({
-                'name': file_path.name,
-                'size': stat.st_size,
-                'modified': datetime.fromtimestamp(stat.st_mtime).strftime('%d/%m/%Y %H:%M:%S')
-            })
-        excel_files.sort(key=lambda x: x['modified'], reverse=True)
-        return jsonify({'files': excel_files})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
 # ============================================================================
-# FRONTEND (served inline)
+# FRONTEND
 # ============================================================================
 
 @app.route('/')
@@ -554,6 +622,43 @@ def index():
             margin-bottom:14px;color:#111827;display:flex;align-items:center;
             gap:10px;font-size:1.3em;font-weight:700;
         }
+
+        /* ── Hướng dẫn Chrome ── */
+        .guide-box{
+            background:#f0f9ff;border:2px solid #0ea5e9;border-radius:12px;
+            padding:18px 22px;margin-bottom:20px;
+        }
+        .guide-box h3{color:#0369a1;margin-bottom:12px;font-size:1.05em}
+        .guide-box .os-tabs{display:flex;gap:8px;margin-bottom:14px}
+        .os-tab{
+            padding:6px 16px;border-radius:6px;border:2px solid #0ea5e9;
+            background:#fff;color:#0369a1;font-weight:600;cursor:pointer;font-size:.9em;
+        }
+        .os-tab.active{background:#0ea5e9;color:#fff}
+        .cmd-block{
+            background:#1e1e1e;border-radius:8px;padding:14px 18px;
+            font-family:'Courier New',monospace;font-size:.9em;color:#a3e635;
+            position:relative;display:none;
+        }
+        .cmd-block.visible{display:block}
+        .cmd-copy{
+            position:absolute;top:10px;right:12px;
+            background:#374151;border:none;color:#9ca3af;
+            border-radius:5px;padding:4px 10px;cursor:pointer;font-size:.8em;
+        }
+        .cmd-copy:hover{background:#4b5563;color:#fff}
+
+        /* ── Chrome status indicator ── */
+        .chrome-status{
+            display:flex;align-items:center;gap:10px;padding:12px 18px;
+            border-radius:10px;margin-bottom:20px;font-weight:600;font-size:.95em;
+        }
+        .chrome-status.connected{background:#dcfce7;color:#16a34a;border:2px solid #86efac}
+        .chrome-status.disconnected{background:#fef2f2;color:#dc2626;border:2px solid #fca5a5}
+        .status-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+        .connected .status-dot{background:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.3)}
+        .disconnected .status-dot{background:#dc2626}
+
         .form-grid{
             display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
             column-gap:20px;row-gap:16px;margin-bottom:20px;
@@ -567,6 +672,7 @@ def index():
         .form-group input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
         .checkbox-group{display:flex;align-items:center;gap:10px;margin-top:15px}
         .checkbox-group input[type=checkbox]{width:20px;height:20px;cursor:pointer}
+
         .btn{
             background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
             color:#fff;border:none;padding:15px 40px;border-radius:10px;
@@ -575,8 +681,12 @@ def index():
         }
         .btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 30px rgba(102,126,234,.4)}
         .btn:disabled{background:#ccc;cursor:not-allowed;transform:none}
+        .btn-check{
+            background:linear-gradient(135deg,#0ea5e9 0%,#0284c7 100%);
+            color:#fff;border:none;padding:10px 22px;border-radius:8px;
+            font-size:.95em;cursor:pointer;font-weight:600;
+        }
 
-        /* ── Nút xác nhận ── */
         .btn-confirm{
             background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);
             color:#fff;border:none;padding:15px 40px;border-radius:10px;
@@ -586,12 +696,21 @@ def index():
             animation:pulse-confirm 1.4s ease-in-out infinite;
         }
         .btn-confirm.visible{display:inline-flex}
+
+        .btn-stop{
+            background:linear-gradient(135deg,#dc2626 0%,#b91c1c 100%);
+            color:#fff;border:none;padding:15px 34px;border-radius:10px;
+            font-size:1.05em;cursor:pointer;font-weight:700;
+            display:none;align-items:center;gap:8px;
+            box-shadow:0 8px 24px rgba(220,38,38,.4);transition:all .2s;
+        }
+        .btn-stop:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(220,38,38,.55)}
+        .btn-stop.visible{display:inline-flex}
         @keyframes pulse-confirm{
             0%,100%{transform:scale(1)}
             50%{transform:scale(1.04);box-shadow:0 12px 36px rgba(22,163,74,.65)}
         }
 
-        /* ── Banner chờ xác nhận ── */
         .confirm-banner{
             display:none;background:#fef9c3;border:2px solid #fbbf24;
             border-radius:12px;padding:16px 22px;margin-bottom:20px;
@@ -600,7 +719,6 @@ def index():
         .confirm-banner.visible{display:flex}
         .confirm-banner p{flex:1;font-weight:600;color:#92400e}
 
-        /* ── Progress ── */
         .progress-section{display:none}
         .progress-bar{
             width:100%;height:40px;background:#e0e0e0;border-radius:20px;
@@ -624,13 +742,11 @@ def index():
         .log-error{color:#f00}
         .log-warning{color:#ff0}
 
-        /* ── Results ── */
         .results-section{display:none}
         .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:30px}
         .stat-card{
             background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
             color:#fff;padding:25px;border-radius:15px;text-align:center;
-            box-shadow:0 5px 20px rgba(0,0,0,.2);
         }
         .stat-card .number{font-size:3em;font-weight:bold;margin-bottom:5px}
         .stat-card .label{opacity:.9;font-size:1em}
@@ -646,7 +762,6 @@ def index():
         .download-btn{
             padding:12px 30px;background:#28a745;color:#fff;border:none;
             border-radius:8px;font-weight:600;cursor:pointer;transition:all .3s;
-            display:inline-flex;align-items:center;gap:8px;
         }
         .download-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(40,167,69,.4)}
         @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
@@ -661,18 +776,75 @@ def index():
 <div class="container">
     <div class="header">
         <h1>🏢 HSCTVN Company Scraper</h1>
-        <p>undetected-chromedriver · Chrome hiển thị · Xác nhận thủ công CAPTCHA</p>
+        <p>Dùng Chrome cá nhân của bạn · Không mở cửa sổ mới · Kết nối qua Remote Debugging</p>
     </div>
 
     <div class="content">
 
-        <!-- ── Cấu hình ── -->
+        <!-- ── Hướng dẫn bật Chrome ── -->
         <div class="section">
-            <h2>⚙️ Cấu hình Scraping</h2>
-            <p style="margin-bottom:15px;color:#555">
-                Nhập URL trang 1, chọn khoảng trang (tối đa 50), rồi nhấn Bắt đầu.<br>
-                Chrome sẽ mở lên – hãy tick CAPTCHA nếu có, rồi nhấn <strong>✅ Xác nhận</strong>.
-            </p>
+            <h2>📋 Bước 1 — Bật Chrome với Remote Debugging</h2>
+
+            <!-- Kill Chrome trước -->
+            <div style="background:#fff7ed;border:2px solid #f97316;border-radius:12px;padding:16px 20px;margin-bottom:16px">
+                <div style="font-weight:700;color:#c2410c;margin-bottom:10px;font-size:1em">
+                    ⚠️ QUAN TRỌNG — Phải tắt Chrome hoàn toàn trước!
+                </div>
+                <div style="color:#7c2d12;font-size:.93em;margin-bottom:12px">
+                    Nếu Chrome đang chạy → lệnh bên dưới sẽ KHÔNG có tác dụng (chỉ mở tab mới trong Chrome cũ, không có debug port).
+                </div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <div style="background:#1e1e1e;border-radius:8px;padding:10px 16px;font-family:monospace;font-size:.88em;color:#fbbf24;flex:1;min-width:280px;position:relative">
+                        <button class="cmd-copy" style="position:absolute;top:8px;right:10px" onclick="copyKill()">Copy</button>
+                        <span id="kill-cmd">taskkill /F /IM chrome.exe /T</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:6px">
+                        <span style="font-size:.85em;color:#92400e;font-weight:600">Hoặc thủ công:</span>
+                        <span style="font-size:.83em;color:#78350f">Ctrl+Shift+Esc → tìm Chrome → End Task</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mở Chrome với debug port -->
+            <div class="guide-box">
+                <h3>Sau khi đóng Chrome xong → Chạy lệnh này để mở Chrome với debug port:</h3>
+                <div class="os-tabs">
+                    <button class="os-tab active" onclick="showOS(event, \'win\')">🪟 Windows</button>
+                    <button class="os-tab" onclick="showOS(event, \'mac\')">🍎 macOS</button>
+                    <button class="os-tab" onclick="showOS(event, \'linux\')">🐧 Linux</button>
+                </div>
+
+                <div class="cmd-block visible" id="cmd-win">
+                    <button class="cmd-copy" onclick="copyCmd(\'win\')">Copy</button>
+                    <span id="text-win">"C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\ScraperData" --no-first-run --no-default-browser-check</span>
+                </div>
+                <div class="cmd-block" id="cmd-mac">
+                    <button class="cmd-copy" onclick="copyCmd(\'mac\')">Copy</button>
+                    <span id="text-mac">/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --remote-debugging-port=9222 --user-data-dir="$HOME/Library/Application Support/Google/Chrome"</span>
+                </div>
+                <div class="cmd-block" id="cmd-linux">
+                    <button class="cmd-copy" onclick="copyCmd(\'linux\')">Copy</button>
+                    <span id="text-linux">google-chrome --remote-debugging-port=9222 --user-data-dir="$HOME/.config/google-chrome"</span>
+                </div>
+
+                <div style="margin-top:14px;background:#e0f2fe;border-radius:8px;padding:12px 16px;font-size:.9em;color:#0369a1">
+                    ✅ <strong>Thành công khi:</strong> Cửa sổ CMD <strong>không thoát ra</strong> (giữ nguyên trong khi Chrome đang chạy).
+                    Nếu CMD thoát ngay → Chrome vẫn còn chạy, chạy lệnh taskkill trên rồi thử lại.
+                </div>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:14px">
+                <div class="chrome-status disconnected" id="chromeStatus" style="flex:1">
+                    <div class="status-dot"></div>
+                    <span id="chromeStatusText">Chưa kết nối Chrome — Làm theo hướng dẫn bên trên</span>
+                </div>
+                <button class="btn-check" onclick="checkChrome()">🔍 Kiểm tra kết nối</button>
+            </div>
+        </div>
+
+        <!-- ── Cấu hình scraping ── -->
+        <div class="section">
+            <h2>⚙️ Bước 2 — Cấu hình Scraping</h2>
 
             <div class="form-grid">
                 <div class="form-group full">
@@ -706,6 +878,9 @@ def index():
                 </button>
                 <button class="btn-confirm" id="confirmBtn" onclick="sendConfirm()">
                     ✅ Xác nhận – Tiếp tục
+                </button>
+                <button class="btn-stop" id="stopBtn" onclick="stopScraping()">
+                    🛑 Dừng lại
                 </button>
             </div>
         </div>
@@ -781,8 +956,91 @@ def index():
     let currentData = [];
     let filteredData = [];
     let progressInterval = null;
+    let currentOS = 'win';
 
-    // ── Start ──────────────────────────────────────────────────────────────
+    // ── OS tabs ────────────────────────────────────────────────────────────
+    function showOS(evt, os) {
+        currentOS = os;
+        document.querySelectorAll('.os-tab').forEach(t => t.classList.remove('active'));
+        evt.target.classList.add('active');
+        document.querySelectorAll('.cmd-block').forEach(b => b.classList.remove('visible'));
+        document.getElementById('cmd-' + os).classList.add('visible');
+    }
+
+    function copyCmd(os) {
+        const text = document.getElementById('text-' + os).textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.querySelector('#cmd-' + os + ' .cmd-copy');
+            btn.textContent = '✓ Copied!';
+            setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+    }
+
+    function copyKill() {
+        const text = document.getElementById('kill-cmd').textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            event.target.textContent = '✓ Copied!';
+            setTimeout(() => event.target.textContent = 'Copy', 2000);
+        });
+    }
+
+    // ── Kiểm tra Chrome ────────────────────────────────────────────────────
+    async function checkChrome() {
+        const btn = document.querySelector('.btn-check');
+        btn.textContent = '⏳ Đang kiểm tra...';
+        btn.disabled = true;
+
+        try {
+            const res  = await fetch(`${API_URL}/api/chrome-status`);
+            const data = await res.json();
+            updateChromeStatus(data.connected);
+            if (data.connected) {
+                showToast('✅ Chrome đã kết nối thành công!', 'success');
+            } else {
+                showToast('❌ Chưa thấy Chrome — Hãy làm theo hướng dẫn', 'error');
+            }
+        } catch {
+            updateChromeStatus(false);
+            showToast('❌ Không kết nối được server Flask', 'error');
+        } finally {
+            btn.textContent = '🔍 Kiểm tra kết nối';
+            btn.disabled = false;
+        }
+    }
+
+    function updateChromeStatus(connected) {
+        const el   = document.getElementById('chromeStatus');
+        const text = document.getElementById('chromeStatusText');
+        el.className = 'chrome-status ' + (connected ? 'connected' : 'disconnected');
+        text.textContent = connected
+            ? '✅ Chrome đã kết nối — Sẵn sàng scraping!'
+            : '❌ Chưa kết nối Chrome — Làm theo hướng dẫn bên trên';
+    }
+
+    function showToast(msg, type) {
+        let t = document.getElementById('toast');
+        if (!t) {
+            t = document.createElement('div');
+            t.id = 'toast';
+            t.style.cssText = `
+                position:fixed;bottom:30px;right:30px;z-index:9999;
+                padding:14px 22px;border-radius:10px;font-weight:700;font-size:1em;
+                box-shadow:0 8px 24px rgba(0,0,0,.2);transition:opacity .4s;
+            `;
+            document.body.appendChild(t);
+        }
+        t.textContent = msg;
+        t.style.background  = type === 'success' ? '#16a34a' : '#dc2626';
+        t.style.color       = '#fff';
+        t.style.opacity     = '1';
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => t.style.opacity = '0', 3000);
+    }
+
+    // Auto-check khi tải trang
+    checkChrome();
+    setInterval(checkChrome, 5000);
+
     async function startScraping() {
         const startUrl  = document.getElementById('startUrl').value.trim();
         const fromPage  = parseInt(document.getElementById('fromPage').value);
@@ -797,6 +1055,7 @@ def index():
 
         document.getElementById('startBtn').disabled = true;
         document.getElementById('btnText').innerHTML = '<span class="spinner"></span> Đang scraping...';
+        document.getElementById('stopBtn').classList.add('visible');
         document.getElementById('progressSection').style.display = 'block';
         document.getElementById('resultsSection').style.display = 'none';
         document.getElementById('logContainer').innerHTML = '';
@@ -815,13 +1074,20 @@ def index():
         }
     }
 
+    async function stopScraping() {
+        if (!confirm('Dừng scraping? Dữ liệu đã thu thập sẽ được giữ lại.')) return;
+        try {
+            await fetch(`${API_URL}/api/stop`, { method: 'POST' });
+            showToast('🛑 Đã gửi lệnh dừng...', 'success');
+        } catch (err) { console.error(err); }
+    }
+
     // ── Poll progress ──────────────────────────────────────────────────────
     async function checkProgress() {
         try {
             const res  = await fetch(`${API_URL}/api/progress`);
             const data = await res.json();
 
-            // Progress bar
             if (data.total > 0) {
                 const pct = Math.round((data.progress / data.total) * 100);
                 document.getElementById('progressFill').style.width = pct + '%';
@@ -829,7 +1095,6 @@ def index():
             }
             document.getElementById('progressText').textContent = data.current_task || 'Đang xử lý...';
 
-            // Logs
             const logBox = document.getElementById('logContainer');
             logBox.innerHTML = data.logs.map(l =>
                 `<div class="log-entry">
@@ -839,8 +1104,8 @@ def index():
             ).join('');
             logBox.scrollTop = logBox.scrollHeight;
 
-            // Confirm button
             setConfirmUI(data.waiting_confirm, data.waiting_confirm ? '⚠️ ' + data.confirm_message : '');
+            updateChromeStatus(data.chrome_connected || false);
 
             if (data.status === 'completed') {
                 clearInterval(progressInterval);
@@ -930,6 +1195,7 @@ def index():
     function resetUI() {
         document.getElementById('startBtn').disabled = false;
         document.getElementById('btnText').innerHTML = '🚀 Bắt đầu scraping';
+        document.getElementById('stopBtn').classList.remove('visible');
         setConfirmUI(false, '');
     }
 </script>
@@ -940,8 +1206,11 @@ def index():
 # ============================================================================
 if __name__ == '__main__':
     print("=" * 70)
-    print("🚀 HSCTVN SCRAPER")
+    print("🚀 HSCTVN SCRAPER — Chrome Cá Nhân (Remote Debugging)")
+    print("=" * 70)
+    print("📌 Trước khi chạy: Mở Chrome bằng lệnh remote debugging")
+    print("   Xem hướng dẫn tại: http://localhost:5001")
     print("=" * 70)
     print("📡 http://localhost:5001")
     print("=" * 70)
-    app.run(debug=True, host='0.0.0.0', port=5005)
+    app.run(debug=True, host='0.0.0.0', port=5001)
